@@ -28,6 +28,15 @@ function PlayState.canMove(player: Player): boolean
 	return state == "WAITING" or state == "READY" or (state == "PLAYING" and active[player] == true)
 end
 
+-- Émotes : au lobby, pendant le compte à rebours et à la fin de manche (célébration) pour tous ; en manche
+-- uniquement pour les joueurs encore en vie. Jamais pendant le changement d'arène.
+function PlayState.canEmote(player: Player): boolean
+	if state == "PLAYING" then
+		return active[player] == true
+	end
+	return state ~= "RESETTING"
+end
+
 function PlayState.canBomb(player: Player): boolean
 	return state == "PLAYING" and active[player] == true
 end

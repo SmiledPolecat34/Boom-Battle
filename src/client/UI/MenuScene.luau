@@ -9,6 +9,8 @@
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 
+local Components = require(script.Parent.Components)
+
 local MenuScene = {}
 MenuScene.__index = MenuScene
 
@@ -40,6 +42,10 @@ type Actor = {
 	gui: BillboardGui?,
 	status: TextLabel?,
 	lastWave: number,
+	animator: Animator?,
+	emoteTracks: { [string]: AnimationTrack },
+	emote: AnimationTrack?,
+	emoteToken: number,
 }
 
 local function part(parent: Instance, name: string, size: Vector3, offset: Vector3, color: Color3, material: Enum.Material, shape: Enum.PartType?): Part
@@ -90,10 +96,16 @@ function MenuScene.new()
 		part(folder, "Hazard", Vector3.new(2, 0.7, 1), Vector3.new(-19 + i * 2, 0.35, 8.3), color, Enum.Material.SmoothPlastic)
 	end
 
-	-- Podiums (cylindres verticaux) avec leur anneau doré.
-	for _, x in SLOT_X do
+	-- Podiums (cylindres verticaux) avec leur anneau doré. Les podiums sont mémorisés : les marqueurs « + »
+	-- d'invitation s'y accrochent.
+	self.podiums = {} :: { [number]: BasePart }
+	self.plusGuis = {} :: { [number]: BillboardGui }
+	self.inviteOpen = {} :: { [number]: boolean }
+	self.onInvite = nil :: (() -> ())?
+	for slotIndex, x in SLOT_X do
 		local podium = part(folder, "Podium", Vector3.new(0.8, 7, 7), Vector3.new(x, 1, 0), Color3.fromRGB(112, 116, 128), Enum.Material.Metal, Enum.PartType.Cylinder)
 		podium.CFrame = CFrame.new(ORIGIN + Vector3.new(x, 1, 0)) * CFrame.Angles(0, 0, math.pi / 2)
+		self.podiums[slotIndex] = podium
 		local ring = part(folder, "PodiumRing", Vector3.new(0.1, 7.7, 7.7), Vector3.new(x, 0.95, 0), Color3.fromRGB(255, 200, 60), Enum.Material.Neon, Enum.PartType.Cylinder)
 		ring.CFrame = CFrame.new(ORIGIN + Vector3.new(x, 0.95, 0)) * CFrame.Angles(0, 0, math.pi / 2)
 	end
@@ -199,6 +211,7 @@ function MenuScene._buildActor(self, actor: Actor, name: string)
 
 		local animator = humanoid:FindFirstChildOfClass("Animator") or Instance.new("Animator")
 		animator.Parent = humanoid
+		actor.animator = animator
 		actor.idle = loadTrack(animator, IDLE_ANIMATION, true, Enum.AnimationPriority.Idle)
 		if actor.isLocal then
 			actor.wave = loadTrack(animator, WAVE_ANIMATION, false, Enum.AnimationPriority.Action)
@@ -265,6 +278,7 @@ function MenuScene._ensureActor(self, userId: number, name: string, slot: number
 	local actor: Actor = {
 		userId = userId, slot = slot, isLocal = isLocal, phase = slot * 1.7, destroyed = false,
 		model = nil, root = nil, bomb = nil, idle = nil, wave = nil, gui = nil, status = nil, lastWave = os.clock(),
+		animator = nil, emoteTracks = {}, emote = nil, emoteToken = 0,
 	}
 	self.actors[userId] = actor
 	task.spawn(function()
@@ -278,26 +292,176 @@ function MenuScene.setLocalPlayer(self, userId: number, name: string)
 	self:_ensureActor(userId, name, 1, true)
 end
 
--- Autres joueurs inscrits (au plus deux), avec leur état « prêt ». Les absents sont retirés.
-function MenuScene.setOthers(self, others: { { userId: number, name: string, ready: boolean } })
+-- Marqueur « + » d'invitation sur un podium : cercle blanc translucide cliquable, posé au-dessus du podium vide.
+-- C'est un BillboardGui dans PlayerGui adossé au podium : seul moyen qu'une interface 2D suive un objet 3D et reçoive
+-- les clics.
+function MenuScene._plusGui(self, slot: number): BillboardGui
+	local existing = self.plusGuis[slot]
+	if existing then
+		return existing
+	end
+	local gui = Instance.new("BillboardGui")
+	gui.Name = "InviteSlot" .. slot
+	gui.Adornee = self.podiums[slot]
+	gui.AlwaysOnTop = true
+	gui.Active = true
+	gui.LightInfluence = 0
+	gui.Size = UDim2.fromOffset(120, 120)
+	gui.StudsOffsetWorldSpace = Vector3.new(0, 5.2, 0)
+	gui.Enabled = false
+
+	local button = Instance.new("TextButton")
+	button.Name = "Plus"
+	button.AnchorPoint = Vector2.new(0.5, 0.5)
+	button.Position = UDim2.fromScale(0.5, 0.5)
+	button.Size = UDim2.fromOffset(96, 96)
+	button.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	button.BackgroundTransparency = 0.82
+	button.AutoButtonColor = false
+	button.Text = "+"
+	button.Font = Enum.Font.FredokaOne
+	button.TextSize = 72
+	button.TextColor3 = Color3.new(1, 1, 1)
+	button.TextStrokeTransparency = 0.4
+	button.Parent = gui
+	Components.corner(button, 48)
+	Components.stroke(button, Color3.new(1, 1, 1), 4)
+	Components.addHover(button, { scale = 1.1 })
+	button.Activated:Connect(function()
+		if self.onInvite then
+			self.onInvite()
+		end
+	end)
+
+	local player = Players.LocalPlayer
+	gui.Parent = player:WaitForChild("PlayerGui")
+	self.plusGuis[slot] = gui
+	return gui
+end
+
+-- slots : deux emplacements (voir PartySlots.compute), dans l'ordre des podiums latéraux (gauche puis droite).
+-- Un emplacement « player » affiche le personnage et son statut ; un emplacement « invite » affiche le « + ».
+function MenuScene.setParty(self, slots: { any }, onInvite: (() -> ())?)
+	self.onInvite = onInvite
 	local keep: { [number]: boolean } = {}
 	for _, actor in self.actors do
 		if actor.isLocal then
 			keep[actor.userId] = true
 		end
 	end
-	for index = 1, math.min(#others, 2) do
-		local entry = others[index]
-		local actor = self:_ensureActor(entry.userId, entry.name, index + 1, false)
-		keep[entry.userId] = true
-		if actor.status then
-			actor.status.Text = if entry.ready then "Prêt !" else "En attente"
-			actor.status.TextColor3 = if entry.ready then Color3.fromRGB(110, 230, 110) else Color3.fromRGB(200, 205, 225)
+
+	for index = 1, 2 do
+		local slot = slots[index]
+		local podiumSlot = index + 1
+		local isInvite = slot == nil or slot.kind == "invite"
+		self.inviteOpen[podiumSlot] = isInvite
+		if isInvite then
+			local gui = self:_plusGui(podiumSlot)
+			gui.Enabled = self.visible
+		else
+			local gui = self.plusGuis[podiumSlot]
+			if gui then
+				gui.Enabled = false
+			end
+			local actor = self:_ensureActor(slot.userId, slot.name, podiumSlot, false)
+			keep[slot.userId] = true
+			if actor.status then
+				actor.status.Text = slot.status or ""
+				actor.status.TextColor3 = if slot.ready then Color3.fromRGB(110, 230, 110) else Color3.fromRGB(200, 205, 225)
+			end
 		end
 	end
+
 	for userId in table.clone(self.actors) do
 		if not keep[userId] then
 			self:_removeActor(userId)
+		end
+	end
+end
+
+-- Bulle de chat rapide au-dessus du personnage LOCAL du menu (aperçu : visible seulement par ce client ; en jeu
+-- c'est le serveur qui affiche la bulle à tout le monde).
+function MenuScene.showBubble(self, text: string, seconds: number)
+	for _, actor in self.actors do
+		if actor.isLocal and actor.root then
+			local previous = actor.root:FindFirstChild("QuickChatBubble")
+			if previous then
+				previous:Destroy()
+			end
+			local gui = Instance.new("BillboardGui")
+			gui.Name = "QuickChatBubble"
+			gui.Adornee = actor.root
+			gui.AlwaysOnTop = true
+			gui.LightInfluence = 0
+			gui.Size = UDim2.fromOffset(250, 78)
+			gui.StudsOffset = Vector3.new(0, 5.6, 0)
+			local bubble = Instance.new("Frame")
+			bubble.Size = UDim2.new(1, 0, 0, 62)
+			bubble.BackgroundColor3 = Color3.new(1, 1, 1)
+			bubble.BorderSizePixel = 0
+			bubble.Parent = gui
+			Components.corner(bubble, 16)
+			Components.stroke(bubble, Color3.fromRGB(10, 10, 10), 4)
+			local label = Instance.new("TextLabel")
+			label.BackgroundTransparency = 1
+			label.Size = UDim2.new(1, -20, 1, -10)
+			label.Position = UDim2.fromOffset(10, 5)
+			label.Font = Enum.Font.GothamBlack
+			label.Text = text
+			label.TextColor3 = Color3.fromRGB(10, 10, 10)
+			label.TextScaled = true
+			label.Parent = bubble
+			local limit = Instance.new("UITextSizeConstraint")
+			limit.MaxTextSize = 34
+			limit.MinTextSize = 12
+			limit.Parent = label
+			gui.Enabled = self.visible
+			gui.Parent = actor.root
+			task.delay(seconds, function()
+				if gui.Parent then
+					gui:Destroy()
+				end
+			end)
+		end
+	end
+end
+
+-- Joue une émote sur le personnage LOCAL du menu (aperçu : ne concerne que ce client). emote : EmoteConfig.Emote.
+function MenuScene.playEmote(self, emote: { id: string, animationId: string, looped: boolean }, maxLoopSeconds: number)
+	for _, actor in self.actors do
+		if actor.isLocal and actor.animator then
+			if actor.emote then
+				actor.emote:Stop(0.15)
+				actor.emote = nil
+			end
+			local track = actor.emoteTracks[emote.id]
+			if not track then
+				local animation = Instance.new("Animation")
+				animation.AnimationId = emote.animationId
+				local ok, loaded = pcall(function()
+					return (actor.animator :: Animator):LoadAnimation(animation)
+				end)
+				if not ok or not loaded then
+					return
+				end
+				loaded.Priority = Enum.AnimationPriority.Action
+				loaded.Looped = emote.looped
+				actor.emoteTracks[emote.id] = loaded
+				track = loaded
+			end
+			actor.emoteToken += 1
+			local token = actor.emoteToken
+			actor.emote = track
+			actor.lastWave = os.clock() -- pas de salut automatique juste après
+			track:Play(0.2)
+			if emote.looped then
+				task.delay(maxLoopSeconds, function()
+					if actor.emoteToken == token and actor.emote == track then
+						track:Stop(0.3)
+						actor.emote = nil
+					end
+				end)
+			end
 		end
 	end
 end
@@ -321,7 +485,8 @@ function MenuScene._step(self)
 		if root then
 			local home = ORIGIN + Vector3.new(SLOT_X[actor.slot], PODIUM_TOP + ROOT_HEIGHT, 0)
 			root.CFrame = CFrame.new(home) * CFrame.Angles(0, math.rad(math.sin(now * SWAY_SPEED + actor.phase) * SWAY_DEGREES), 0)
-			if actor.wave and now - actor.lastWave >= WAVE_INTERVAL then
+			local emoting = actor.emote ~= nil and actor.emote.IsPlaying
+			if actor.wave and not emoting and now - actor.lastWave >= WAVE_INTERVAL then
 				actor.lastWave = now
 				actor.wave:Play(0.2)
 			end
@@ -342,6 +507,9 @@ function MenuScene.setVisible(self, visible: boolean)
 			actor.gui.Enabled = visible
 		end
 	end
+	for slot, gui in self.plusGuis do
+		gui.Enabled = visible and self.inviteOpen[slot] == true
+	end
 	if visible and not self.connection then
 		self.connection = RunService.RenderStepped:Connect(function()
 			self:_step()
@@ -357,6 +525,10 @@ function MenuScene.destroy(self)
 	for userId in table.clone(self.actors) do
 		self:_removeActor(userId)
 	end
+	for _, gui in self.plusGuis do
+		gui:Destroy()
+	end
+	table.clear(self.plusGuis)
 	self.folder:Destroy()
 end
 

@@ -7,10 +7,12 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Services = script.Parent.Services
 local BombService = require(Services.BombService)
 local DamageService = require(Services.DamageService)
+local EmoteService = require(Services.EmoteService)
 local MapService = require(Services.MapService)
 local MovementService = require(Services.MovementService)
 local PlayerDataService = require(Services.PlayerDataService)
 local PowerupService = require(Services.PowerupService)
+local QuickChatService = require(Services.QuickChatService)
 local QuestService = require(Services.QuestService)
 local RoundService = require(Services.RoundService)
 local ShopService = require(Services.ShopService)
@@ -38,6 +40,8 @@ for _, name in {
 	"RequestPurchase",
 	"RequestEquip",
 	"ShopResult",
+	"RequestEmote",
+	"RequestQuickChat",
 	"RoundState",
 	"RoundEnded",
 } do
@@ -59,6 +63,8 @@ BombService.start(remotes)
 PlayerDataService.start(remotes)
 QuestService.start()
 ShopService.start(remotes)
+EmoteService.start(remotes)
+QuickChatService.start(remotes)
 RoundService.start(remotes)
 
 -- Le client signale qu'il est prêt à recevoir l'arène et l'état de la manche.

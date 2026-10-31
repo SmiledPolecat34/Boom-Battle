@@ -15,5 +15,6 @@ Pour être sûr de tester le code courant, lance une session **Play** et exécut
 | `Phase4Tests.luau` | Choix de l'écran, réglages | Client |
 | `Phase5Tests.luau` | 5 thèmes × 3 tailles, construction, décors | Serveur |
 | `Phase6Tests.luau` | Profil, boutique, récompenses, quêtes, stockage | Serveur |
+| `Phase8Tests.luau` | Émotes, chat rapide (récents, favoris), emplacements du groupe, limite d'invitations | Client |
 
 Une ligne `[PhaseXTests] N réussis, 0 échecs` dans Output signifie que ces vérifications logiques passent.

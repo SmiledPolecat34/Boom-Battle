@@ -53,6 +53,21 @@ function GameHUD.new(parent: Instance, ctx: any)
 		bombCorner.CornerRadius = UDim.new(1, 0)
 	end
 
+	-- Haut droite : émotes et chat rapide (joueurs de la manche seulement). Les petits boutons restent en périphérie.
+	local emotes = Components.button(frame, "EmotesButton", "ÉMOTES", Theme.violet, UDim2.fromOffset(120, 44))
+	emotes.AnchorPoint = Vector2.new(1, 0)
+	emotes.Position = UDim2.new(1, -24, 0, 76)
+	emotes.TextSize = 18
+	emotes.Activated:Connect(function()
+		ctx.openOverlay("Emotes")
+	end)
+	local chat = Components.bubbleButton(frame, "ChatButton", "CHAT", UDim2.fromOffset(120, 44))
+	chat.AnchorPoint = Vector2.new(1, 0)
+	chat.Position = UDim2.new(1, -24, 0, 128)
+	chat.Activated:Connect(function()
+		ctx.openOverlay("QuickChat")
+	end)
+
 	-- Centre : compte à rebours de début de manche.
 	local countdown = Components.label(frame, "Countdown", "", 120, Theme.yellow, Theme.fontTitle)
 	countdown.AnchorPoint = Vector2.new(0.5, 0.5)
@@ -133,6 +148,10 @@ function GameHUD.new(parent: Instance, ctx: any)
 			canBomb = playing
 
 			bomb.Visible = playing
+			-- Émotes et chat : tant qu'on a un personnage dans la manche (pas pour un spectateur sans personnage).
+			local hasCharacter = participant and (state == "COUNTDOWN" or alive)
+			emotes.Visible = hasCharacter
+			chat.Visible = hasCharacter
 			stats.Visible = participant and (state == "PLAYING" or state == "COUNTDOWN")
 			survivors.Text = if state == "PLAYING" then ("Survivants : %d"):format(snapshot.survivors) else ""
 

@@ -12,7 +12,10 @@ local CameraController = require(script.Parent.Parent.Parent.Controllers.CameraC
 local Components = require(script.Parent.Parent.Components)
 local CosmeticConfig = require(ReplicatedStorage.Shared.CosmeticConfig)
 local EventConfig = require(ReplicatedStorage.Shared.EventConfig)
+local EmoteConfig = require(ReplicatedStorage.Shared.EmoteConfig)
 local MenuScene = require(script.Parent.Parent.MenuScene)
+local PartySlots = require(script.Parent.Parent.PartySlots)
+local QuickChatConfig = require(ReplicatedStorage.Shared.QuickChatConfig)
 local QuestConfig = require(ReplicatedStorage.Shared.QuestConfig)
 local Theme = require(script.Parent.Parent.Theme)
 
@@ -151,6 +154,20 @@ function MainMenu.new(parent: Instance, ctx: any)
 	inventory.Activated:Connect(function()
 		ctx.openOverlay("Inventory")
 	end)
+	-- Émotes et chat rapide : deux boutons côte à côte sous l'inventaire.
+	local emotes = Components.button(frame, "EmotesButton", "ÉMOTES", Theme.violet, UDim2.fromOffset(150, 58))
+	emotes.AnchorPoint = Vector2.new(0, 0.5)
+	emotes.Position = UDim2.new(0, 24, 0.5, 156)
+	emotes.TextSize = 22
+	emotes.Activated:Connect(function()
+		ctx.openOverlay("Emotes")
+	end)
+	local chat = Components.bubbleButton(frame, "ChatButton", "CHAT", UDim2.fromOffset(150, 58))
+	chat.AnchorPoint = Vector2.new(0, 0.5)
+	chat.Position = UDim2.new(0, 184, 0.5, 156)
+	chat.Activated:Connect(function()
+		ctx.openOverlay("QuickChat")
+	end)
 
 	-- Droite : cartes événements et quêtes ----------------------------------------------------------------------
 	local eventsCard = Instance.new("TextButton")
@@ -277,6 +294,43 @@ function MainMenu.new(parent: Instance, ctx: any)
 		ctx.setQueued(true)
 	end)
 
+	-- Groupe : deux emplacements à côté du joueur (joueur présent ou « + » d'invitation) ----------------------------
+	local friendCache: { [number]: boolean } = {}
+	local lastSnapshot: any = nil
+	local lastMe: any = nil
+	local function refreshParty()
+		local entries: { PartySlots.Entry } = {}
+		if lastSnapshot then
+			for _, entry in lastSnapshot.players do
+				if lastMe == nil or entry.userId ~= lastMe.userId then
+					table.insert(entries, {
+						userId = entry.userId,
+						name = entry.name,
+						queued = entry.queued == true,
+						ready = entry.ready == true,
+						isFriend = friendCache[entry.userId] == true,
+					})
+					if friendCache[entry.userId] == nil then
+						friendCache[entry.userId] = false -- une seule demande par joueur
+						task.spawn(function()
+							local ok, isFriend = pcall(function()
+								return localPlayer:IsFriendsWith(entry.userId)
+							end)
+							if ok and isFriend then
+								friendCache[entry.userId] = true
+								refreshParty()
+							end
+						end)
+					end
+				end
+			end
+		end
+		scene:setParty(PartySlots.compute(entries, PartySlots.MaxSlots), function()
+			ctx.requestInvite()
+		end)
+	end
+	refreshParty() -- avant le premier message du serveur : deux emplacements « + »
+
 	-- Décor 3D : visible seulement avec ce menu -------------------------------------------------------------------
 	local function syncVisibility()
 		if frame.Visible then
@@ -310,16 +364,19 @@ function MainMenu.new(parent: Instance, ctx: any)
 				scene:setLocalBombColor(equipped.color)
 			end
 		end,
-		-- Les autres joueurs inscrits apparaissent sur les podiums latéraux avec leur statut.
+		-- Les autres joueurs du serveur occupent les deux podiums latéraux (amis d'abord) ; un emplacement libre
+		-- affiche le « + » d'invitation.
 		update = function(snapshot: any, me: any)
-			local others = {}
-			for _, entry in snapshot.players do
-				if entry.queued and (me == nil or entry.userId ~= me.userId) then
-					table.insert(others, { userId = entry.userId, name = entry.name, ready = entry.ready })
-				end
-			end
-			scene:setOthers(others)
+			lastSnapshot, lastMe = snapshot, me
+			refreshParty()
 			syncVisibility()
+		end,
+		-- Aperçus locaux sur le personnage du menu (en jeu, c'est le serveur qui joue l'émote et affiche la bulle).
+		previewEmote = function(emote: any)
+			scene:playEmote(emote, EmoteConfig.MaxLoopSeconds)
+		end,
+		previewBubble = function(text: string)
+			scene:showBubble(text, QuickChatConfig.BubbleSeconds)
 		end,
 		tick = function(_remaining: number?) end,
 	}

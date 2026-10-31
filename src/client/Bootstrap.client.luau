@@ -6,6 +6,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Controllers = script.Parent.Controllers
 local CameraController = require(Controllers.CameraController)
+local ChatController = require(Controllers.ChatController)
 local EffectsController = require(Controllers.EffectsController)
 local MovementController = require(Controllers.MovementController)
 local RoundController = require(Controllers.RoundController)
@@ -34,6 +35,7 @@ end)
 -- Les écrans de manche d'abord, pour ne manquer aucun état envoyé en réponse à ClientReady.
 UIController.start(remotes)
 RoundController.start(remotes)
+ChatController.start() -- chat Roblox aux couleurs du jeu
 
 -- MapReady arrive à chaque nouvelle arène (lobby, manche) : caméra, clics et effets sont réinitialisés.
 mapReady.OnClientEvent:Connect(function(info: CameraController.MapInfo)

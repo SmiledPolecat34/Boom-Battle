@@ -210,6 +210,50 @@ function Components.arcadeText(parent: Instance, name: string, text: string, are
 	return zone
 end
 
+-- Bouton en forme de BULLE DE BD (fond blanc, contour noir épais, texte noir, pointe vers le bas) : celui des
+-- phrases du chat rapide. Retourne le bouton ; brancher .Activated.
+function Components.bubbleButton(parent: Instance, name: string, text: string, size: UDim2): TextButton
+	local button = Instance.new("TextButton")
+	button.Name = name
+	button.Size = size
+	button.BackgroundColor3 = Color3.new(1, 1, 1)
+	button.AutoButtonColor = false
+	button.Text = text
+	button.TextColor3 = Color3.fromRGB(10, 10, 10)
+	button.Font = Theme.fontTitle
+	button.TextScaled = true
+	button.Parent = parent
+	Components.corner(button, 14)
+	Components.stroke(button, Color3.fromRGB(10, 10, 10), 3)
+	local limit = Instance.new("UITextSizeConstraint")
+	limit.MaxTextSize = 26
+	limit.MinTextSize = 12
+	limit.Parent = button
+	local padding = Instance.new("UIPadding")
+	padding.PaddingLeft = UDim.new(0, 10)
+	padding.PaddingRight = UDim.new(0, 10)
+	padding.PaddingTop = UDim.new(0, 4)
+	padding.PaddingBottom = UDim.new(0, 8)
+	padding.Parent = button
+
+	-- Pointe de la bulle (carré tourné), en bas à droite.
+	local tail = Instance.new("Frame")
+	tail.Name = "Tail"
+	tail.AnchorPoint = Vector2.new(0.5, 0.5)
+	tail.Position = UDim2.new(0.82, 0, 1, -1)
+	tail.Size = UDim2.fromOffset(14, 14)
+	tail.Rotation = 45
+	tail.BackgroundColor3 = Color3.new(1, 1, 1)
+	tail.BorderSizePixel = 0
+	tail.Active = false
+	tail.ZIndex = 0
+	tail.Parent = button
+	Components.stroke(tail, Color3.fromRGB(10, 10, 10), 3)
+
+	Components.addHover(button, { scale = 1.04 })
+	return button
+end
+
 -- Bouton avec retour visuel (survol PC, pression mobile). Retourne le bouton ; brancher .Activated.
 function Components.button(parent: Instance, name: string, text: string, color: Color3, size: UDim2): TextButton
 	local button = Instance.new("TextButton")

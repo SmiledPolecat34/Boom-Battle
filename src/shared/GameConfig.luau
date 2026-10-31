@@ -60,6 +60,8 @@ GameConfig.RemoteLimits = table.freeze({
 	PlaceBombMinInterval = 0.25,
 	ReadyToggleMinInterval = 0.5,
 	ShopRequestMinInterval = 0.5,
+	EmoteRequestMinInterval = 1.0,
+	QuickChatMinInterval = 1.5,
 })
 
 -- PROPOSITION : récompenses en Bomb Coins, attribuées uniquement par le serveur.

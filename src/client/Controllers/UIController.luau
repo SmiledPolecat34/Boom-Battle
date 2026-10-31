@@ -13,7 +13,15 @@ local AssetIds = require(script.Parent.Parent.UI.AssetIds)
 
 local SettingsStore = require(script.Parent.SettingsStore)
 local GameHUD = require(script.Parent.Parent.UI.Screens.GameHUD)
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local EmoteConfig = require(ReplicatedStorage.Shared.EmoteConfig)
+local QuickChatConfig = require(ReplicatedStorage.Shared.QuickChatConfig)
+local InviteController = require(script.Parent.InviteController)
+local QuickChatStore = require(script.Parent.QuickChatStore)
 local CosmeticBrowser = require(script.Parent.Parent.UI.Screens.CosmeticBrowser)
+local EmoteWheel = require(script.Parent.Parent.UI.Screens.EmoteWheel)
+local QuickChat = require(script.Parent.Parent.UI.Screens.QuickChat)
 local Events = require(script.Parent.Parent.UI.Screens.Events)
 local Help = require(script.Parent.Parent.UI.Screens.Help)
 local Quests = require(script.Parent.Parent.UI.Screens.Quests)
@@ -38,6 +46,7 @@ local currentSnapshot: any = nil
 local currentScreen: string? = nil
 local currentProfile: any = nil
 local forceTick = false
+local toastLabel: TextLabel? = nil
 local connections: { RBXScriptConnection } = {}
 
 local function findMe(snapshot: any): any
@@ -117,9 +126,14 @@ local function render()
 	local target = selectScreen(snapshot, me)
 	if target ~= currentScreen then
 		currentScreen = target
-		-- Les fenêtres Aide / Réglages ne sont accessibles que depuis le menu et le lobby.
-		if target ~= "MainMenu" and target ~= "Lobby" then
-			closeOverlay()
+		-- Fenêtres autorisées : toutes depuis le menu et le lobby ; seulement émotes et chat rapide pendant la manche ;
+		-- aucune sur l'écran des résultats.
+		if openOverlay then
+			local inRound = target == "GameHUD"
+			local allowed = target == "MainMenu" or target == "Lobby" or (inRound and (openOverlay == "Emotes" or openOverlay == "QuickChat"))
+			if not allowed then
+				closeOverlay()
+			end
 		end
 	end
 	for name, screen in screens do
@@ -171,6 +185,23 @@ function UIController.onStats(stats: any)
 	end
 end
 
+local toastToken = 0
+function UIController.showToast(text: string)
+	local label = toastLabel
+	if not label then
+		return
+	end
+	toastToken += 1
+	local token = toastToken
+	label.Text = text
+	label.Visible = true
+	task.delay(3.5, function()
+		if toastToken == token then
+			label.Visible = false
+		end
+	end)
+end
+
 function UIController.getCurrentScreen(): string?
 	return currentScreen
 end
@@ -185,8 +216,37 @@ function UIController.start(remotes: Folder)
 	local placeBomb = remotes:WaitForChild("RequestPlaceBomb") :: RemoteEvent
 	local requestPurchase = remotes:WaitForChild("RequestPurchase") :: RemoteEvent
 	local requestEquip = remotes:WaitForChild("RequestEquip") :: RemoteEvent
+	local requestEmote = remotes:WaitForChild("RequestEmote") :: RemoteEvent
+	local requestQuickChat = remotes:WaitForChild("RequestQuickChat") :: RemoteEvent
 
 	local ctx = {
+		-- Menu : aperçu local sur le personnage du décor 3D ; ailleurs : demande au serveur (répliquée à tous).
+		playEmote = function(id: string)
+			local emote = EmoteConfig.get(id)
+			if not emote then
+				return
+			end
+			if currentScreen == "MainMenu" and screens.MainMenu then
+				screens.MainMenu.previewEmote(emote)
+			else
+				requestEmote:FireServer(id)
+			end
+		end,
+		sendQuickChat = function(id: string)
+			local phrase = QuickChatConfig.get(id)
+			if not phrase then
+				return
+			end
+			QuickChatStore.addRecent(id)
+			if currentScreen == "MainMenu" and screens.MainMenu then
+				screens.MainMenu.previewBubble(phrase.text)
+			else
+				requestQuickChat:FireServer(id)
+			end
+		end,
+		requestInvite = function()
+			InviteController.request(UIController.showToast)
+		end,
 		purchase = function(id: string)
 			requestPurchase:FireServer(id)
 		end,
@@ -234,6 +294,25 @@ function UIController.start(remotes: Folder)
 	overlays.Inventory = CosmeticBrowser.new(rootFrame, ctx, "inventory")
 	overlays.Quests = Quests.new(rootFrame, ctx)
 	overlays.Events = Events.new(rootFrame, ctx)
+	overlays.Emotes = EmoteWheel.new(rootFrame, ctx)
+	overlays.QuickChat = QuickChat.new(rootFrame, ctx)
+
+	-- Message court (ex. « Invitations indisponibles ici ») : un seul à la fois, disparaît seul.
+	local toast = Instance.new("TextLabel")
+	toast.Name = "Toast"
+	toast.AnchorPoint = Vector2.new(0.5, 1)
+	toast.Position = UDim2.new(0.5, 0, 1, -150)
+	toast.Size = UDim2.fromOffset(520, 44)
+	toast.BackgroundColor3 = Color3.fromRGB(21, 27, 49)
+	toast.BackgroundTransparency = 0.1
+	toast.TextColor3 = Color3.new(1, 1, 1)
+	toast.Font = Enum.Font.GothamBold
+	toast.TextSize = 20
+	toast.TextWrapped = true
+	toast.Visible = false
+	toast.ZIndex = 50
+	toast.Parent = rootFrame
+	toastLabel = toast
 	-- Les fenêtres passent au-dessus des écrans (frères sous Root, ZIndexBehavior = Sibling).
 	for _, overlay in overlays do
 		overlay.frame.ZIndex = 10
