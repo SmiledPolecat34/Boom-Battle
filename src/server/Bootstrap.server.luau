@@ -14,8 +14,11 @@ local GameConfig = require(ReplicatedStorage.Shared.GameConfig)
 local MapConfig = require(ReplicatedStorage.Shared.MapConfig)
 
 local Services = script.Parent.Services
+local BombService = require(Services.BombService)
+local DamageService = require(Services.DamageService)
 local MapService = require(Services.MapService)
 local MovementService = require(Services.MovementService)
+local PowerupService = require(Services.PowerupService)
 
 local SPAWN_HEIGHT = 3 -- studs au-dessus du sol
 
@@ -23,7 +26,16 @@ local SPAWN_HEIGHT = 3 -- studs au-dessus du sol
 
 local remotes = Instance.new("Folder")
 remotes.Name = "Remotes"
-for _, name in { "ClientReady", "MapReady", "RequestMove", "MoveRejected" } do
+for _, name in {
+	"ClientReady",
+	"MapReady",
+	"RequestMove",
+	"MoveRejected",
+	"RequestPlaceBomb",
+	"Explosion",
+	"StatsChanged",
+	"PlayerEliminated",
+} do
 	local event = Instance.new("RemoteEvent")
 	event.Name = name
 	event.Parent = remotes
@@ -46,6 +58,9 @@ MovementService.start(remotes, function()
 	local info = MapService.getCurrent()
 	return if info then info.grid else nil
 end)
+PowerupService.start(remotes)
+DamageService.start(remotes)
+BombService.start(remotes)
 
 -- Spawns (temporaire) -------------------------------------------------------------------------------------
 
@@ -80,6 +95,10 @@ local function onCharacterAdded(player: Player, character: Model)
 	local cell = mapInfo.layout.spawns[index]
 	character:PivotTo(CFrame.new(mapInfo.grid:cellToWorld(cell, SPAWN_HEIGHT)))
 	MovementService.setupCharacter(player, character)
+	-- PHASE 2 (temporaire) : chaque apparition remet les statistiques à zéro et rend le joueur vivant.
+	-- En Phase 3, c'est le RoundService qui fera cela au début de chaque manche.
+	DamageService.setAlive(player, true)
+	PowerupService.reset(player)
 end
 
 local function onPlayerAdded(player: Player)

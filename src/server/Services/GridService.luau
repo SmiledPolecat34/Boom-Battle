@@ -23,6 +23,7 @@ export type GridService = typeof(setmetatable(
 		size: number,
 		cellSize: number,
 		origin: Vector3, -- coin de la zone jouable (cellule 1,1)
+		bombs: { [number]: boolean }, -- cases occupées par une bombe, clé : key(x, y)
 	},
 	GridService
 ))
@@ -33,7 +34,20 @@ function GridService.new(layout: Types.MapLayout, cellSize: number, origin: Vect
 		size = layout.size,
 		cellSize = cellSize,
 		origin = origin,
+		bombs = {},
 	}, GridService)
+end
+
+function GridService.key(self: GridService, x: number, y: number): number
+	return (y - 1) * self.size + x
+end
+
+function GridService.setBomb(self: GridService, x: number, y: number, present: boolean)
+	self.bombs[self:key(x, y)] = if present then true else nil
+end
+
+function GridService.hasBomb(self: GridService, x: number, y: number): boolean
+	return self.bombs[self:key(x, y)] == true
 end
 
 function GridService.inBounds(self: GridService, x: number, y: number): boolean
@@ -53,9 +67,9 @@ function GridService.setKind(self: GridService, x: number, y: number, kind: Type
 	end
 end
 
--- Franchissable à pied : uniquement les cases vides. Les bombes seront ajoutées en Phase 2.
+-- Franchissable à pied : case vide sans bombe.
 function GridService.isWalkable(self: GridService, x: number, y: number): boolean
-	return self:getKind(x, y) == "EMPTY"
+	return self:getKind(x, y) == "EMPTY" and not self:hasBomb(x, y)
 end
 
 function GridService.cellToWorld(self: GridService, cell: Types.Cell, height: number?): Vector3

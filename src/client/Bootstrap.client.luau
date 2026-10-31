@@ -6,7 +6,9 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Controllers = script.Parent.Controllers
 local CameraController = require(Controllers.CameraController)
+local EffectsController = require(Controllers.EffectsController)
 local MovementController = require(Controllers.MovementController)
+local UIController = require(Controllers.UIController)
 
 local remotes = ReplicatedStorage:WaitForChild("Remotes") :: Folder
 local mapReady = remotes:WaitForChild("MapReady") :: RemoteEvent
@@ -35,6 +37,8 @@ mapReady.OnClientEvent:Connect(function(info: CameraController.MapInfo)
 	end
 	CameraController.apply(info)
 	MovementController.start(info, remotes)
+	EffectsController.start(info, remotes)
+	UIController.start(remotes)
 end)
 
 clientReady:FireServer()

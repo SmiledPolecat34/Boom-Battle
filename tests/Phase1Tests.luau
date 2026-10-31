@@ -60,7 +60,7 @@ for sizeId, sizeDef in MapConfig.Sizes do
 			end
 		end
 	end
-	check(("%s : nombre de piliers attendu"):format(sizeId), pillars == #sizeDef.pillarAxis ^ 2)
+	check(("%s : nombre de piliers attendu"):format(sizeId), pillars == (#sizeDef.pillarAxis) ^ 2)
 	check(("%s : des caisses sont générées"):format(sizeId), crates > 0)
 
 	-- Aucune caisse dans les zones de spawn.

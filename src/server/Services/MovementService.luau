@@ -56,6 +56,10 @@ local function walkPath(player: Player, grid: GridService.GridService, path: { T
 		if not humanoid or not root or state.token ~= token then
 			return
 		end
+		-- Une bombe a pu être posée sur le trajet depuis le calcul du chemin : on s'arrête devant.
+		if not grid:isWalkable(cell.x, cell.y) then
+			return
+		end
 		local isLast = index == #path
 		local target = grid:cellToWorld(cell, root.Position.Y)
 		humanoid:MoveTo(target)
