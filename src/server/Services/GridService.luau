@@ -1,0 +1,121 @@
+--!strict
+-- État logique de la grille et recherche de chemin. Aucune dépendance au Workspace : testable seul.
+-- Coordonnées de cellule 1-indexées ; la cellule (x, y) est centrée en
+-- origin + ((x - 0.5) * cellSize, 0, (y - 0.5) * cellSize).
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local Types = require(ReplicatedStorage.Shared.Types)
+
+local DIRECTIONS = {
+	{ x = 1, y = 0 },
+	{ x = -1, y = 0 },
+	{ x = 0, y = 1 },
+	{ x = 0, y = -1 },
+}
+
+local GridService = {}
+GridService.__index = GridService
+
+export type GridService = typeof(setmetatable(
+	{} :: {
+		layout: Types.MapLayout,
+		size: number,
+		cellSize: number,
+		origin: Vector3, -- coin de la zone jouable (cellule 1,1)
+	},
+	GridService
+))
+
+function GridService.new(layout: Types.MapLayout, cellSize: number, origin: Vector3): GridService
+	return setmetatable({
+		layout = layout,
+		size = layout.size,
+		cellSize = cellSize,
+		origin = origin,
+	}, GridService)
+end
+
+function GridService.inBounds(self: GridService, x: number, y: number): boolean
+	return x >= 1 and x <= self.size and y >= 1 and y <= self.size
+end
+
+function GridService.getKind(self: GridService, x: number, y: number): Types.CellKind
+	if not self:inBounds(x, y) then
+		return "BORDER"
+	end
+	return self.layout.cells[y][x]
+end
+
+function GridService.setKind(self: GridService, x: number, y: number, kind: Types.CellKind)
+	if self:inBounds(x, y) then
+		self.layout.cells[y][x] = kind
+	end
+end
+
+-- Franchissable à pied : uniquement les cases vides. Les bombes seront ajoutées en Phase 2.
+function GridService.isWalkable(self: GridService, x: number, y: number): boolean
+	return self:getKind(x, y) == "EMPTY"
+end
+
+function GridService.cellToWorld(self: GridService, cell: Types.Cell, height: number?): Vector3
+	return self.origin
+		+ Vector3.new((cell.x - 0.5) * self.cellSize, height or 0, (cell.y - 0.5) * self.cellSize)
+end
+
+-- Retourne nil si la position est en dehors de la zone jouable.
+function GridService.worldToCell(self: GridService, position: Vector3): Types.Cell?
+	local x = math.floor((position.X - self.origin.X) / self.cellSize) + 1
+	local y = math.floor((position.Z - self.origin.Z) / self.cellSize) + 1
+	if not self:inBounds(x, y) then
+		return nil
+	end
+	return { x = x, y = y }
+end
+
+-- Plus court chemin (parcours en largeur, déplacements orthogonaux, coût uniforme).
+-- Retourne les cellules à parcourir SANS la case de départ, AVEC la cible ; {} si départ == cible ;
+-- nil si la cible n'est pas franchissable ou n'est pas atteignable.
+function GridService.findPath(self: GridService, from: Types.Cell, to: Types.Cell): { Types.Cell }?
+	if not self:isWalkable(to.x, to.y) then
+		return nil
+	end
+	if from.x == to.x and from.y == to.y then
+		return {}
+	end
+
+	local size = self.size
+	local startKey = (from.y - 1) * size + from.x
+	local targetKey = (to.y - 1) * size + to.x
+	local parent: { [number]: number } = { [startKey] = -1 }
+	local queue: { Types.Cell } = { from }
+	local head = 1
+
+	while head <= #queue do
+		local current = queue[head]
+		head += 1
+		local currentKey = (current.y - 1) * size + current.x
+		for _, d in DIRECTIONS do
+			local nx, ny = current.x + d.x, current.y + d.y
+			if self:isWalkable(nx, ny) then
+				local key = (ny - 1) * size + nx
+				if parent[key] == nil then
+					parent[key] = currentKey
+					if key == targetKey then
+						local path: { Types.Cell } = {}
+						local walk = key
+						while walk ~= startKey do
+							table.insert(path, 1, { x = (walk - 1) % size + 1, y = (walk - 1) // size + 1 })
+							walk = parent[walk]
+						end
+						return path
+					end
+					table.insert(queue, { x = nx, y = ny })
+				end
+			end
+		end
+	end
+	return nil
+end
+
+return GridService
