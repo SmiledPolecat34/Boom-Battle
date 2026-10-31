@@ -9,6 +9,7 @@ local Types = require(ReplicatedStorage.Shared.Types)
 local DamageService = require(script.Parent.DamageService)
 local ExplosionResolver = require(script.Parent.ExplosionResolver)
 local MapService = require(script.Parent.MapService)
+local PlayState = require(script.Parent.PlayState)
 local PowerupService = require(script.Parent.PowerupService)
 
 local DAMAGE_TICK = 0.05
@@ -124,6 +125,9 @@ local function handlePlaceBomb(player: Player)
 	end
 	lastPlaceRequest[player] = now
 
+	if not PlayState.canBomb(player) then
+		return
+	end
 	local info = MapService.getCurrent()
 	if not info then
 		return

@@ -8,6 +8,7 @@ local Controllers = script.Parent.Controllers
 local CameraController = require(Controllers.CameraController)
 local EffectsController = require(Controllers.EffectsController)
 local MovementController = require(Controllers.MovementController)
+local RoundController = require(Controllers.RoundController)
 local UIController = require(Controllers.UIController)
 
 local remotes = ReplicatedStorage:WaitForChild("Remotes") :: Folder
@@ -30,6 +31,11 @@ task.spawn(function()
 	end
 end)
 
+-- Les écrans de manche d'abord, pour ne manquer aucun état envoyé en réponse à ClientReady.
+UIController.start(remotes)
+RoundController.start(remotes)
+
+-- MapReady arrive à chaque nouvelle arène (lobby, manche) : caméra, clics et effets sont réinitialisés.
 mapReady.OnClientEvent:Connect(function(info: CameraController.MapInfo)
 	if typeof(info) ~= "table" or typeof(info.size) ~= "number" or typeof(info.cellSize) ~= "number" then
 		warn("[BOM BATTLE] MapReady invalide")
@@ -38,7 +44,6 @@ mapReady.OnClientEvent:Connect(function(info: CameraController.MapInfo)
 	CameraController.apply(info)
 	MovementController.start(info, remotes)
 	EffectsController.start(info, remotes)
-	UIController.start(remotes)
 end)
 
 clientReady:FireServer()

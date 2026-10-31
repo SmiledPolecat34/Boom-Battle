@@ -35,6 +35,8 @@ export type MapLayout = {
 export type RoundResult = {
 	outcome: RoundOutcome,
 	winnerUserId: number?,
+	-- Joueurs à égalité (vide pour une victoire).
+	tiedUserIds: { number },
 	-- Ordre de classement, du meilleur au moins bon.
 	ranking: { number },
 	durationSeconds: number,

@@ -20,8 +20,19 @@ local function describe(stats: any): string
 	)
 end
 
+local bombButton: TextButton? = nil
+
+-- Le bouton de bombe n'est affiché que pendant une manche, pour un joueur encore en vie.
+function UIController.setBombVisible(visible: boolean)
+	if bombButton then
+		bombButton.Visible = visible
+	end
+end
+
 function UIController.start(remotes: Folder)
-	UIController.stop()
+	if gui then
+		return -- le HUD est créé une seule fois, même si l'arène est regénérée
+	end
 
 	local requestPlaceBomb = remotes:WaitForChild("RequestPlaceBomb") :: RemoteEvent
 	local statsChanged = remotes:WaitForChild("StatsChanged") :: RemoteEvent
@@ -45,7 +56,9 @@ function UIController.start(remotes: Folder)
 	local corner = Instance.new("UICorner")
 	corner.CornerRadius = UDim.new(1, 0)
 	corner.Parent = button
+	button.Visible = false
 	button.Parent = screenGui
+	bombButton = button
 
 	local label = Instance.new("TextLabel")
 	label.Name = "Stats"
@@ -88,6 +101,7 @@ function UIController.stop()
 		gui:Destroy()
 		gui = nil
 	end
+	bombButton = nil
 end
 
 return UIController

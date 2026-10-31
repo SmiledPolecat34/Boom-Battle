@@ -7,6 +7,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local GameConfig = require(ReplicatedStorage.Shared.GameConfig)
 local Types = require(ReplicatedStorage.Shared.Types)
 local GridService = require(script.Parent.GridService)
+local PlayState = require(script.Parent.PlayState)
 
 local WAYPOINT_REACHED_DISTANCE = 1.5 -- studs : on enchaîne la case suivante avant de s'arrêter
 local FINAL_REACHED_DISTANCE = 0.8
@@ -107,6 +108,10 @@ local function handleMoveRequest(player: Player, remotes: Folder, payload: any)
 	local grid = if getGrid then getGrid() else nil
 	local humanoid, root = getLiveCharacter(player)
 	if not grid or not humanoid or not root then
+		return
+	end
+	-- Hors lobby, seuls les joueurs encore en vie d'une manche en cours peuvent bouger.
+	if not PlayState.canMove(player) then
 		return
 	end
 
