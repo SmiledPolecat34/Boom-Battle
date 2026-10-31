@@ -8,6 +8,7 @@ local Players = game:GetService("Players")
 
 local CameraController = require(script.Parent.CameraController)
 local InputController = require(script.Parent.InputController)
+local SettingsStore = require(script.Parent.SettingsStore)
 
 local MovementController = {}
 
@@ -18,6 +19,10 @@ local connections: { RBXScriptConnection } = {}
 local function showMarker(info: CameraController.MapInfo, x: number, y: number, color: Color3)
 	if marker then
 		marker:Destroy()
+		marker = nil
+	end
+	if not SettingsStore.get("showMoveMarker") then
+		return
 	end
 	local part = Instance.new("Part")
 	part.Name = "MoveMarker"

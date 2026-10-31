@@ -38,6 +38,10 @@ local stateEnteredAt = os.clock()
 local endsAt: number? = nil -- heure serveur (workspace:GetServerTimeNow())
 
 local ready: { [Player]: boolean } = {}
+-- Joueurs ayant cliqué PLAY : seuls eux comptent pour démarrer une manche (les autres sont au menu).
+local queued: { [Player]: boolean } = {}
+-- « Rejouer » demandé pendant l'écran de résultats : devient « prêt » au retour au lobby.
+local rematch: { [Player]: boolean } = {}
 local participants: { [Player]: boolean } = {}
 local participantOrder: { Player } = {}
 local alive: { [Player]: boolean } = {}
@@ -74,7 +78,8 @@ local function buildSnapshot()
 		table.insert(list, {
 			userId = player.UserId,
 			name = player.DisplayName,
-			ready = ready[player] == true,
+			queued = queued[player] == true,
+			ready = ready[player] == true or rematch[player] == true,
 			participant = participants[player] == true,
 			alive = alive[player] == true,
 		})
@@ -192,9 +197,10 @@ local function returnToLobby(keepReady: boolean)
 
 	buildLobby()
 	for _, player in Players:GetPlayers() do
-		if keepReady and previousReady[player] then
+		if queued[player] and ((keepReady and previousReady[player]) or rematch[player]) then
 			ready[player] = true
 		end
+		rematch[player] = nil
 		claimLobbySpawn(player)
 		loadCharacter(player)
 	end
@@ -279,6 +285,17 @@ local function resetRound()
 	setState("WAITING")
 end
 
+-- Joueurs dans la file (PLAY cliqué), dans l'ordre d'arrivée.
+local function queuedPlayers(): { Player }
+	local list: { Player } = {}
+	for _, player in Players:GetPlayers() do
+		if queued[player] then
+			table.insert(list, player)
+		end
+	end
+	return list
+end
+
 local function onEliminated(player: Player)
 	if state ~= "PLAYING" or not alive[player] then
 		return
@@ -293,11 +310,11 @@ end
 
 local function tick()
 	if state == "WAITING" then
-		if #Players:GetPlayers() >= minPlayers() then
+		if #queuedPlayers() >= minPlayers() then
 			setState("READY")
 		end
 	elseif state == "READY" then
-		local all = Players:GetPlayers()
+		local all = queuedPlayers()
 		if #all < minPlayers() then
 			setState("WAITING")
 			return
@@ -359,6 +376,8 @@ end
 
 local function onPlayerRemoving(player: Player)
 	ready[player] = nil
+	queued[player] = nil
+	rematch[player] = nil
 	lastReadyRequest[player] = nil
 	spawnIndex[player] = nil
 	if participants[player] then
@@ -414,10 +433,41 @@ function RoundService.start(remotes: Folder)
 		end
 		lastReadyRequest[player] = now
 
+		if not queued[player] then
+			return -- il faut d'abord cliquer PLAY
+		end
 		if state == "WAITING" or state == "READY" or (state == "COUNTDOWN" and participants[player]) then
 			ready[player] = if value then true else nil
 			broadcast()
+		elseif state == "FINISHED" then
+			rematch[player] = if value then true else nil -- « Rejouer » : prêt dès le retour au lobby
+			broadcast()
 		end
+	end)
+
+	-- PLAY / retour au menu. Un participant encore en jeu ne peut pas quitter la file.
+	local setQueued = remotes:WaitForChild("SetQueued") :: RemoteEvent
+	setQueued.OnServerEvent:Connect(function(player: Player, value: any)
+		if typeof(value) ~= "boolean" then
+			return
+		end
+		local now = os.clock()
+		if now - (lastReadyRequest[player] or 0) < GameConfig.RemoteLimits.ReadyToggleMinInterval then
+			return
+		end
+		lastReadyRequest[player] = now
+
+		local lockedIn = participants[player]
+			and (state == "COUNTDOWN" or (state == "PLAYING" and alive[player] == true))
+		if not value and lockedIn then
+			return
+		end
+		queued[player] = if value then true else nil
+		if not value then
+			ready[player] = nil
+			rematch[player] = nil
+		end
+		broadcast()
 	end)
 
 	task.spawn(function()

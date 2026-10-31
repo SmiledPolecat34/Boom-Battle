@@ -30,6 +30,7 @@ for _, name in {
 	"StatsChanged",
 	"PlayerEliminated",
 	"SetReady",
+	"SetQueued",
 	"RoundState",
 	"RoundEnded",
 } do
