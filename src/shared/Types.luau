@@ -24,6 +24,7 @@ export type PlayerStats = {
 
 export type MapLayout = {
 	seed: number,
+	sizeId: string,
 	size: number,
 	theme: string,
 	-- cells[y][x] ; index 1..size
