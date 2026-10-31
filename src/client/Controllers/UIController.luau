@@ -5,8 +5,11 @@
 -- Écrans : MainMenu, Lobby, GameHUD (joueur et spectateur), Results ; fenêtres : Settings, Help.
 -- Aucune décision de jeu ici : tout vient du serveur (RoundController relaie les messages).
 
+local ContentProvider = game:GetService("ContentProvider")
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
+
+local AssetIds = require(script.Parent.Parent.UI.AssetIds)
 
 local SettingsStore = require(script.Parent.SettingsStore)
 local GameHUD = require(script.Parent.Parent.UI.Screens.GameHUD)
@@ -241,6 +244,19 @@ function UIController.start(remotes: Folder)
 
 	screenGui.Parent = localPlayer:WaitForChild("PlayerGui")
 	gui = screenGui
+
+	-- Préchargement des images du menu en arrière-plan : évite qu'elles apparaissent avec retard (logo, boutons).
+	task.spawn(function()
+		local ids: { string } = {}
+		for _, value in AssetIds do
+			if typeof(value) == "string" then
+				table.insert(ids, value)
+			end
+		end
+		pcall(function()
+			ContentProvider:PreloadAsync(ids)
+		end)
+	end)
 
 	applyScale()
 	table.insert(connections, SettingsStore.Changed:Connect(applyScale))

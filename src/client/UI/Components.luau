@@ -126,6 +126,90 @@ function Components.addHover(button: GuiButton, options: { scale: number?, glow:
 	end)
 end
 
+-- Texte « arcade » façon bouton PLAY : police épaisse arrondie (FredokaOne), dégradé vertical jaune → orange → rouge
+-- orangé, gros contour noir, ombre noire décalée vers le bas et reflet blanc sur le haut des lettres.
+-- Quatre TextLabel transparents superposés dans une zone en FRACTIONS du parent (donc responsive : PC, tablette,
+-- mobile) ; le texte est mis à l'échelle (TextScaled) dans cette zone. Retourne la zone.
+export type TextArea = { x: number, y: number, width: number, height: number }
+
+local TITLE_TOP = Color3.fromHex("#FFD52A")
+local TITLE_MIDDLE = Color3.fromHex("#FF9800")
+local TITLE_BOTTOM = Color3.fromHex("#F04400")
+local TITLE_OUTLINE = Color3.fromHex("#080808")
+local TITLE_STROKE_THICKNESS = 6 -- px de conception (mis à l'échelle avec l'interface)
+local TITLE_SHADOW_OFFSET = 0.07 -- fraction de la hauteur de la zone, soit environ 5 px sur le bouton PLAY
+
+function Components.arcadeText(parent: Instance, name: string, text: string, area: TextArea): Frame
+	local zone = Instance.new("Frame")
+	zone.Name = name
+	zone.BackgroundTransparency = 1
+	zone.BorderSizePixel = 0
+	zone.Active = false -- ne bloque jamais le clic du bouton parent
+	zone.Position = UDim2.fromScale(area.x, area.y)
+	zone.Size = UDim2.fromScale(area.width, area.height)
+	zone.ZIndex = if parent:IsA("GuiObject") then (parent :: GuiObject).ZIndex + 2 else 2
+	zone.Parent = parent
+
+	local function layer(layerName: string, offsetY: number, textColor: Color3): TextLabel
+		local label = Instance.new("TextLabel")
+		label.Name = layerName
+		label.BackgroundTransparency = 1
+		label.Size = UDim2.fromScale(1, 1)
+		label.Position = UDim2.fromScale(0, offsetY)
+		label.Font = Enum.Font.FredokaOne
+		label.Text = string.upper(text)
+		label.TextColor3 = textColor
+		label.TextScaled = true
+		label.TextXAlignment = Enum.TextXAlignment.Center
+		label.TextYAlignment = Enum.TextYAlignment.Center
+		label.Rotation = 0
+		label.Active = false
+		label.Parent = zone
+		return label
+	end
+
+	-- 1. Ombre : noire, décalée vers le bas, avec son propre contour pour garder la silhouette épaisse.
+	local shadow = layer("Shadow", TITLE_SHADOW_OFFSET, TITLE_OUTLINE)
+	shadow.ZIndex = zone.ZIndex
+	local shadowStroke = Instance.new("UIStroke")
+	shadowStroke.Color = TITLE_OUTLINE
+	shadowStroke.Thickness = TITLE_STROKE_THICKNESS
+	shadowStroke.LineJoinMode = Enum.LineJoinMode.Round
+	shadowStroke.Parent = shadow
+
+	-- 2. Texte : dégradé vertical (le dégradé enfant du TextLabel colore le texte, pas le contour) + contour noir.
+	local main = layer("Text", 0, Color3.new(1, 1, 1))
+	main.ZIndex = zone.ZIndex + 1
+	local gradient = Instance.new("UIGradient")
+	gradient.Rotation = 90 -- de haut en bas
+	gradient.Color = ColorSequence.new({
+		ColorSequenceKeypoint.new(0, TITLE_TOP),
+		ColorSequenceKeypoint.new(0.5, TITLE_MIDDLE),
+		ColorSequenceKeypoint.new(1, TITLE_BOTTOM),
+	})
+	gradient.Parent = main
+	local stroke = Instance.new("UIStroke")
+	stroke.Color = TITLE_OUTLINE
+	stroke.Thickness = TITLE_STROKE_THICKNESS
+	stroke.LineJoinMode = Enum.LineJoinMode.Round
+	stroke.Parent = main
+
+	-- 3. Reflet : le même texte en blanc, visible seulement sur le haut des lettres (transparence en dégradé).
+	local shine = layer("Shine", -0.015, Color3.new(1, 1, 1))
+	shine.ZIndex = zone.ZIndex + 2
+	local shineGradient = Instance.new("UIGradient")
+	shineGradient.Rotation = 90
+	shineGradient.Transparency = NumberSequence.new({
+		NumberSequenceKeypoint.new(0, 0.35),
+		NumberSequenceKeypoint.new(0.4, 0.8),
+		NumberSequenceKeypoint.new(0.5, 1),
+		NumberSequenceKeypoint.new(1, 1),
+	})
+	shineGradient.Parent = shine
+
+	return zone
+end
+
 -- Bouton avec retour visuel (survol PC, pression mobile). Retourne le bouton ; brancher .Activated.
 function Components.button(parent: Instance, name: string, text: string, color: Color3, size: UDim2): TextButton
 	local button = Instance.new("TextButton")

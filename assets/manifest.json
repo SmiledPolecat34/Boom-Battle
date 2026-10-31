@@ -1,6 +1,5 @@
 {
   "_commentaire": "Registre des images importées dans Roblox. Avant d'envoyer un fichier, comparer son sha256 : s'il est déjà listé, réutiliser son identifiant au lieu de le renvoyer. Ne jamais inventer d'identifiant.",
-  "importeLe": "2026-10-31",
   "createur": "SmiledPolecat34 (compte connecté à Roblox Studio)",
   "assets": [
     {
@@ -9,6 +8,7 @@
       "dimensions": "1416x786",
       "assetId": "rbxassetid://115523406234858",
       "type": "Image",
+      "importeLe": "2026-10-31",
       "utilisePar": "src/client/UI/AssetIds.luau : Logo"
     },
     {
@@ -17,6 +17,7 @@
       "dimensions": "887x858",
       "assetId": "rbxassetid://78179054044113",
       "type": "Image",
+      "importeLe": "2026-10-31",
       "utilisePar": "src/client/UI/AssetIds.luau : HelpIcon"
     },
     {
@@ -25,7 +26,26 @@
       "dimensions": "920x913",
       "assetId": "rbxassetid://109788821205687",
       "type": "Image",
+      "importeLe": "2026-10-31",
       "utilisePar": "src/client/UI/AssetIds.luau : SettingsIcon"
+    },
+    {
+      "fichier": "assets/ui/icone_quetes.png",
+      "sha256": "bf48661881ffc3d6ea0ff2ed1f3f4b2a602dbeab17c8dddb4a566e7a27889905",
+      "dimensions": "1092x1164",
+      "assetId": "rbxassetid://121477183604134",
+      "type": "Image",
+      "importeLe": "2026-10-31",
+      "utilisePar": "src/client/UI/AssetIds.luau : QuestsIcon"
+    },
+    {
+      "fichier": "assets/ui/bouton_play.png",
+      "sha256": "f1836445c4447f95a071f9b2916017f41207563039ff456385eb4d9e24e0b1b8",
+      "dimensions": "1655x544",
+      "assetId": "rbxassetid://78978566535693",
+      "type": "Image",
+      "importeLe": "2026-10-31",
+      "utilisePar": "src/client/UI/AssetIds.luau : PlayButton (texte PLAY ajouté par le code)"
     }
   ]
 }

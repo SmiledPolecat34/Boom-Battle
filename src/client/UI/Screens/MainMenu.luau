@@ -207,12 +207,27 @@ function MainMenu.new(parent: Instance, ctx: any)
 	Components.stroke(questsCard, Color3.fromRGB(150, 160, 205), 3)
 	questsCard.AutoButtonColor = false
 	Components.addHover(questsCard, { scale = 1.04 })
+	-- Icône de quêtes à gauche (si importée) ; le titre et la barre se décalent pour lui laisser la place.
+	local contentLeft = 18
+	if AssetIds.QuestsIcon then
+		local icon = Instance.new("ImageLabel")
+		icon.Name = "QuestsIcon"
+		icon.AnchorPoint = Vector2.new(0, 0.5)
+		icon.Position = UDim2.new(0, 10, 0.5, 0)
+		icon.Size = UDim2.fromOffset(66, 70)
+		icon.BackgroundTransparency = 1
+		icon.Image = AssetIds.QuestsIcon
+		icon.ScaleType = Enum.ScaleType.Fit
+		icon.Parent = questsCard
+		contentLeft = 86
+	end
 	local questsTitle = Components.label(questsCard, "Title", "QUÊTES", 30, Theme.white, Theme.fontTitle)
-	questsTitle.Position = UDim2.fromOffset(0, 8)
+	questsTitle.Position = UDim2.fromOffset(contentLeft - 18, 8)
+	questsTitle.Size = UDim2.new(1, -(contentLeft - 18), 0, 38)
 	questsTitle.TextStrokeTransparency = 0
 	local barBack = Instance.new("Frame")
-	barBack.Position = UDim2.new(0, 18, 1, -34)
-	barBack.Size = UDim2.new(1, -90, 0, 16)
+	barBack.Position = UDim2.new(0, contentLeft, 1, -34)
+	barBack.Size = UDim2.new(1, -(contentLeft + 72), 0, 16)
 	barBack.BackgroundColor3 = Color3.fromRGB(30, 32, 48)
 	barBack.Parent = questsCard
 	Components.corner(barBack, 8)
@@ -231,35 +246,33 @@ function MainMenu.new(parent: Instance, ctx: any)
 	end)
 
 	-- Bas droite : PLAY ------------------------------------------------------------------------------------------
-	local play = Components.button(frame, "PlayButton", "PLAY", Color3.fromRGB(76, 200, 60), UDim2.fromOffset(440, 112))
-	play.AnchorPoint = Vector2.new(1, 1)
-	play.Position = UDim2.new(1, -28, 1, -28)
-	play.TextSize = 72
-	play.TextStrokeTransparency = 0
-	play.TextStrokeColor3 = Color3.fromRGB(40, 110, 30)
-	Components.stroke(play, Color3.fromRGB(255, 255, 255), 3)
-	local bombIcon = Instance.new("Frame")
-	bombIcon.Name = "BombIcon"
-	bombIcon.AnchorPoint = Vector2.new(1, 0.5)
-	bombIcon.Position = UDim2.new(1, -16, 0.5, 6)
-	bombIcon.Size = UDim2.fromOffset(62, 62)
-	bombIcon.BackgroundColor3 = Color3.fromRGB(34, 34, 44)
-	bombIcon.Parent = play
-	Components.corner(bombIcon, 31)
-	local shine = Instance.new("Frame")
-	shine.Position = UDim2.fromOffset(12, 10)
-	shine.Size = UDim2.fromOffset(14, 14)
-	shine.BackgroundColor3 = Color3.fromRGB(150, 156, 180)
-	shine.Parent = bombIcon
-	Components.corner(shine, 7)
-	local fuse = Instance.new("Frame")
-	fuse.AnchorPoint = Vector2.new(0.5, 1)
-	fuse.Position = UDim2.new(0.5, 8, 0, 4)
-	fuse.Size = UDim2.fromOffset(6, 18)
-	fuse.Rotation = 25
-	fuse.BackgroundColor3 = Color3.fromRGB(255, 160, 40)
-	fuse.Parent = bombIcon
-	Components.corner(fuse, 3)
+	local play: GuiButton
+	if AssetIds.PlayButton then
+		-- Image du bouton (inchangée : couleurs, proportions et icônes d'origine) + texte « PLAY » stylé au centre.
+		local width = 470
+		local image = Instance.new("ImageButton")
+		image.Name = "PlayButton"
+		image.AnchorPoint = Vector2.new(1, 1)
+		image.Position = UDim2.new(1, -24, 1, -20)
+		image.Size = UDim2.fromOffset(width, width / AssetIds.PlayButtonAspectRatio) -- proportions exactes de l'image
+		image.BackgroundTransparency = 1
+		image.Image = AssetIds.PlayButton
+		image.ScaleType = Enum.ScaleType.Fit
+		image.AutoButtonColor = false
+		image.Parent = frame
+		Components.arcadeText(image, "PlayText", "PLAY", AssetIds.PlayTextArea)
+		Components.addHover(image, { scale = 1.05, glow = false })
+		play = image
+	else
+		-- Rendu de secours tant que l'image du bouton n'est pas importée.
+		local text = Components.button(frame, "PlayButton", "PLAY", Color3.fromRGB(76, 200, 60), UDim2.fromOffset(440, 112))
+		text.AnchorPoint = Vector2.new(1, 1)
+		text.Position = UDim2.new(1, -28, 1, -28)
+		text.TextSize = 72
+		text.TextStrokeTransparency = 0
+		text.TextStrokeColor3 = Color3.fromRGB(40, 110, 30)
+		play = text
+	end
 	play.Activated:Connect(function()
 		ctx.setQueued(true)
 	end)
