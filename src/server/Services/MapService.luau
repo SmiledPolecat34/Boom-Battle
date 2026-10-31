@@ -14,6 +14,7 @@ local ARENA_NAME = "Arena"
 local WALL_HEIGHT_RATIO = 1 -- hauteur des piliers / murs = 1 case
 local FLOOR_ACCENT_RATIO = 0.12 -- part des cases de sol qui reçoivent la couleur d'accent
 local DECOR_MARGIN_CELLS = 4 -- les décors vivent dans cette bande, autour de l'anneau de murs
+local FLOOR_TILE_THICKNESS = 0.06 -- dalles de couleur posées sur la plaque de sol
 
 export type MapInfo = {
 	layout: Types.MapLayout,
@@ -170,26 +171,40 @@ function MapService.generateAndBuild(
 
 	-- Sol extérieur : masque la baseplate de l'éditeur et donne l'ambiance (lave, neige, sable, ...).
 	local groundSize = (size + 2 * DECOR_MARGIN_CELLS + 8) * cellSize
-	makePart("Ground", Vector3.new(groundSize, 1, groundSize),
+	local ground = makePart("Ground", Vector3.new(groundSize, 1, groundSize),
 		Vector3.new(0, -1.6, 0), theme.groundColor, theme.groundMaterial, folder)
+	ground.CastShadow = false
+	ground.CanQuery = false -- sous l'arène, inatteignable : aucun intérêt pour les requêtes spatiales
+
+	-- Sol : UNE seule plaque (couleur A, seule à collisionner) + de fines dalles uniquement pour les cases dont la
+	-- couleur diffère (damier B et taches). Deux fois moins de Parts qu'une Part par case, rendu identique.
+	local floorPlate = makePart("Floor", Vector3.new(size * cellSize, 1, size * cellSize),
+		Vector3.new(0, -0.5, 0), theme.floorColorA, theme.floorMaterial, folder)
+	floorPlate.CastShadow = false
 
 	for y = 1, size do
 		for x = 1, size do
 			local cell = { x = x, y = y }
 			local floorColor = if (x + y) % 2 == 0 then theme.floorColorA else theme.floorColorB
+			-- Le tirage est TOUJOURS consommé, même sans dalle : il garde les décors identiques pour une même seed.
 			if rng:NextNumber() < FLOOR_ACCENT_RATIO then
 				floorColor = theme.floorAccentColor
 			end
-			local floor = makePart(
-				("Floor_%d_%d"):format(x, y),
-				Vector3.new(cellSize, 1, cellSize),
-				grid:cellToWorld(cell, -0.5),
-				floorColor,
-				theme.floorMaterial,
-				folder
-			)
-			floor:SetAttribute("CellX", x)
-			floor:SetAttribute("CellY", y)
+			if floorColor ~= theme.floorColorA then
+				local tile = makePart(
+					("Tile_%d_%d"):format(x, y),
+					Vector3.new(cellSize, FLOOR_TILE_THICKNESS, cellSize),
+					grid:cellToWorld(cell, FLOOR_TILE_THICKNESS / 2),
+					floorColor,
+					theme.floorMaterial,
+					folder
+				)
+				-- Purement visuelle : la plaque assure la collision ; ni requête, ni contact, ni ombre.
+				tile.CanCollide = false
+				tile.CanQuery = false
+				tile.CanTouch = false
+				tile.CastShadow = false
+			end
 
 			local kind = layout.cells[y][x]
 			if kind == "PILLAR" then
@@ -230,21 +245,19 @@ function MapService.generateAndBuild(
 		end
 	end
 
-	-- Anneau de murs extérieurs : cellules 0 et size + 1 sur chaque axe.
-	for y = 0, size + 1 do
-		for x = 0, size + 1 do
-			if x == 0 or y == 0 or x == size + 1 or y == size + 1 then
-				makePart(
-					("Border_%d_%d"):format(x, y),
-					Vector3.new(cellSize, wallHeight, cellSize),
-					grid:cellToWorld({ x = x, y = y }, wallHeight / 2),
-					theme.borderColor,
-					theme.borderMaterial,
-					folder
-				)
-			end
-		end
+	-- Anneau de murs extérieurs (cellules 0 et size + 1) : 4 longs murs au lieu d'une Part par case.
+	-- Haut et bas portent les coins ; gauche et droite couvrent le reste. Même emprise, même collision.
+	local ringLength = (size + 2) * cellSize
+	local sideLength = size * cellSize
+	local half = size * cellSize / 2
+	local wallY = wallHeight / 2
+	local function wall(name: string, sizeVector: Vector3, position: Vector3)
+		makePart(name, sizeVector, position, theme.borderColor, theme.borderMaterial, folder)
 	end
+	wall("Border_North", Vector3.new(ringLength, wallHeight, cellSize), Vector3.new(0, wallY, -half - cellSize / 2))
+	wall("Border_South", Vector3.new(ringLength, wallHeight, cellSize), Vector3.new(0, wallY, half + cellSize / 2))
+	wall("Border_West", Vector3.new(cellSize, wallHeight, sideLength), Vector3.new(-half - cellSize / 2, wallY, 0))
+	wall("Border_East", Vector3.new(cellSize, wallHeight, sideLength), Vector3.new(half + cellSize / 2, wallY, 0))
 
 	-- Décors : uniquement dans la bande extérieure à l'anneau de murs (jamais sur la zone de jeu).
 	local decorFolder = Instance.new("Folder")

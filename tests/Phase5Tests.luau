@@ -110,14 +110,16 @@ for _, themeId in MapConfig.ThemeOrder do
 			local folder = info.folder
 			local size = info.layout.size
 			local half = size * MapConfig.CellSize / 2 + MapConfig.CellSize -- demi-largeur de la zone + anneau
-			local decorInside, decorCollide, floors, crates, parts = 0, 0, 0, 0, 0
+			local decorInside, decorCollide, tiles, plates, borders, crates, parts = 0, 0, 0, 0, 0, 0, 0
 			for _, d in folder:GetDescendants() do
 				if d:IsA("BasePart") then
 					parts += 1
 				end
 			end
 			for _, child in folder:GetChildren() do
-				if child.Name:match("^Floor_") then floors += 1 end
+				if child.Name == "Floor" then plates += 1 end
+				if child.Name:match("^Tile_") then tiles += 1 end
+				if child.Name:match("^Border_") then borders += 1 end
 				if child.Name:match("^Crate_") then crates += 1 end
 			end
 			for _, d in folder.Decor:GetDescendants() do
@@ -126,7 +128,10 @@ for _, themeId in MapConfig.ThemeOrder do
 					if math.abs(d.Position.X) < half and math.abs(d.Position.Z) < half then decorInside += 1 end
 				end
 			end
-			check(("%s/%s : %d sols"):format(themeId, sizeId, size * size), floors == size * size, tostring(floors))
+			-- Sol : une plaque + des dalles pour les cases d'une autre couleur (au moins la moitié du damier).
+			check(("%s/%s : une plaque de sol"):format(themeId, sizeId), plates == 1)
+			check(("%s/%s : dalles de sol plausibles"):format(themeId, sizeId), tiles >= size * size // 2 and tiles <= size * size, tostring(tiles))
+			check(("%s/%s : 4 murs d'enceinte"):format(themeId, sizeId), borders == 4, tostring(borders))
 			check(("%s/%s : caisses = grille"):format(themeId, sizeId), crates == (function() local n = 0 for _ in info.crates do n += 1 end return n end)())
 			check(("%s/%s : décors sans collision"):format(themeId, sizeId), decorCollide == 0, tostring(decorCollide))
 			check(("%s/%s : aucun décor dans la zone de jeu"):format(themeId, sizeId), decorInside == 0, tostring(decorInside))

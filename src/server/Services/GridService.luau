@@ -98,33 +98,41 @@ function GridService.findPath(self: GridService, from: Types.Cell, to: Types.Cel
 		return {}
 	end
 
+	-- Parcours en largeur sur des clés numériques : aucune table allouée par case visitée.
 	local size = self.size
 	local startKey = (from.y - 1) * size + from.x
 	local targetKey = (to.y - 1) * size + to.x
 	local parent: { [number]: number } = { [startKey] = -1 }
-	local queue: { Types.Cell } = { from }
-	local head = 1
+	local queue: { number } = { startKey }
+	local head, tail = 1, 1
 
-	while head <= #queue do
-		local current = queue[head]
+	while head <= tail do
+		local currentKey = queue[head]
 		head += 1
-		local currentKey = (current.y - 1) * size + current.x
+		local cx = (currentKey - 1) % size + 1
+		local cy = (currentKey - 1) // size + 1
 		for _, d in DIRECTIONS do
-			local nx, ny = current.x + d.x, current.y + d.y
+			local nx, ny = cx + d.x, cy + d.y
 			if self:isWalkable(nx, ny) then
 				local key = (ny - 1) * size + nx
 				if parent[key] == nil then
 					parent[key] = currentKey
 					if key == targetKey then
-						local path: { Types.Cell } = {}
+						-- Reconstruction à rebours puis inversion (évite table.insert(path, 1, ...) en O(n²)).
+						local reversed: { Types.Cell } = {}
 						local walk = key
 						while walk ~= startKey do
-							table.insert(path, 1, { x = (walk - 1) % size + 1, y = (walk - 1) // size + 1 })
+							table.insert(reversed, { x = (walk - 1) % size + 1, y = (walk - 1) // size + 1 })
 							walk = parent[walk]
+						end
+						local path: { Types.Cell } = table.create(#reversed)
+						for i = #reversed, 1, -1 do
+							table.insert(path, reversed[i])
 						end
 						return path
 					end
-					table.insert(queue, { x = nx, y = ny })
+					tail += 1
+					queue[tail] = key
 				end
 			end
 		end

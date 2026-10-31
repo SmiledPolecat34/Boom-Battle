@@ -34,6 +34,7 @@ local openOverlay: string? = nil
 local currentSnapshot: any = nil
 local currentScreen: string? = nil
 local currentProfile: any = nil
+local forceTick = false
 local connections: { RBXScriptConnection } = {}
 
 local function findMe(snapshot: any): any
@@ -130,6 +131,7 @@ end
 
 function UIController.onSnapshot(snapshot: any)
 	currentSnapshot = snapshot
+	forceTick = true -- le prochain affichage des textes tient compte du nouvel état
 	render()
 end
 
@@ -248,12 +250,29 @@ function UIController.start(remotes: Folder)
 	end
 
 	-- Chronomètres : calculés localement à partir de l'heure serveur annoncée (aucun trafic réseau par seconde).
+	-- Les textes ne changent qu'à la seconde : on ne les réécrit que lorsque la seconde affichée change (ou après un
+	-- changement d'écran ou de réglage), au lieu de 60 fois par seconde.
+	local lastSecond: number? = nil
+	local lastTickedScreen: string? = nil
+	table.insert(
+		connections,
+		SettingsStore.Changed:Connect(function()
+			lastSecond = nil -- force un rafraîchissement (ex. minuteur masqué ou affiché)
+		end)
+	)
 	table.insert(
 		connections,
 		RunService.RenderStepped:Connect(function()
+			local screenName = currentScreen
+			if not screenName or not screens[screenName] then
+				return
+			end
 			local value = remaining()
-			if currentScreen and screens[currentScreen] then
-				screens[currentScreen].tick(value)
+			local second = if value then math.ceil(value) else -1
+			if second ~= lastSecond or screenName ~= lastTickedScreen or forceTick then
+				forceTick = false
+				lastSecond, lastTickedScreen = second, screenName
+				screens[screenName].tick(value)
 			end
 		end)
 	)
