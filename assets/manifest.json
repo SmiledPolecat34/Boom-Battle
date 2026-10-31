@@ -1,0 +1,31 @@
+{
+  "_commentaire": "Registre des images importées dans Roblox. Avant d'envoyer un fichier, comparer son sha256 : s'il est déjà listé, réutiliser son identifiant au lieu de le renvoyer. Ne jamais inventer d'identifiant.",
+  "importeLe": "2026-10-31",
+  "createur": "SmiledPolecat34 (compte connecté à Roblox Studio)",
+  "assets": [
+    {
+      "fichier": "assets/ui/logo.png",
+      "sha256": "a85f96a6fb8fc35c1c01f5dec1fcdb9dc8902da67d96e433afac5dbfb4d21b55",
+      "dimensions": "1416x786",
+      "assetId": "rbxassetid://115523406234858",
+      "type": "Image",
+      "utilisePar": "src/client/UI/AssetIds.luau : Logo"
+    },
+    {
+      "fichier": "assets/ui/icone_aide.png",
+      "sha256": "d4ea73be25015b3dd1af16d1d8a77c75cb6ea2c553fa4f09fe0d9c4b5afe7bfd",
+      "dimensions": "887x858",
+      "assetId": "rbxassetid://78179054044113",
+      "type": "Image",
+      "utilisePar": "src/client/UI/AssetIds.luau : HelpIcon"
+    },
+    {
+      "fichier": "assets/ui/icone_reglages.png",
+      "sha256": "b230b40c2865332c77c2c5ed1faea339c9255a5661a0c8199757bb4ebbc7260d",
+      "dimensions": "920x913",
+      "assetId": "rbxassetid://109788821205687",
+      "type": "Image",
+      "utilisePar": "src/client/UI/AssetIds.luau : SettingsIcon"
+    }
+  ]
+}

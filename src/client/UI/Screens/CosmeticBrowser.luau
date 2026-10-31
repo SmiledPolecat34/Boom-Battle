@@ -156,6 +156,8 @@ function CosmeticBrowser.new(parent: Instance, ctx: any, mode: string)
 			card.BackgroundColor3 = if id == state.selected then Theme.violet else Theme.navy
 			card.Parent = grid
 			Components.corner(card, 10)
+			card.AutoButtonColor = false
+			Components.addHover(card, { scale = 1.05 })
 			if id == state.selected then
 				Components.stroke(card, Theme.yellow, 3)
 			end

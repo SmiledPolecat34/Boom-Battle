@@ -1,117 +1,313 @@
 --!strict
--- Menu principal : logo, avatar du joueur, PLAY, Aide, Réglages.
--- Boutique, inventaire, quêtes, événements et solde de pièces sont absents : ils n'existent pas encore (Phase 6).
+-- Menu principal, disposition de la maquette : logo en haut, solde + aide + réglages en haut à droite,
+-- BOUTIQUE / INVENTAIRE à gauche, cartes ÉVÉNEMENTS / QUÊTES à droite, grand bouton PLAY en bas à droite.
+-- Le fond est une scène 3D (MenuScene) avec le personnage Roblox du joueur au centre, sur son podium.
+-- Rien n'est affiché qui n'existe pas : pas de bouton « + inviter », pas d'événement ou de saison inventés.
 
 local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
+local AssetIds = require(script.Parent.Parent.AssetIds)
+local CameraController = require(script.Parent.Parent.Parent.Controllers.CameraController)
 local Components = require(script.Parent.Parent.Components)
+local CosmeticConfig = require(ReplicatedStorage.Shared.CosmeticConfig)
+local EventConfig = require(ReplicatedStorage.Shared.EventConfig)
+local MenuScene = require(script.Parent.Parent.MenuScene)
+local QuestConfig = require(ReplicatedStorage.Shared.QuestConfig)
 local Theme = require(script.Parent.Parent.Theme)
 
 local MainMenu = {}
 
+local function formatNumber(n: number): string
+	local text = tostring(math.floor(n)):reverse():gsub("(%d%d%d)", "%1 "):reverse()
+	return (text:gsub("^ ", ""))
+end
+
+local function logoLabel(parent: Instance, name: string, text: string, color: Color3, y: number, size: number): TextLabel
+	local label = Components.label(parent, name, text, size, color, Theme.fontTitle)
+	label.AnchorPoint = Vector2.new(0.5, 0)
+	label.Position = UDim2.new(0.5, 0, 0, y)
+	label.Size = UDim2.new(0.6, 0, 0, size + 8)
+	label.TextStrokeTransparency = 0
+	label.TextStrokeColor3 = Color3.fromRGB(88, 36, 10)
+	return label
+end
+
 function MainMenu.new(parent: Instance, ctx: any)
+	-- Écran transparent : le décor 3D est le fond. Il absorbe quand même les clics (aucun déplacement derrière).
 	local frame = Components.screen(parent, "MainMenu", true)
-	frame.BackgroundColor3 = Theme.navy
-	frame.BackgroundTransparency = 0.3
+	frame.BackgroundTransparency = 1
 
-	local logo = Components.label(frame, "Logo", "BOM BATTLE", 96, Theme.yellow, Theme.fontTitle)
-	logo.AnchorPoint = Vector2.new(0.5, 0)
-	logo.Position = UDim2.new(0.5, 0, 0.04, 0)
-	logo.Size = UDim2.new(0.9, 0, 0, 110)
-	logo.TextStrokeTransparency = 0
-	logo.TextStrokeColor3 = Color3.fromRGB(140, 60, 20)
+	local scene = MenuScene.new()
+	local localPlayer = Players.LocalPlayer
+	scene:setLocalPlayer(localPlayer.UserId, localPlayer.DisplayName)
 
-	local tagline = Components.label(frame, "Tagline", "Place ta bombe. Fuis l'explosion. Reste le dernier.", 22, Theme.white)
-	tagline.AnchorPoint = Vector2.new(0.5, 0)
-	tagline.Position = UDim2.new(0.5, 0, 0.04, 118)
-	tagline.Size = UDim2.new(0.9, 0, 0, 30)
+	-- Logo ------------------------------------------------------------------------------------------------------
+	if AssetIds.Logo then
+		local logo = Instance.new("ImageLabel")
+		logo.Name = "Logo"
+		logo.AnchorPoint = Vector2.new(0.5, 0)
+		logo.Position = UDim2.new(0.5, 0, 0, 0)
+		logo.Size = UDim2.fromOffset(460, math.floor(460 / AssetIds.LogoAspectRatio))
+		logo.BackgroundTransparency = 1
+		logo.Image = AssetIds.Logo
+		logo.ScaleType = Enum.ScaleType.Fit
+		logo.Parent = frame
+	else
+		-- Rendu de secours tant que l'image du logo n'est pas importée (assets/ui/LISEZMOI.md).
+		logoLabel(frame, "LogoTop", "BOM", Color3.fromRGB(255, 142, 32), 6, 96)
+		logoLabel(frame, "LogoBottom", "BATTLE", Color3.fromRGB(255, 214, 64), 92, 84)
+	end
 
-	-- Avatar du joueur local.
-	local avatar = Instance.new("ImageLabel")
-	avatar.Name = "Avatar"
-	avatar.AnchorPoint = Vector2.new(0.5, 0.5)
-	avatar.Position = UDim2.new(0.5, 0, 0.55, 0)
-	avatar.Size = UDim2.fromOffset(240, 240)
-	avatar.BackgroundColor3 = Theme.panel
-	avatar.BackgroundTransparency = 0.2
-	avatar.Parent = frame
-	Components.corner(avatar, 120)
-	Components.stroke(avatar, Theme.yellow, 3)
+	-- Haut droite : solde, aide, réglages ----------------------------------------------------------------------
+	local coinsPill = Instance.new("Frame")
+	coinsPill.Name = "CoinsPill"
+	coinsPill.AnchorPoint = Vector2.new(1, 0)
+	coinsPill.Position = UDim2.new(1, if AssetIds.HelpIcon and AssetIds.SettingsIcon then -184 else -250, 0, 20)
+	coinsPill.Size = UDim2.fromOffset(200, 50)
+	coinsPill.BackgroundColor3 = Color3.fromRGB(30, 34, 46)
+	coinsPill.BackgroundTransparency = 0.1
+	coinsPill.Parent = frame
+	Components.corner(coinsPill, 25)
+	Components.stroke(coinsPill, Theme.yellow, 2)
+	local coinIcon = Instance.new("Frame")
+	coinIcon.Position = UDim2.fromOffset(6, 5)
+	coinIcon.Size = UDim2.fromOffset(40, 40)
+	coinIcon.BackgroundColor3 = Theme.yellow
+	coinIcon.Parent = coinsPill
+	Components.corner(coinIcon, 20)
+	Components.stroke(coinIcon, Color3.fromRGB(190, 130, 20), 3)
+	local coinMark = Components.label(coinIcon, "Mark", "C", 24, Color3.fromRGB(150, 90, 10), Theme.fontTitle)
+	coinMark.Size = UDim2.fromScale(1, 1)
+	local coins = Components.label(coinsPill, "Coins", "...", 26, Theme.white, Theme.fontTitle)
+	coins.Position = UDim2.fromOffset(52, 0)
+	coins.Size = UDim2.new(1, -60, 1, 0)
+	coins.TextXAlignment = Enum.TextXAlignment.Left
 
-	local nameLabel = Components.label(frame, "PlayerName", Players.LocalPlayer.DisplayName, 28, Theme.white, Theme.fontBold)
-	nameLabel.AnchorPoint = Vector2.new(0.5, 0)
-	nameLabel.Position = UDim2.new(0.5, 0, 0.55, 132)
-	nameLabel.Size = UDim2.fromOffset(360, 36)
-
-	task.spawn(function()
-		local ok, content = pcall(function()
-			return Players:GetUserThumbnailAsync(
-				Players.LocalPlayer.UserId,
-				Enum.ThumbnailType.AvatarBust,
-				Enum.ThumbnailSize.Size420x420
-			)
-		end)
-		if ok and typeof(content) == "string" then
-			avatar.Image = content
-		end
-	end)
-
-	local play = Components.button(frame, "PlayButton", "PLAY", Theme.green, UDim2.fromOffset(260, 96))
-	play.AnchorPoint = Vector2.new(1, 1)
-	play.Position = UDim2.new(1, -40, 1, -40)
-	play.TextSize = 48
-	play.Activated:Connect(function()
-		ctx.setQueued(true)
-	end)
-
-	local help = Components.button(frame, "HelpButton", "AIDE", Theme.violet, UDim2.fromOffset(130, 52))
+	-- Boutons d'aide et de réglages : image importée si disponible, sinon texte (rendu de secours).
+	local help: GuiButton
+	if AssetIds.HelpIcon then
+		local image = Instance.new("ImageButton")
+		image.Name = "HelpButton"
+		image.Size = UDim2.fromOffset(68, 68)
+		image.BackgroundTransparency = 1
+		image.Image = AssetIds.HelpIcon
+		image.ScaleType = Enum.ScaleType.Fit
+		image.Parent = frame
+		Components.addHover(image, { scale = 1.12, glow = false })
+		help = image
+	else
+		local text = Components.button(frame, "HelpButton", "?", Color3.fromRGB(48, 120, 230), UDim2.fromOffset(56, 56))
+		text.TextSize = 34
+		help = text
+	end
 	help.AnchorPoint = Vector2.new(1, 0)
-	help.Position = UDim2.new(1, -24, 0, 24)
+	help.Position = UDim2.new(1, if AssetIds.SettingsIcon then -100 else -182, 0, 12)
 	help.Activated:Connect(function()
 		ctx.openOverlay("Help")
 	end)
 
-	local settings = Components.button(frame, "SettingsButton", "RÉGLAGES", Theme.violet, UDim2.fromOffset(170, 52))
+	local settings: GuiButton
+	if AssetIds.SettingsIcon then
+		local image = Instance.new("ImageButton")
+		image.Name = "SettingsButton"
+		image.Size = UDim2.fromOffset(68, 68)
+		image.BackgroundTransparency = 1
+		image.Image = AssetIds.SettingsIcon
+		image.ScaleType = Enum.ScaleType.Fit
+		image.Parent = frame
+		Components.addHover(image, { scale = 1.12, glow = false })
+		settings = image
+	else
+		local text = Components.button(frame, "SettingsButton", "RÉGLAGES", Color3.fromRGB(64, 72, 98), UDim2.fromOffset(150, 56))
+		text.TextSize = 20
+		settings = text
+	end
 	settings.AnchorPoint = Vector2.new(1, 0)
-	settings.Position = UDim2.new(1, -164, 0, 24)
+	settings.Position = UDim2.new(1, -24, 0, if AssetIds.SettingsIcon then 12 else 17)
 	settings.Activated:Connect(function()
 		ctx.openOverlay("Settings")
 	end)
 
-	-- Boutique et inventaire à gauche, quêtes et événements à droite (disposition de la maquette).
-	local function sideButton(name: string, text: string, color: Color3, overlay: string, position: UDim2, anchor: Vector2)
-		local button = Components.button(frame, name, text, color, UDim2.fromOffset(210, 60))
-		button.AnchorPoint = anchor
-		button.Position = position
-		button.TextSize = 22
-		button.Activated:Connect(function()
-			ctx.openOverlay(overlay)
-		end)
-	end
-	sideButton("ShopButton", "BOUTIQUE", Theme.orange, "Shop", UDim2.new(0, 28, 0.42, 0), Vector2.new(0, 0.5))
-	sideButton("InventoryButton", "INVENTAIRE", Color3.fromRGB(150, 100, 60), "Inventory", UDim2.new(0, 28, 0.42, 76), Vector2.new(0, 0.5))
-	sideButton("QuestsButton", "QUÊTES", Theme.violet, "Quests", UDim2.new(1, -28, 0.42, 0), Vector2.new(1, 0.5))
-	sideButton("EventsButton", "ÉVÉNEMENTS", Theme.turquoise, "Events", UDim2.new(1, -28, 0.42, 76), Vector2.new(1, 0.5))
-
-	-- Solde de Bomb Coins (valeur du serveur) et avertissement si la progression n'est pas enregistrée.
-	local coins = Components.label(frame, "Coins", "Pièces : ...", 26, Theme.yellow, Theme.fontBold)
-	coins.AnchorPoint = Vector2.new(0, 0)
-	coins.Position = UDim2.fromOffset(24, 24)
-	coins.Size = UDim2.fromOffset(260, 36)
-	coins.TextXAlignment = Enum.TextXAlignment.Left
 	local saveNotice = Components.label(frame, "SaveNotice", "", 16, Theme.red, Theme.fontBold)
-	saveNotice.Position = UDim2.fromOffset(24, 62)
-	saveNotice.Size = UDim2.fromOffset(420, 24)
-	saveNotice.TextXAlignment = Enum.TextXAlignment.Left
+	saveNotice.AnchorPoint = Vector2.new(1, 0)
+	saveNotice.Position = UDim2.new(1, -24, 0, 80)
+	saveNotice.Size = UDim2.fromOffset(420, 22)
+	saveNotice.TextXAlignment = Enum.TextXAlignment.Right
+	saveNotice.TextStrokeTransparency = 0.4
+
+	-- Gauche : boutique et inventaire ---------------------------------------------------------------------------
+	local shop = Components.button(frame, "ShopButton", "BOUTIQUE", Color3.fromRGB(255, 150, 30), UDim2.fromOffset(310, 76))
+	shop.AnchorPoint = Vector2.new(0, 0.5)
+	shop.Position = UDim2.new(0, 24, 0.5, -6)
+	shop.TextSize = 38
+	shop.Activated:Connect(function()
+		ctx.openOverlay("Shop")
+	end)
+	local inventory = Components.button(frame, "InventoryButton", "INVENTAIRE", Color3.fromRGB(140, 92, 58), UDim2.fromOffset(310, 66))
+	inventory.AnchorPoint = Vector2.new(0, 0.5)
+	inventory.Position = UDim2.new(0, 24, 0.5, 78)
+	inventory.TextSize = 32
+	inventory.Activated:Connect(function()
+		ctx.openOverlay("Inventory")
+	end)
+
+	-- Droite : cartes événements et quêtes ----------------------------------------------------------------------
+	local eventsCard = Instance.new("TextButton")
+	eventsCard.Name = "EventsButton"
+	eventsCard.AnchorPoint = Vector2.new(1, 0)
+	eventsCard.Position = UDim2.new(1, -24, 0.5, -190)
+	eventsCard.Size = UDim2.fromOffset(300, 150)
+	eventsCard.BackgroundColor3 = Color3.fromRGB(122, 52, 30)
+	eventsCard.AutoButtonColor = true
+	eventsCard.Text = ""
+	eventsCard.Parent = frame
+	Components.corner(eventsCard, 14)
+	Components.stroke(eventsCard, Color3.fromRGB(255, 160, 50), 3)
+	eventsCard.AutoButtonColor = false
+	Components.addHover(eventsCard, { scale = 1.04 })
+	local eventsTitle = Components.label(eventsCard, "Title", "ÉVÉNEMENTS", 32, Theme.white, Theme.fontTitle)
+	eventsTitle.Position = UDim2.fromOffset(0, 12)
+	eventsTitle.TextStrokeTransparency = 0
+	local activeEvents = 0
+	local now = os.time()
+	local firstName = ""
+	for _, event in EventConfig.Events do
+		if (event.startsAt == nil or now >= event.startsAt) and (event.endsAt == nil or now <= event.endsAt) then
+			activeEvents += 1
+			if firstName == "" then
+				firstName = event.name
+			end
+		end
+	end
+	local eventsBody = Components.label(
+		eventsCard,
+		"Body",
+		if activeEvents > 0 then firstName else "Aucun événement\nen cours",
+		22,
+		Color3.fromRGB(255, 226, 160),
+		Theme.fontBold
+	)
+	eventsBody.Position = UDim2.fromOffset(0, 66)
+	eventsBody.Size = UDim2.new(1, 0, 0, 64)
+	eventsCard.Activated:Connect(function()
+		ctx.openOverlay("Events")
+	end)
+
+	local questsCard = Instance.new("TextButton")
+	questsCard.Name = "QuestsButton"
+	questsCard.AnchorPoint = Vector2.new(1, 0)
+	questsCard.Position = UDim2.new(1, -24, 0.5, -24)
+	questsCard.Size = UDim2.fromOffset(300, 96)
+	questsCard.BackgroundColor3 = Color3.fromRGB(58, 64, 94)
+	questsCard.AutoButtonColor = true
+	questsCard.Text = ""
+	questsCard.Parent = frame
+	Components.corner(questsCard, 14)
+	Components.stroke(questsCard, Color3.fromRGB(150, 160, 205), 3)
+	questsCard.AutoButtonColor = false
+	Components.addHover(questsCard, { scale = 1.04 })
+	local questsTitle = Components.label(questsCard, "Title", "QUÊTES", 30, Theme.white, Theme.fontTitle)
+	questsTitle.Position = UDim2.fromOffset(0, 8)
+	questsTitle.TextStrokeTransparency = 0
+	local barBack = Instance.new("Frame")
+	barBack.Position = UDim2.new(0, 18, 1, -34)
+	barBack.Size = UDim2.new(1, -90, 0, 16)
+	barBack.BackgroundColor3 = Color3.fromRGB(30, 32, 48)
+	barBack.Parent = questsCard
+	Components.corner(barBack, 8)
+	local barFill = Instance.new("Frame")
+	barFill.Size = UDim2.fromScale(0, 1)
+	barFill.BackgroundColor3 = Theme.yellow
+	barFill.Parent = barBack
+	Components.corner(barFill, 8)
+	local questsCount = Components.label(questsCard, "Count", ("0/%d"):format(#QuestConfig.Quests), 20, Theme.white, Theme.fontBold)
+	questsCount.AnchorPoint = Vector2.new(1, 1)
+	questsCount.Position = UDim2.new(1, -14, 1, -28)
+	questsCount.Size = UDim2.fromOffset(64, 26)
+	questsCount.TextXAlignment = Enum.TextXAlignment.Right
+	questsCard.Activated:Connect(function()
+		ctx.openOverlay("Quests")
+	end)
+
+	-- Bas droite : PLAY ------------------------------------------------------------------------------------------
+	local play = Components.button(frame, "PlayButton", "PLAY", Color3.fromRGB(76, 200, 60), UDim2.fromOffset(440, 112))
+	play.AnchorPoint = Vector2.new(1, 1)
+	play.Position = UDim2.new(1, -28, 1, -28)
+	play.TextSize = 72
+	play.TextStrokeTransparency = 0
+	play.TextStrokeColor3 = Color3.fromRGB(40, 110, 30)
+	Components.stroke(play, Color3.fromRGB(255, 255, 255), 3)
+	local bombIcon = Instance.new("Frame")
+	bombIcon.Name = "BombIcon"
+	bombIcon.AnchorPoint = Vector2.new(1, 0.5)
+	bombIcon.Position = UDim2.new(1, -16, 0.5, 6)
+	bombIcon.Size = UDim2.fromOffset(62, 62)
+	bombIcon.BackgroundColor3 = Color3.fromRGB(34, 34, 44)
+	bombIcon.Parent = play
+	Components.corner(bombIcon, 31)
+	local shine = Instance.new("Frame")
+	shine.Position = UDim2.fromOffset(12, 10)
+	shine.Size = UDim2.fromOffset(14, 14)
+	shine.BackgroundColor3 = Color3.fromRGB(150, 156, 180)
+	shine.Parent = bombIcon
+	Components.corner(shine, 7)
+	local fuse = Instance.new("Frame")
+	fuse.AnchorPoint = Vector2.new(0.5, 1)
+	fuse.Position = UDim2.new(0.5, 8, 0, 4)
+	fuse.Size = UDim2.fromOffset(6, 18)
+	fuse.Rotation = 25
+	fuse.BackgroundColor3 = Color3.fromRGB(255, 160, 40)
+	fuse.Parent = bombIcon
+	Components.corner(fuse, 3)
+	play.Activated:Connect(function()
+		ctx.setQueued(true)
+	end)
+
+	-- Décor 3D : visible seulement avec ce menu -------------------------------------------------------------------
+	local function syncVisibility()
+		if frame.Visible then
+			scene:setVisible(true)
+			CameraController.setOverride(MenuScene.CameraCFrame, MenuScene.FieldOfView)
+		else
+			scene:setVisible(false)
+			CameraController.setOverride(nil)
+		end
+	end
+	frame:GetPropertyChangedSignal("Visible"):Connect(syncVisibility)
 
 	return {
 		frame = frame,
 		setProfile = function(profile: any)
-			local text = tostring(math.floor(profile.coins)):reverse():gsub("(%d%d%d)", "%1 "):reverse()
-			coins.Text = ("Pièces : %s"):format((text:gsub("^ ", "")))
+			coins.Text = formatNumber(profile.coins)
 			saveNotice.Text = if profile.persisted then "" else "Sauvegarde indisponible : progression non enregistrée"
+
+			local done = 0
+			for _, quest in QuestConfig.Quests do
+				local state = profile.quests[quest.id]
+				if state and state.done then
+					done += 1
+				end
+			end
+			barFill.Size = UDim2.fromScale(done / math.max(#QuestConfig.Quests, 1), 1)
+			questsCount.Text = ("%d/%d"):format(done, #QuestConfig.Quests)
+
+			local equipped = CosmeticConfig.get(profile.equipped.bomb)
+			if equipped then
+				scene:setLocalBombColor(equipped.color)
+			end
 		end,
-		update = function(_snapshot: any, _me: any) end,
+		-- Les autres joueurs inscrits apparaissent sur les podiums latéraux avec leur statut.
+		update = function(snapshot: any, me: any)
+			local others = {}
+			for _, entry in snapshot.players do
+				if entry.queued and (me == nil or entry.userId ~= me.userId) then
+					table.insert(others, { userId = entry.userId, name = entry.name, ready = entry.ready })
+				end
+			end
+			scene:setOthers(others)
+			syncVisibility()
+		end,
 		tick = function(_remaining: number?) end,
 	}
 end

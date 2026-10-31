@@ -15,10 +15,25 @@ local FRAMING_MARGIN = 1.08
 local connections: { RBXScriptConnection } = {}
 local currentInfo: MapInfo? = nil
 
+-- Caméra fixe alternative (décor du menu principal) : prioritaire sur le cadrage de l'arène tant qu'elle est active.
+local override: CFrame? = nil
+local overrideFov = 50
+local DEFAULT_FOV = 70
+
 local function frame()
 	local info = currentInfo
 	local camera = workspace.CurrentCamera
-	if not info or not camera then
+	if not camera then
+		return
+	end
+	if override then
+		camera.CameraType = Enum.CameraType.Scriptable
+		camera.FieldOfView = overrideFov
+		camera.CFrame = override
+		return
+	end
+	camera.FieldOfView = DEFAULT_FOV
+	if not info then
 		return
 	end
 
@@ -35,6 +50,13 @@ local function frame()
 	camera.CameraType = Enum.CameraType.Scriptable
 	-- Vecteur « haut » = -Z : l'axe X de la grille va vers la droite, l'axe Y (Z monde) vers le bas de l'écran.
 	camera.CFrame = CFrame.lookAt(center + Vector3.new(0, height, 0), center, Vector3.new(0, 0, -1))
+end
+
+-- Active (cframe, fov) ou désactive (nil) la caméra du décor de menu. Le cadrage de l'arène revient tout seul.
+function CameraController.setOverride(cframe: CFrame?, fov: number?)
+	override = cframe
+	overrideFov = fov or 50
+	frame()
 end
 
 function CameraController.getCamera(): Camera?
