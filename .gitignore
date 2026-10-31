@@ -2,6 +2,10 @@ Cahier_charges
 ARCHITECTURE*
 SETUP*
 TEST_PLAN*
+DEPLOYMENT*
+ROADMAP*
+*.md
+
 # Rojo / Roblox
 *.rbxl
 *.rbxlx

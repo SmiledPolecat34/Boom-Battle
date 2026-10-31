@@ -11,7 +11,8 @@ local QuestService = require(script.Parent.QuestService)
 
 local RewardService = {}
 
-local lastAwardedRound: { [Player]: number } = {}
+-- Clés faibles : l'entrée d'un joueur parti est libérée avec son instance (pas de fuite mémoire).
+local lastAwardedRound: { [Player]: number } = setmetatable({}, { __mode = "k" }) :: any
 
 -- Pièces gagnées pour un résultat : participation, plus bonus de victoire ou d'égalité.
 -- (Une victoire remplace le bonus d'égalité ; un éliminé non gagnant n'a que la participation.)

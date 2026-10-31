@@ -144,20 +144,44 @@ La progression devra rester compatible avec l'objectif d'un jeu **sans achats in
 
 ## 🛠️ Installation et développement
 
-> Le projet est conçu pour être développé avec Roblox Studio. **La structure exacte du dépôt et son éventuelle synchronisation automatique ne sont pas encore définies.**
+Le dépôt est synchronisé avec Roblox Studio par **[Rojo](https://rojo.space)** (`default.project.json`) : les scripts vivent dans `src/`, la scène (Workspace, éclairage) dans le fichier de place.
 
-1. Installer **Roblox Studio** depuis le site officiel de Roblox.
-2. Cloner le dépôt GitHub :
+1. Installer **Roblox Studio** et **Rojo 7.x** (CLI et plugin Studio).
+2. Cloner le dépôt :
 
    ```bash
-   git clone https://github.com/UTILISATEUR/DEPOT.git
+   git clone https://github.com/SmiledPolecat34/Boom-Battle.git
+   cd Boom-Battle
    ```
 
-3. Ouvrir le projet Roblox Studio associé, **si son fichier de place est présent dans le dépôt**.
-4. À défaut, consulter la structure du dépôt et les instructions qui seront ajoutées lors de la mise en place du workflow de synchronisation.
-5. Tester le gameplay en local puis avec les outils de simulation multijoueur de Roblox Studio.
+3. Sauvegarder le fichier de place, puis supprimer `Workspace.Baseplate` et `Workspace.SpawnLocation` (l'arène génère son propre sol).
+4. Lancer la synchronisation et se connecter depuis le plugin Rojo dans Studio :
 
-*Remplacer `UTILISATEUR/DEPOT` par l'URL réelle du dépôt. Aucune procédure de lancement automatique n'est garantie à ce stade.*
+   ```bash
+   rojo serve
+   ```
+
+5. Tester avec **Play**, ou **Test > Clients and Servers** pour plusieurs joueurs. Un joueur seul peut jouer dans Studio (mode solo de test) ; hors Studio, 2 joueurs minimum sont requis.
+6. Pour tester la sauvegarde, activer *Enable Studio Access to API Services* dans les paramètres du jeu.
+
+Détails : `docs/SETUP.md` (installation), `docs/DEPLOYMENT.md` (mise en ligne), `docs/TEST_PLAN.md` (état réel des tests).
+
+## 📍 État actuel du développement
+
+Le MVP est **écrit et partiellement testé** (un seul joueur à la fois dans Studio) ; il n'est **pas encore validé** en multijoueur ni sur mobile.
+
+| Domaine | État |
+| --- | --- |
+| Arène 10 / 16 / 24 générée au hasard, 5 thèmes | Implémenté, testé en logique et en solo |
+| Déplacement au clic / toucher, bombes, explosions en chaîne, 4 bonus | Implémenté, testé en solo |
+| Manches (Ready, compte à rebours, résultats, rejouer) | Implémenté, testé en solo |
+| Interface (menu, lobby, HUD, résultats, aide, réglages) | Implémenté, testé par messages réseau (pas de clics réels, pas de mobile) |
+| Bomb Coins, boutique, inventaire, quêtes, sauvegarde | Implémenté ; sauvegarde réelle non encore vérifiée |
+| Multijoueur (2 à 8), déconnexions, mobile | **Non testé** |
+
+## 🧪 Tests
+
+Les scripts de `tests/` se collent dans la barre de commande de Studio (voir `tests/README.md`). Ils vérifient la logique pure (génération, chemins, explosions, résultats, données, boutique). Ils ne remplacent pas les tests multijoueur et mobile.
 
 ## 🗓️ Feuille de route
 
