@@ -21,6 +21,7 @@ local InviteController = require(script.Parent.InviteController)
 local QuickChatStore = require(script.Parent.QuickChatStore)
 local CosmeticBrowser = require(script.Parent.Parent.UI.Screens.CosmeticBrowser)
 local EmoteWheel = require(script.Parent.Parent.UI.Screens.EmoteWheel)
+local Solo = require(script.Parent.Parent.UI.Screens.Solo)
 local QuickChat = require(script.Parent.Parent.UI.Screens.QuickChat)
 local Events = require(script.Parent.Parent.UI.Screens.Events)
 local Help = require(script.Parent.Parent.UI.Screens.Help)
@@ -219,7 +220,12 @@ function UIController.start(remotes: Folder)
 	local requestEmote = remotes:WaitForChild("RequestEmote") :: RemoteEvent
 	local requestQuickChat = remotes:WaitForChild("RequestQuickChat") :: RemoteEvent
 
+	local startSolo = remotes:WaitForChild("StartSolo") :: RemoteEvent
+
 	local ctx = {
+		startSolo = function(botCount: number)
+			startSolo:FireServer(botCount)
+		end,
 		-- Menu : aperçu local sur le personnage du décor 3D ; ailleurs : demande au serveur (répliquée à tous).
 		playEmote = function(id: string)
 			local emote = EmoteConfig.get(id)
@@ -296,6 +302,7 @@ function UIController.start(remotes: Folder)
 	overlays.Events = Events.new(rootFrame, ctx)
 	overlays.Emotes = EmoteWheel.new(rootFrame, ctx)
 	overlays.QuickChat = QuickChat.new(rootFrame, ctx)
+	overlays.Solo = Solo.new(rootFrame, ctx)
 
 	-- Message court (ex. « Invitations indisponibles ici ») : un seul à la fois, disparaît seul.
 	local toast = Instance.new("TextLabel")

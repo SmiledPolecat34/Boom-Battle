@@ -6,6 +6,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local GameConfig = require(ReplicatedStorage.Shared.GameConfig)
 local Types = require(ReplicatedStorage.Shared.Types)
+local ActorRegistry = require(script.Parent.ActorRegistry)
 local DamageService = require(script.Parent.DamageService)
 local ExplosionResolver = require(script.Parent.ExplosionResolver)
 local MapService = require(script.Parent.MapService)
@@ -23,6 +24,7 @@ local BombService = {}
 local bombsByKey: { [number]: ExplosionResolver.BombRecord } = {}
 local activeByOwner: { [number]: number } = {} -- userId -> bombes posées non explosées
 local lastPlaceRequest: { [Player]: number } = {}
+local flameUntil: { [number]: number } = {} -- clé de case -> heure de fin des flammes
 local explosionRemote: RemoteEvent? = nil
 local nextBombId = 0
 
@@ -34,7 +36,7 @@ local function equippedCosmetic(userId: number, kind: CosmeticConfig.Kind): Cosm
 	return CosmeticConfig.get(id) or (CosmeticConfig.get(CosmeticConfig.Defaults[kind]) :: CosmeticConfig.Cosmetic)
 end
 
-local function getLivePlayerCell(player: Player, info: MapService.MapInfo): Types.Cell?
+local function getLivePlayerCell(player: any, info: MapService.MapInfo): Types.Cell?
 	local character = player.Character
 	local root = if character then character:FindFirstChild("HumanoidRootPart") else nil
 	if not root or not root:IsA("BasePart") or not DamageService.isAlive(player) then
@@ -100,14 +102,18 @@ local function explode(first: ExplosionResolver.BombRecord)
 	end
 
 	-- Dégâts pendant toute la durée des flammes ; un joueur n'est touché qu'une fois par explosion.
-	local hit: { [Player]: boolean } = {}
+	local hit: { [any]: boolean } = {}
+	local flameEnd = os.clock() + duration
+	for key in blastKeys do
+		flameUntil[key] = flameEnd
+	end
 	task.spawn(function()
 		local startedAt = os.clock()
 		repeat
 			if MapService.getCurrent() ~= info then
 				return
 			end
-			for _, player in Players:GetPlayers() do
+			for _, player in ActorRegistry.all() do
 				if not hit[player] then
 					local cell = getLivePlayerCell(player, info)
 					if cell and blastKeys[info.grid:key(cell.x, cell.y)] then
@@ -136,31 +142,27 @@ local function makeBombPart(info: MapService.MapInfo, cell: Types.Cell, ownerUse
 	return part
 end
 
-local function handlePlaceBomb(player: Player)
-	local now = os.clock()
-	if now - (lastPlaceRequest[player] or 0) < GameConfig.RemoteLimits.PlaceBombMinInterval then
-		return
-	end
-	lastPlaceRequest[player] = now
-
-	if not PlayState.canBomb(player) then
-		return
+-- Pose une bombe pour un acteur (joueur OU bot) à SA position serveur. Toutes les vérifications de jeu sont ici ;
+-- la cadence des demandes d'un client est limitée à part (handlePlaceBomb). Retourne true si une bombe est posée.
+function BombService.placeBomb(actor: any): boolean
+	if not PlayState.canBomb(actor) then
+		return false
 	end
 	local info = MapService.getCurrent()
 	if not info then
-		return
+		return false
 	end
-	-- La case vient de la position SERVEUR du joueur : le client ne peut pas choisir où poser.
-	local cell = getLivePlayerCell(player, info)
+	-- La case vient de la position SERVEUR de l'acteur : jamais choisie par un client.
+	local cell = getLivePlayerCell(actor, info)
 	if not cell then
-		return
+		return false
 	end
-	local stats = PowerupService.getStats(player)
-	if (activeByOwner[player.UserId] or 0) >= stats.bombCapacity then
-		return
+	local stats = PowerupService.getStats(actor)
+	if (activeByOwner[actor.UserId] or 0) >= stats.bombCapacity then
+		return false
 	end
 	if info.grid:getKind(cell.x, cell.y) ~= "EMPTY" or info.grid:hasBomb(cell.x, cell.y) then
-		return
+		return false
 	end
 
 	nextBombId += 1
@@ -168,24 +170,64 @@ local function handlePlaceBomb(player: Player)
 		cell = cell,
 		range = stats.blastRange,
 		id = nextBombId,
-		ownerId = player.UserId,
+		ownerId = actor.UserId,
 		exploded = false,
 		mapInfo = info,
-		part = makeBombPart(info, cell, player.UserId),
+		part = makeBombPart(info, cell, actor.UserId),
 	}
 	bombsByKey[info.grid:key(cell.x, cell.y)] = bomb
 	info.grid:setBomb(cell.x, cell.y, true)
-	activeByOwner[player.UserId] = (activeByOwner[player.UserId] or 0) + 1
+	activeByOwner[actor.UserId] = (activeByOwner[actor.UserId] or 0) + 1
 
 	task.delay(GameConfig.Bomb.FuseTime, function()
 		explode(bomb)
 	end)
+	return true
+end
+
+-- L'acteur peut-il encore poser une bombe (capacité) ? Utilisé par les bots avant de décider.
+function BombService.canPlaceBomb(actor: any): boolean
+	local stats = PowerupService.getStats(actor)
+	return (activeByOwner[actor.UserId] or 0) < stats.bombCapacity
+end
+
+-- Cases menacées : zone de toutes les bombes posées (chaînes comprises) et flammes encore actives.
+-- Les bots s'en servent pour fuir ; clé = grid:key(x, y).
+function BombService.getDangerKeys(info: MapService.MapInfo): { [number]: boolean }
+	local danger: { [number]: boolean } = {}
+	for _, bomb in bombsByKey do
+		if bomb.mapInfo == info and not bomb.exploded then
+			local result = ExplosionResolver.resolve(info.grid, bombsByKey, bomb)
+			for _, cell in result.cells do
+				danger[info.grid:key(cell.x, cell.y)] = true
+			end
+		end
+	end
+	local now = os.clock()
+	for key, expiresAt in flameUntil do
+		if expiresAt > now then
+			danger[key] = true
+		else
+			flameUntil[key] = nil
+		end
+	end
+	return danger
+end
+
+local function handlePlaceBomb(player: Player)
+	local now = os.clock()
+	if now - (lastPlaceRequest[player] or 0) < GameConfig.RemoteLimits.PlaceBombMinInterval then
+		return
+	end
+	lastPlaceRequest[player] = now
+	BombService.placeBomb(player)
 end
 
 -- À appeler quand l'arène est détruite ou régénérée.
 function BombService.clear()
 	table.clear(bombsByKey)
 	table.clear(activeByOwner)
+	table.clear(flameUntil)
 	PowerupService.clear()
 end
 

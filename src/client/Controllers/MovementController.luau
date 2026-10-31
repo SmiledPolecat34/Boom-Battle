@@ -71,6 +71,10 @@ function MovementController.start(info: CameraController.MapInfo, remotes: Folde
 	local moveRejected = remotes:WaitForChild("MoveRejected") :: RemoteEvent
 
 	InputController.onPrimaryAction(function(screenPosition: Vector2)
+		-- Au menu principal la caméra montre le décor 3D : un clic n'a rien à déplacer.
+		if CameraController.isOverridden() then
+			return
+		end
 		local character = Players.LocalPlayer.Character
 		if not character then
 			return

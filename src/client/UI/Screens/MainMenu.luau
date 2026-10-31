@@ -37,8 +37,10 @@ local function logoLabel(parent: Instance, name: string, text: string, color: Co
 end
 
 function MainMenu.new(parent: Instance, ctx: any)
-	-- Écran transparent : le décor 3D est le fond. Il absorbe quand même les clics (aucun déplacement derrière).
-	local frame = Components.screen(parent, "MainMenu", true)
+	-- Écran transparent : le décor 3D est le fond. Il n'absorbe PAS les clics : sinon il passerait au-dessus des « + »
+	-- d'invitation du décor et les rendrait incliquables. Aucun déplacement n'est possible derrière le menu, car
+	-- MovementController ignore les clics tant que la caméra du menu est active.
+	local frame = Components.screen(parent, "MainMenu", false)
 	frame.BackgroundTransparency = 1
 
 	local scene = MenuScene.new()
@@ -290,6 +292,15 @@ function MainMenu.new(parent: Instance, ctx: any)
 		text.TextStrokeColor3 = Color3.fromRGB(40, 110, 30)
 		play = text
 	end
+	-- SOLO : entraînement contre des bots, juste au-dessus de PLAY.
+	local solo = Components.button(frame, "SoloButton", "SOLO (BOTS)", Color3.fromRGB(48, 120, 230), UDim2.fromOffset(250, 58))
+	solo.AnchorPoint = Vector2.new(1, 1)
+	solo.Position = UDim2.new(1, -24, 1, -190)
+	solo.TextSize = 24
+	solo.Activated:Connect(function()
+		ctx.openOverlay("Solo")
+	end)
+
 	play.Activated:Connect(function()
 		ctx.setQueued(true)
 	end)

@@ -16,6 +16,17 @@ function RoundController.start(remotes: Folder)
 	local statsChanged = remotes:WaitForChild("StatsChanged") :: RemoteEvent
 	local profileUpdated = remotes:WaitForChild("ProfileUpdated") :: RemoteEvent
 	local shopResult = remotes:WaitForChild("ShopResult") :: RemoteEvent
+	local notice = remotes:WaitForChild("Notice") :: RemoteEvent
+
+	-- Messages courts du serveur (ex. refus du mode solo) : affichés en bandeau.
+	table.insert(
+		connections,
+		notice.OnClientEvent:Connect(function(text: any)
+			if typeof(text) == "string" and #text > 0 and #text <= 120 then
+				UIController.showToast(text)
+			end
+		end)
+	)
 
 	table.insert(
 		connections,

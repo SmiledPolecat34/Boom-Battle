@@ -1,7 +1,7 @@
 --!strict
 -- Invitation d'amis via la fenêtre officielle de Roblox (SocialService:PromptGameInvite).
 -- Disponible seulement dans l'expérience publiée : dans Studio, CanSendGameInviteAsync répond non et on l'indique
--- au joueur au lieu d'échouer en silence.
+-- au joueur au lieu d'échouer en silence. Un retour visible est donné DÈS le clic.
 
 local Players = game:GetService("Players")
 local SocialService = game:GetService("SocialService")
@@ -12,20 +12,38 @@ local InviteController = {}
 
 local MAX_PROMPTS = 2
 local WINDOW_SECONDS = 60
+local WATCHDOG_SECONDS = 6 -- une vérification qui ne répond pas ne doit jamais bloquer le bouton
 
 local limiter = PartySlots.newLimiter(MAX_PROMPTS, WINDOW_SECONDS)
 local busy = false
+local busyToken = 0
 
 -- toast : fonction d'affichage d'un message court (fournie par UIController).
 function InviteController.request(toast: (text: string) -> ())
 	if busy then
+		toast("Vérification des invitations en cours...")
 		return
 	end
 	busy = true
+	busyToken += 1
+	local token = busyToken
+	toast("Ouverture des invitations...")
+
+	-- Garde-fou : libère le bouton si la vérification ne répond pas.
+	task.delay(WATCHDOG_SECONDS, function()
+		if busy and busyToken == token then
+			busy = false
+			toast("Les invitations ne répondent pas, réessaie.")
+		end
+	end)
+
 	task.spawn(function()
 		local okCheck, canSend = pcall(function()
 			return SocialService:CanSendGameInviteAsync(Players.LocalPlayer)
 		end)
+		if busyToken ~= token then
+			return -- le garde-fou est déjà passé
+		end
 		if not okCheck or not canSend then
 			toast("Invitations indisponibles ici (jeu publié requis)")
 			busy = false

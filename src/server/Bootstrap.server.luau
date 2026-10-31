@@ -42,6 +42,8 @@ for _, name in {
 	"ShopResult",
 	"RequestEmote",
 	"RequestQuickChat",
+	"StartSolo",
+	"Notice",
 	"RoundState",
 	"RoundEnded",
 } do

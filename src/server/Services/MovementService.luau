@@ -84,6 +84,47 @@ local function reject(player: Player, remotes: Folder, target: any)
 	end
 end
 
+-- Demande de déplacement d'un acteur (joueur OU bot) vers la case (x, y). Toutes les vérifications de jeu sont ici :
+-- contexte, état de manche, position de départ lue côté SERVEUR, chemin existant. remotes : seulement pour renvoyer un
+-- refus à un joueur (un bot n'en a pas besoin). Retourne true si un déplacement est lancé.
+function MovementService.requestMove(actor: any, x: number, y: number, remotes: Folder?): boolean
+	local grid = if getGrid then getGrid() else nil
+	local humanoid, root = getLiveCharacter(actor)
+	if not grid or not humanoid or not root then
+		return false
+	end
+	-- Hors lobby, seuls les acteurs encore en vie d'une manche en cours peuvent bouger.
+	if not PlayState.canMove(actor) then
+		return false
+	end
+
+	local isPlayer = typeof(actor) == "Instance"
+	local from = grid:worldToCell(root.Position)
+	if not from then
+		if isPlayer and remotes then
+			reject(actor, remotes, { x = x, y = y })
+		end
+		return false
+	end
+
+	local path = grid:findPath(from, { x = x, y = y })
+	if not path then
+		if isPlayer and remotes then
+			reject(actor, remotes, { x = x, y = y })
+		end
+		return false
+	end
+
+	local state = getState(actor)
+	state.token += 1
+	local token = state.token
+	if #path > 0 then
+		EmoteService.stop(actor) -- se déplacer interrompt l'émote
+	end
+	task.spawn(walkPath, actor, grid, path, token)
+	return true
+end
+
 local function handleMoveRequest(player: Player, remotes: Folder, payload: any)
 	-- 1. Forme de la charge utile : jamais de confiance dans le client.
 	if typeof(payload) ~= "table" then
@@ -105,36 +146,7 @@ local function handleMoveRequest(player: Player, remotes: Folder, payload: any)
 	end
 	state.lastRequest = now
 
-	-- 3. Contexte de jeu.
-	local grid = if getGrid then getGrid() else nil
-	local humanoid, root = getLiveCharacter(player)
-	if not grid or not humanoid or not root then
-		return
-	end
-	-- Hors lobby, seuls les joueurs encore en vie d'une manche en cours peuvent bouger.
-	if not PlayState.canMove(player) then
-		return
-	end
-
-	-- 4. Position de départ : celle du serveur, jamais celle annoncée par le client.
-	local from = grid:worldToCell(root.Position)
-	if not from then
-		reject(player, remotes, payload)
-		return
-	end
-
-	local path = grid:findPath(from, { x = x, y = y })
-	if not path then
-		reject(player, remotes, { x = x, y = y })
-		return
-	end
-
-	state.token += 1
-	local token = state.token
-	if #path > 0 then
-		EmoteService.stop(player) -- se déplacer interrompt l'émote
-	end
-	task.spawn(walkPath, player, grid, path, token)
+	MovementService.requestMove(player, x, y, remotes)
 end
 
 -- Prépare un personnage fraîchement apparu : vitesse, pas de saut, serveur propriétaire du réseau.
@@ -161,6 +173,15 @@ end
 
 function MovementService.cancel(player: Player)
 	getState(player).token += 1
+end
+
+-- Oublie l'état d'un acteur qui n'est pas un joueur (bot retiré en fin de manche) : annule son trajet, libère l'entrée.
+function MovementService.forget(actor: any)
+	local state = states[actor]
+	if state then
+		state.token += 1
+		states[actor] = nil
+	end
 end
 
 function MovementService.start(remotes: Folder, gridProvider: () -> GridService.GridService?)

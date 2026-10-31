@@ -13,6 +13,13 @@ local eliminatedEvent = Instance.new("BindableEvent")
 -- Signal pour le futur RoundService : se déclenche une seule fois par élimination, avec le Player concerné.
 DamageService.Eliminated = eliminatedEvent.Event
 
+-- Rappels directs : un BindableEvent COPIE les tables qu'on lui passe (un bot perdrait son identité). Les rappels
+-- reçoivent l'acteur lui-même, joueur ou bot.
+local listeners: { (actor: any) -> () } = {}
+function DamageService.onEliminated(callback: (actor: any) -> ())
+	table.insert(listeners, callback)
+end
+
 local playerEliminatedRemote: RemoteEvent? = nil
 
 function DamageService.start(remotes: Folder)
@@ -48,7 +55,12 @@ function DamageService.hit(player: Player): boolean
 	if playerEliminatedRemote then
 		playerEliminatedRemote:FireAllClients(player.UserId)
 	end
-	eliminatedEvent:Fire(player)
+	if typeof(player) == "Instance" then
+		eliminatedEvent:Fire(player)
+	end
+	for _, callback in listeners do
+		callback(player)
+	end
 	return true
 end
 

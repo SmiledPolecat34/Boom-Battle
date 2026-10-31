@@ -14,7 +14,9 @@ local RunService = game:GetService("RunService")
 local GameConfig = require(ReplicatedStorage.Shared.GameConfig)
 local MapConfig = require(ReplicatedStorage.Shared.MapConfig)
 local Types = require(ReplicatedStorage.Shared.Types)
+local ActorRegistry = require(script.Parent.ActorRegistry)
 local BombService = require(script.Parent.BombService)
+local BotService = require(script.Parent.BotService)
 local DamageService = require(script.Parent.DamageService)
 local MapService = require(script.Parent.MapService)
 local MovementService = require(script.Parent.MovementService)
@@ -53,9 +55,14 @@ local roundId = 0 -- identifiant de la manche en cours : garantit une seule réc
 local lastEliminationAt = 0
 local lastReadyRequest: { [Player]: number } = {}
 
+-- Mode solo : manche d'entraînement contre des bots. Aucune récompense ni statistique (pas d'exploitation possible).
+local soloRound = false
+local pendingSolo: { player: Player, botCount: number }? = nil
+
 local roundStateRemote: RemoteEvent
 local roundEndedRemote: RemoteEvent
 local mapReadyRemote: RemoteEvent
+local noticeRemote: RemoteEvent
 
 local function minPlayers(): number
 	if RunService:IsStudio() and ROUND.AllowSoloInStudio then
@@ -85,6 +92,19 @@ local function buildSnapshot()
 			participant = participants[player] == true,
 			alive = alive[player] == true,
 		})
+	end
+	-- Les bots de la manche apparaissent comme participants (survivants comptés, noms dans les résultats).
+	for _, actor in participantOrder do
+		if ActorRegistry.isBot(actor) then
+			table.insert(list, {
+				userId = actor.UserId,
+				name = actor.DisplayName,
+				queued = true,
+				ready = true,
+				participant = true,
+				alive = alive[actor] == true,
+			})
+		end
 	end
 	return {
 		state = state,
@@ -189,6 +209,8 @@ local function buildLobby()
 end
 
 local function returnToLobby(keepReady: boolean)
+	BotService.clear() -- retire les bots (personnages, décisions, statistiques)
+	soloRound = false
 	local previousReady = ready
 	ready = {}
 	table.clear(participants)
@@ -211,7 +233,9 @@ end
 
 -- Transitions ------------------------------------------------------------------------------------------------
 
-local function startCountdown(group: { Player })
+-- botCount : nombre de bots (mode solo) ; 0 pour une manche normale.
+local function startCountdown(group: { Player }, botCount: number?)
+	BotService.clear()
 	table.clear(participants)
 	table.clear(participantOrder)
 	table.clear(alive)
@@ -226,15 +250,28 @@ local function startCountdown(group: { Player })
 		spawnIndex[player] = index
 	end
 
+	-- Bots : participants à part entière (ils comptent dans la taille de l'arène et les spawns).
+	local bots: { any } = if botCount and botCount > 0 then BotService.createBots(botCount) else {}
+	soloRound = #bots > 0
+	for botIndex, bot in bots do
+		local index = #group + botIndex
+		participants[bot] = true
+		participantOrder[index] = bot
+		spawnIndex[bot] = index
+		ready[bot] = true
+	end
+	local total = #group + #bots
+
 	BombService.clear()
-	local sizeDef = MapConfig.getSizeForPlayerCount(#group)
+	local sizeDef = MapConfig.getSizeForPlayerCount(total)
 	local seed = os.time()
 	-- Thème d'après la seed ; l'Attribut de test `MapTheme` du Workspace le force (ex. « Volcano »).
 	local forced = workspace:GetAttribute("MapTheme")
 	local themeId = if typeof(forced) == "string" and MapConfig.Themes[forced] then forced else MapConfig.themeForSeed(seed)
-	local info = MapService.generateAndBuild(sizeDef, seed, #group, themeId)
-	print(("[RoundService] Manche : %d joueur(s), arène %s (%d x %d), thème %s, seed %d"):format(
+	local info = MapService.generateAndBuild(sizeDef, seed, total, themeId)
+	print(("[RoundService] Manche : %d joueur(s) + %d bot(s), arène %s (%d x %d), thème %s, seed %d"):format(
 		#group,
+		#bots,
 		info.layout.sizeId,
 		info.layout.size,
 		info.layout.size,
@@ -251,6 +288,14 @@ local function startCountdown(group: { Player })
 			removeCharacter(player) -- spectateur : pas de personnage dans l'arène
 		end
 	end
+
+	-- Personnages des bots, posés sur leurs spawns comme ceux des joueurs.
+	for botIndex, bot in bots do
+		local model = BotService.buildCharacter(bot, botIndex)
+		if model then
+			placeCharacter(bot, model)
+		end
+	end
 end
 
 local function beginPlaying()
@@ -261,6 +306,9 @@ local function beginPlaying()
 	roundStartedAt = os.clock()
 	lastEliminationAt = 0
 	setState("PLAYING", ROUND.RoundDuration)
+	if soloRound then
+		BotService.startAI(ActorRegistry.getBots())
+	end
 end
 
 local function finishRound()
@@ -285,7 +333,8 @@ local function finishRound()
 
 	PlayState.clearActive()
 	-- Récompenses : calculées ici, une fois par manche, avant d'annoncer les résultats.
-	local rewards = RewardService.awardRound(roundId, table.clone(participantOrder), result)
+	-- Manche solo contre des bots : aucune récompense ni statistique (sinon des bots sans risque feraient gagner des pièces).
+	local rewards = if soloRound then {} else RewardService.awardRound(roundId, table.clone(participantOrder), result)
 	setState("FINISHED", ROUND.ResultDuration)
 	roundEndedRemote:FireAllClients({ result = result, names = names, rewards = rewards })
 end
@@ -319,7 +368,39 @@ local function onEliminated(player: Player)
 	broadcast()
 end
 
+-- Joueurs (pas les bots) encore en vie / présents dans la manche : sert à clore une manche solo sans humain.
+local function humansAlive(): number
+	local n = 0
+	for actor in alive do
+		if not ActorRegistry.isBot(actor) then
+			n += 1
+		end
+	end
+	return n
+end
+
+local function humanParticipants(): number
+	local n = 0
+	for _, actor in participantOrder do
+		if not ActorRegistry.isBot(actor) then
+			n += 1
+		end
+	end
+	return n
+end
+
 local function tick()
+	-- Demande de mode solo (validée par la remote) : exécutée ici, dans le fil de la machine d'états.
+	if pendingSolo and (state == "WAITING" or state == "READY") then
+		local request = pendingSolo
+		pendingSolo = nil
+		if request.player.Parent == Players and queued[request.player] then
+			ready[request.player] = true
+			startCountdown({ request.player }, request.botCount)
+			return
+		end
+	end
+
 	if state == "WAITING" then
 		if #queuedPlayers() >= minPlayers() then
 			setState("READY")
@@ -348,8 +429,9 @@ local function tick()
 				stillReady += 1
 			end
 		end
-		-- Un participant qui annule ou quitte interrompt le compte à rebours.
-		if stillReady < #participantOrder or #participantOrder < minPlayers() then
+		-- Un participant qui annule ou quitte interrompt le compte à rebours (en solo : si l'humain part ou annule).
+		local soloAbandoned = soloRound and humanParticipants() == 0
+		if soloAbandoned or stillReady < #participantOrder or (not soloRound and #participantOrder < minPlayers()) then
 			print("[RoundService] Compte à rebours interrompu")
 			returnToLobby(true)
 			setState("READY")
@@ -359,8 +441,11 @@ local function tick()
 	elseif state == "PLAYING" then
 		local survivors = countAlive()
 		local threshold = if #participantOrder <= 1 then 0 else 1 -- le solo Studio dure jusqu'à la mort ou la fin du temps
-		if survivors <= threshold and os.clock() - lastEliminationAt >= SETTLE_DELAY then
+		local settled = os.clock() - lastEliminationAt >= SETTLE_DELAY
+		if survivors <= threshold and settled then
 			finishRound()
+		elseif soloRound and humansAlive() == 0 and settled then
+			finishRound() -- en solo, la manche s'arrête dès que l'humain est éliminé (inutile de regarder les bots)
 		elseif os.clock() - roundStartedAt >= ROUND.RoundDuration then
 			finishRound()
 		end
@@ -424,10 +509,11 @@ function RoundService.start(remotes: Folder)
 	roundEndedRemote = remotes:WaitForChild("RoundEnded") :: RemoteEvent
 	mapReadyRemote = remotes:WaitForChild("MapReady") :: RemoteEvent
 	local setReady = remotes:WaitForChild("SetReady") :: RemoteEvent
+	noticeRemote = remotes:WaitForChild("Notice") :: RemoteEvent
 
 	buildLobby()
 
-	DamageService.Eliminated:Connect(onEliminated)
+	DamageService.onEliminated(onEliminated)
 	Players.PlayerAdded:Connect(onPlayerAdded)
 	Players.PlayerRemoving:Connect(onPlayerRemoving)
 	for _, player in Players:GetPlayers() do
@@ -478,6 +564,37 @@ function RoundService.start(remotes: Folder)
 			ready[player] = nil
 			rematch[player] = nil
 		end
+		broadcast()
+	end)
+
+	-- Mode solo : manche d'entraînement contre 1 à 3 bots. Le client n'envoie que le nombre de bots.
+	local startSolo = remotes:WaitForChild("StartSolo") :: RemoteEvent
+	startSolo.OnServerEvent:Connect(function(player: Player, botCount: any)
+		if typeof(botCount) ~= "number" or botCount ~= math.floor(botCount) then
+			return
+		end
+		if botCount < 1 or botCount > ROUND.MaxSoloBots then
+			return
+		end
+		local now = os.clock()
+		if now - (lastReadyRequest[player] or 0) < GameConfig.RemoteLimits.ReadyToggleMinInterval then
+			return
+		end
+		lastReadyRequest[player] = now
+
+		if state ~= "WAITING" and state ~= "READY" then
+			noticeRemote:FireClient(player, "Une manche est en cours : attends la fin pour lancer le mode solo.")
+			return
+		end
+		for other in queued do
+			if other ~= player then
+				noticeRemote:FireClient(player, "Mode solo impossible : d'autres joueurs attendent une manche.")
+				return
+			end
+		end
+		queued[player] = true
+		ready[player] = nil
+		pendingSolo = { player = player, botCount = botCount }
 		broadcast()
 	end)
 

@@ -8,6 +8,7 @@ local RunService = game:GetService("RunService")
 local GameConfig = require(ReplicatedStorage.Shared.GameConfig)
 local ItemConfig = require(ReplicatedStorage.Shared.ItemConfig)
 local Types = require(ReplicatedStorage.Shared.Types)
+local ActorRegistry = require(script.Parent.ActorRegistry)
 local MapService = require(script.Parent.MapService)
 
 local PICKUP_POLL_INTERVAL = 0.1
@@ -46,7 +47,10 @@ local function isAlive(player: Player): boolean
 	return player:GetAttribute("Alive") == true and humanoid ~= nil and humanoid.Health > 0
 end
 
-local function publish(player: Player)
+local function publish(player: any)
+	if typeof(player) ~= "Instance" then
+		return -- un bot n'a pas de client à informer
+	end
 	local stats = statsByPlayer[player]
 	if statsChanged and stats then
 		statsChanged:FireClient(player, {
@@ -75,6 +79,11 @@ function PowerupService.getStats(player: Player): Types.PlayerStats
 		statsByPlayer[player] = stats
 	end
 	return stats
+end
+
+-- Oublie les statistiques d'un acteur qui n'est pas un joueur (bot retiré en fin de manche) : pas de fuite mémoire.
+function PowerupService.forget(actor: any)
+	statsByPlayer[actor] = nil
 end
 
 -- À appeler à chaque apparition de personnage (et au début de chaque manche).
@@ -192,7 +201,7 @@ function PowerupService.start(remotes: Folder)
 		if not info or next(pickups) == nil then
 			return
 		end
-		for _, player in Players:GetPlayers() do
+		for _, player in ActorRegistry.all() do
 			local character = player.Character
 			local root = if character then character:FindFirstChild("HumanoidRootPart") else nil
 			if root and root:IsA("BasePart") and isAlive(player) then

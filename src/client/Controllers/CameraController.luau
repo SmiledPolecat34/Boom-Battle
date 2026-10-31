@@ -59,6 +59,11 @@ function CameraController.setOverride(cframe: CFrame?, fov: number?)
 	frame()
 end
 
+-- Vrai tant que la caméra du décor de menu est active (les clics ne doivent alors rien déplacer).
+function CameraController.isOverridden(): boolean
+	return override ~= nil
+end
+
 function CameraController.getCamera(): Camera?
 	return workspace.CurrentCamera
 end
