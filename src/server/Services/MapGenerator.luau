@@ -108,7 +108,14 @@ end
 
 -- seed : graine demandée. layout.seed contient la graine EFFECTIVEMENT utilisée (seed + tentatives échouées),
 -- qui reproduit exactement la même map si on la repasse à generate().
-function MapGenerator.generate(sizeDef: MapConfig.SizeDefinition, seed: number, spawnCount: number): Types.MapLayout
+-- themeId : thème visuel (ne change PAS la grille) ; inconnu ou nil => thème par défaut.
+function MapGenerator.generate(
+	sizeDef: MapConfig.SizeDefinition,
+	seed: number,
+	spawnCount: number,
+	themeId: string?
+): Types.MapLayout
+	local theme = if themeId and MapConfig.Themes[themeId] then themeId else MapConfig.DefaultTheme
 	local size = sizeDef.size
 	local count = math.clamp(math.floor(spawnCount), 1, 8)
 	local allSpawns = MapConfig.getSpawns(size)
@@ -124,7 +131,7 @@ function MapGenerator.generate(sizeDef: MapConfig.SizeDefinition, seed: number, 
 				seed = usedSeed,
 				sizeId = sizeDef.id,
 				size = size,
-				theme = MapConfig.DefaultTheme,
+				theme = theme,
 				cells = cells,
 				spawns = spawns,
 			}
@@ -141,7 +148,7 @@ function MapGenerator.generate(sizeDef: MapConfig.SizeDefinition, seed: number, 
 		seed = seed,
 		sizeId = sizeDef.id,
 		size = size,
-		theme = MapConfig.DefaultTheme,
+		theme = theme,
 		cells = cells,
 		spawns = spawns,
 	}

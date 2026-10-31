@@ -109,6 +109,7 @@ local function announceMap(target: Player?)
 		cellSize = info.grid.cellSize,
 		origin = info.grid.origin,
 		seed = info.layout.seed,
+		theme = info.layout.theme,
 	}
 	if target then
 		mapReadyRemote:FireClient(target, payload)
@@ -224,12 +225,17 @@ local function startCountdown(group: { Player })
 
 	BombService.clear()
 	local sizeDef = MapConfig.getSizeForPlayerCount(#group)
-	local info = MapService.generateAndBuild(sizeDef, os.time(), #group)
-	print(("[RoundService] Manche : %d joueur(s), arène %s (%d x %d), seed %d"):format(
+	local seed = os.time()
+	-- Thème d'après la seed ; l'Attribut de test `MapTheme` du Workspace le force (ex. « Volcano »).
+	local forced = workspace:GetAttribute("MapTheme")
+	local themeId = if typeof(forced) == "string" and MapConfig.Themes[forced] then forced else MapConfig.themeForSeed(seed)
+	local info = MapService.generateAndBuild(sizeDef, seed, #group, themeId)
+	print(("[RoundService] Manche : %d joueur(s), arène %s (%d x %d), thème %s, seed %d"):format(
 		#group,
 		info.layout.sizeId,
 		info.layout.size,
 		info.layout.size,
+		info.layout.theme,
 		info.layout.seed
 	))
 	announceMap(nil)
