@@ -14,6 +14,23 @@ function RoundController.start(remotes: Folder)
 	local roundState = remotes:WaitForChild("RoundState") :: RemoteEvent
 	local roundEnded = remotes:WaitForChild("RoundEnded") :: RemoteEvent
 	local statsChanged = remotes:WaitForChild("StatsChanged") :: RemoteEvent
+	local profileUpdated = remotes:WaitForChild("ProfileUpdated") :: RemoteEvent
+	local shopResult = remotes:WaitForChild("ShopResult") :: RemoteEvent
+
+	table.insert(
+		connections,
+		profileUpdated.OnClientEvent:Connect(function(profile: any)
+			if typeof(profile) == "table" and typeof(profile.coins) == "number" and typeof(profile.owned) == "table" then
+				UIController.onProfile(profile)
+			end
+		end)
+	)
+	table.insert(
+		connections,
+		shopResult.OnClientEvent:Connect(function(result: any)
+			UIController.onShopResult(result)
+		end)
+	)
 
 	table.insert(
 		connections,

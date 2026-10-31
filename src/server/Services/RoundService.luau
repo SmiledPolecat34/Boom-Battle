@@ -20,6 +20,7 @@ local MapService = require(script.Parent.MapService)
 local MovementService = require(script.Parent.MovementService)
 local PlayState = require(script.Parent.PlayState)
 local PowerupService = require(script.Parent.PowerupService)
+local RewardService = require(script.Parent.RewardService)
 local RoundResolver = require(script.Parent.RoundResolver)
 
 local ROUND = GameConfig.Round
@@ -48,6 +49,7 @@ local alive: { [Player]: boolean } = {}
 local eliminations: { RoundResolver.Elimination } = {}
 local spawnIndex: { [Player]: number } = {}
 local roundStartedAt = 0
+local roundId = 0 -- identifiant de la manche en cours : garantit une seule récompense par joueur et par manche
 local lastEliminationAt = 0
 local lastReadyRequest: { [Player]: number } = {}
 
@@ -217,6 +219,7 @@ local function startCountdown(group: { Player })
 	table.clear(spawnIndex)
 	PlayState.clearActive()
 
+	roundId += 1
 	for index, player in group do
 		participants[player] = true
 		participantOrder[index] = player
@@ -281,8 +284,10 @@ local function finishRound()
 	local result = RoundResolver.compute(participantIds, aliveIds, eliminations, SIMULTANEOUS_WINDOW, duration)
 
 	PlayState.clearActive()
+	-- Récompenses : calculées ici, une fois par manche, avant d'annoncer les résultats.
+	local rewards = RewardService.awardRound(roundId, table.clone(participantOrder), result)
 	setState("FINISHED", ROUND.ResultDuration)
-	roundEndedRemote:FireAllClients({ result = result, names = names })
+	roundEndedRemote:FireAllClients({ result = result, names = names, rewards = rewards })
 end
 
 local function resetRound()

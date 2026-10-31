@@ -9,8 +9,11 @@ local BombService = require(Services.BombService)
 local DamageService = require(Services.DamageService)
 local MapService = require(Services.MapService)
 local MovementService = require(Services.MovementService)
+local PlayerDataService = require(Services.PlayerDataService)
 local PowerupService = require(Services.PowerupService)
+local QuestService = require(Services.QuestService)
 local RoundService = require(Services.RoundService)
+local ShopService = require(Services.ShopService)
 
 -- Les personnages sont chargés explicitement par RoundService (lobby, début de manche) ; un joueur éliminé ne
 -- réapparaît pas tout seul.
@@ -31,6 +34,10 @@ for _, name in {
 	"PlayerEliminated",
 	"SetReady",
 	"SetQueued",
+	"ProfileUpdated",
+	"RequestPurchase",
+	"RequestEquip",
+	"ShopResult",
 	"RoundState",
 	"RoundEnded",
 } do
@@ -49,6 +56,9 @@ end)
 PowerupService.start(remotes)
 DamageService.start(remotes)
 BombService.start(remotes)
+PlayerDataService.start(remotes)
+QuestService.start()
+ShopService.start(remotes)
 RoundService.start(remotes)
 
 -- Le client signale qu'il est prêt à recevoir l'arène et l'état de la manche.
@@ -61,6 +71,7 @@ clientReadyEvent.OnServerEvent:Connect(function(player: Player)
 	end
 	clientReadyAt[player] = now
 	RoundService.sendFullState(player)
+	PlayerDataService.sendProfile(player) -- sans effet tant que le profil n'est pas chargé : il est alors envoyé au chargement
 end)
 Players.PlayerRemoving:Connect(function(player)
 	clientReadyAt[player] = nil

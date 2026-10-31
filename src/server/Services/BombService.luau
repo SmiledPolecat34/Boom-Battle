@@ -9,6 +9,9 @@ local Types = require(ReplicatedStorage.Shared.Types)
 local DamageService = require(script.Parent.DamageService)
 local ExplosionResolver = require(script.Parent.ExplosionResolver)
 local MapService = require(script.Parent.MapService)
+local CosmeticConfig = require(ReplicatedStorage.Shared.CosmeticConfig)
+local GameEvents = require(script.Parent.GameEvents)
+local PlayerDataService = require(script.Parent.PlayerDataService)
 local PlayState = require(script.Parent.PlayState)
 local PowerupService = require(script.Parent.PowerupService)
 
@@ -22,6 +25,14 @@ local activeByOwner: { [number]: number } = {} -- userId -> bombes posées non e
 local lastPlaceRequest: { [Player]: number } = {}
 local explosionRemote: RemoteEvent? = nil
 local nextBombId = 0
+
+-- Apparence équipée par un joueur (purement visuelle : taille, portée et délai ne changent jamais).
+local function equippedCosmetic(userId: number, kind: CosmeticConfig.Kind): CosmeticConfig.Cosmetic
+	local player = Players:GetPlayerByUserId(userId)
+	local profile = if player then PlayerDataService.get(player) else nil
+	local id = if profile then profile.EquippedCosmetics[kind] else CosmeticConfig.Defaults[kind]
+	return CosmeticConfig.get(id) or (CosmeticConfig.get(CosmeticConfig.Defaults[kind]) :: CosmeticConfig.Cosmetic)
+end
 
 local function getLivePlayerCell(player: Player, info: MapService.MapInfo): Types.Cell?
 	local character = player.Character
@@ -78,8 +89,14 @@ local function explode(first: ExplosionResolver.BombRecord)
 		end
 	end)
 
+	if #result.crates > 0 then
+		GameEvents.fireCratesDestroyed(first.ownerId :: number, #result.crates)
+	end
+
 	if explosionRemote then
-		explosionRemote:FireAllClients({ cells = result.cells, duration = duration })
+		-- Couleur de l'effet choisi par le poseur de la bombe déclenchante : purement visuelle.
+		local effect = equippedCosmetic(first.ownerId :: number, "effect")
+		explosionRemote:FireAllClients({ cells = result.cells, duration = duration, color = effect.color })
 	end
 
 	-- Dégâts pendant toute la durée des flammes ; un joueur n'est touché qu'une fois par explosion.
@@ -104,13 +121,14 @@ local function explode(first: ExplosionResolver.BombRecord)
 	end)
 end
 
-local function makeBombPart(info: MapService.MapInfo, cell: Types.Cell): Part
+local function makeBombPart(info: MapService.MapInfo, cell: Types.Cell, ownerUserId: number): Part
+	local skin = equippedCosmetic(ownerUserId, "bomb")
 	local part = Instance.new("Part")
 	part.Name = "Bomb"
 	part.Shape = Enum.PartType.Ball
-	part.Size = Vector3.new(3, 3, 3)
-	part.Color = Color3.fromRGB(35, 35, 45)
-	part.Material = Enum.Material.SmoothPlastic
+	part.Size = Vector3.new(3, 3, 3) -- identique pour tous les skins
+	part.Color = skin.color
+	part.Material = skin.material or Enum.Material.SmoothPlastic
 	part.Anchored = true
 	part.CanCollide = false -- le blocage est logique (GridService) ; évite de coincer le poseur
 	part.CFrame = CFrame.new(info.grid:cellToWorld(cell, BOMB_HEIGHT))
@@ -153,7 +171,7 @@ local function handlePlaceBomb(player: Player)
 		ownerId = player.UserId,
 		exploded = false,
 		mapInfo = info,
-		part = makeBombPart(info, cell),
+		part = makeBombPart(info, cell, player.UserId),
 	}
 	bombsByKey[info.grid:key(cell.x, cell.y)] = bomb
 	info.grid:setBomb(cell.x, cell.y, true)

@@ -78,8 +78,39 @@ function MainMenu.new(parent: Instance, ctx: any)
 		ctx.openOverlay("Settings")
 	end)
 
+	-- Boutique et inventaire à gauche, quêtes et événements à droite (disposition de la maquette).
+	local function sideButton(name: string, text: string, color: Color3, overlay: string, position: UDim2, anchor: Vector2)
+		local button = Components.button(frame, name, text, color, UDim2.fromOffset(210, 60))
+		button.AnchorPoint = anchor
+		button.Position = position
+		button.TextSize = 22
+		button.Activated:Connect(function()
+			ctx.openOverlay(overlay)
+		end)
+	end
+	sideButton("ShopButton", "BOUTIQUE", Theme.orange, "Shop", UDim2.new(0, 28, 0.42, 0), Vector2.new(0, 0.5))
+	sideButton("InventoryButton", "INVENTAIRE", Color3.fromRGB(150, 100, 60), "Inventory", UDim2.new(0, 28, 0.42, 76), Vector2.new(0, 0.5))
+	sideButton("QuestsButton", "QUÊTES", Theme.violet, "Quests", UDim2.new(1, -28, 0.42, 0), Vector2.new(1, 0.5))
+	sideButton("EventsButton", "ÉVÉNEMENTS", Theme.turquoise, "Events", UDim2.new(1, -28, 0.42, 76), Vector2.new(1, 0.5))
+
+	-- Solde de Bomb Coins (valeur du serveur) et avertissement si la progression n'est pas enregistrée.
+	local coins = Components.label(frame, "Coins", "Pièces : ...", 26, Theme.yellow, Theme.fontBold)
+	coins.AnchorPoint = Vector2.new(0, 0)
+	coins.Position = UDim2.fromOffset(24, 24)
+	coins.Size = UDim2.fromOffset(260, 36)
+	coins.TextXAlignment = Enum.TextXAlignment.Left
+	local saveNotice = Components.label(frame, "SaveNotice", "", 16, Theme.red, Theme.fontBold)
+	saveNotice.Position = UDim2.fromOffset(24, 62)
+	saveNotice.Size = UDim2.fromOffset(420, 24)
+	saveNotice.TextXAlignment = Enum.TextXAlignment.Left
+
 	return {
 		frame = frame,
+		setProfile = function(profile: any)
+			local text = tostring(math.floor(profile.coins)):reverse():gsub("(%d%d%d)", "%1 "):reverse()
+			coins.Text = ("Pièces : %s"):format((text:gsub("^ ", "")))
+			saveNotice.Text = if profile.persisted then "" else "Sauvegarde indisponible : progression non enregistrée"
+		end,
 		update = function(_snapshot: any, _me: any) end,
 		tick = function(_remaining: number?) end,
 	}

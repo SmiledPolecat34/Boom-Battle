@@ -70,7 +70,13 @@ function Results.new(parent: Instance, ctx: any)
 				title.Text = "ÉGALITÉ"
 				details.Text = if #list > 0 then ("À égalité : %s\n"):format(table.concat(list, ", ")) else "Aucun vainqueur\n"
 			end
-			local lines = { details.Text, ("Durée : %s"):format(formatDuration(result.durationSeconds)), "", "Classement :" }
+			local earned = if typeof(payload.rewards) == "table" then payload.rewards[tostring(ctx.localUserId)] else nil
+			local lines = { details.Text, ("Durée : %s"):format(formatDuration(result.durationSeconds)) }
+			if typeof(earned) == "number" then
+				table.insert(lines, ("Récompense : +%d pièces"):format(earned))
+			end
+			table.insert(lines, "")
+			table.insert(lines, "Classement :")
 			for rank, userId in result.ranking do
 				table.insert(lines, ("%d. %s"):format(rank, nameOf(userId)))
 			end

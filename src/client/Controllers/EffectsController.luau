@@ -18,6 +18,7 @@ function EffectsController.start(info: CameraController.MapInfo, remotes: Folder
 			return
 		end
 		local duration = if typeof(payload.duration) == "number" then math.clamp(payload.duration, 0.1, 2) else 0.5
+		local color = if typeof(payload.color) == "Color3" then payload.color else Color3.fromRGB(255, 150, 30)
 		for _, cell in payload.cells do
 			if typeof(cell) == "table" and typeof(cell.x) == "number" and typeof(cell.y) == "number" then
 				local flame = Instance.new("Part")
@@ -28,7 +29,7 @@ function EffectsController.start(info: CameraController.MapInfo, remotes: Folder
 				flame.CanTouch = false
 				flame.CastShadow = false
 				flame.Material = Enum.Material.Neon
-				flame.Color = Color3.fromRGB(255, 150, 30)
+				flame.Color = color
 				flame.Transparency = 0.15
 				flame.Size = Vector3.new(info.cellSize * 0.95, 0.5, info.cellSize * 0.95)
 				flame.Position = info.origin

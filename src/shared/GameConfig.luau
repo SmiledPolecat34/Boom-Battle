@@ -74,6 +74,8 @@ GameConfig.Data = table.freeze({
 	DataStoreName = "BombBattlePlayerData",
 	AutosaveInterval = 120, -- secondes
 	MaxSaveRetries = 3,
+	MaxLoadRetries = 3,
+	MaxCoins = 1000000000, -- plafond de sécurité du solde
 })
 
 return table.freeze(GameConfig)

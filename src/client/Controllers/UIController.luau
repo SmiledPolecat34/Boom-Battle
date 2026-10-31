@@ -10,7 +10,10 @@ local RunService = game:GetService("RunService")
 
 local SettingsStore = require(script.Parent.SettingsStore)
 local GameHUD = require(script.Parent.Parent.UI.Screens.GameHUD)
+local CosmeticBrowser = require(script.Parent.Parent.UI.Screens.CosmeticBrowser)
+local Events = require(script.Parent.Parent.UI.Screens.Events)
 local Help = require(script.Parent.Parent.UI.Screens.Help)
+local Quests = require(script.Parent.Parent.UI.Screens.Quests)
 local Lobby = require(script.Parent.Parent.UI.Screens.Lobby)
 local MainMenu = require(script.Parent.Parent.UI.Screens.MainMenu)
 local Results = require(script.Parent.Parent.UI.Screens.Results)
@@ -30,6 +33,7 @@ local overlays: { [string]: any } = {}
 local openOverlay: string? = nil
 local currentSnapshot: any = nil
 local currentScreen: string? = nil
+local currentProfile: any = nil
 local connections: { RBXScriptConnection } = {}
 
 local function findMe(snapshot: any): any
@@ -135,6 +139,27 @@ function UIController.onRoundEnded(payload: any)
 	end
 end
 
+-- Profil public envoyé par le serveur (solde, possessions, équipement, quêtes). Lecture seule côté client.
+function UIController.onProfile(profile: any)
+	currentProfile = profile
+	if screens.MainMenu then
+		screens.MainMenu.setProfile(profile)
+	end
+	for _, overlay in overlays do
+		if overlay.setProfile then
+			overlay.setProfile(profile)
+		end
+	end
+end
+
+function UIController.onShopResult(result: any)
+	for _, overlay in overlays do
+		if overlay.onShopResult then
+			overlay.onShopResult(result)
+		end
+	end
+end
+
 function UIController.onStats(stats: any)
 	if screens.GameHUD then
 		screens.GameHUD.setStats(stats)
@@ -153,8 +178,16 @@ function UIController.start(remotes: Folder)
 	local setQueued = remotes:WaitForChild("SetQueued") :: RemoteEvent
 	local setReady = remotes:WaitForChild("SetReady") :: RemoteEvent
 	local placeBomb = remotes:WaitForChild("RequestPlaceBomb") :: RemoteEvent
+	local requestPurchase = remotes:WaitForChild("RequestPurchase") :: RemoteEvent
+	local requestEquip = remotes:WaitForChild("RequestEquip") :: RemoteEvent
 
 	local ctx = {
+		purchase = function(id: string)
+			requestPurchase:FireServer(id)
+		end,
+		equip = function(id: string)
+			requestEquip:FireServer(id)
+		end,
 		localUserId = localPlayer.UserId,
 		setQueued = function(value: boolean)
 			setQueued:FireServer(value)
@@ -192,15 +225,16 @@ function UIController.start(remotes: Folder)
 	screens.Results = Results.new(rootFrame, ctx)
 	overlays.Settings = Settings.new(rootFrame, ctx)
 	overlays.Help = Help.new(rootFrame, ctx)
-	-- Les fenêtres passent au-dessus des écrans.
-	overlays.Settings.frame.ZIndex = 10
-	overlays.Help.frame.ZIndex = 10
+	overlays.Shop = CosmeticBrowser.new(rootFrame, ctx, "shop")
+	overlays.Inventory = CosmeticBrowser.new(rootFrame, ctx, "inventory")
+	overlays.Quests = Quests.new(rootFrame, ctx)
+	overlays.Events = Events.new(rootFrame, ctx)
+	-- Les fenêtres passent au-dessus des écrans (frères sous Root, ZIndexBehavior = Sibling).
 	for _, overlay in overlays do
-		for _, descendant in overlay.frame:GetDescendants() do
-			if descendant:IsA("GuiObject") then
-				descendant.ZIndex = 10 + descendant.ZIndex
-			end
-		end
+		overlay.frame.ZIndex = 10
+	end
+	if currentProfile then
+		UIController.onProfile(currentProfile) -- profil reçu avant la création de l'interface
 	end
 
 	screenGui.Parent = localPlayer:WaitForChild("PlayerGui")
