@@ -1,1 +1,10 @@
 Cahier_charges
+ARCHITECTURE*
+SETUP*
+TEST_PLAN*
+# Rojo / Roblox
+*.rbxl
+*.rbxlx
+*.rbxl.lock
+sourcemap.json
+Packages/

@@ -1,0 +1,76 @@
+--!strict
+-- Valeurs de gameplay centralisées. Les valeurs marquées PROPOSITION n'ont pas été imposées par le cahier des
+-- charges et devront être équilibrées pendant les tests.
+
+local GameConfig = {}
+
+GameConfig.Version = "0.1.0-phase0"
+
+GameConfig.States = table.freeze({
+	WAITING = "WAITING",
+	READY = "READY",
+	COUNTDOWN = "COUNTDOWN",
+	PLAYING = "PLAYING",
+	FINISHED = "FINISHED",
+	RESETTING = "RESETTING",
+})
+
+GameConfig.Round = table.freeze({
+	MinimumPlayers = 2,
+	MaximumPlayers = 8,
+	ReadyCountdown = 10, -- secondes
+	RoundDuration = 150, -- secondes
+	ResultDuration = 8, -- secondes
+	-- Uniquement dans Roblox Studio : permet de tester seul. Jamais actif en production.
+	AllowSoloInStudio = true,
+})
+
+GameConfig.Bomb = table.freeze({
+	FuseTime = 2.0, -- secondes
+	ExplosionDuration = 0.5, -- secondes
+	DefaultCapacity = 1,
+	DefaultBlastRange = 2, -- cases
+	MaxCapacity = 5,
+	MaxBlastRange = 6, -- cases
+})
+
+GameConfig.Movement = table.freeze({
+	-- PROPOSITION : à valider au playtest de la Phase 1.
+	BaseWalkSpeed = 14, -- studs / seconde
+	SpeedBonusPerPickup = 2,
+	MaxSpeedPickups = 3,
+	-- Tolérance serveur entre la position réelle et la position attendue sur le chemin.
+	MaxPositionDeviationStuds = 6,
+})
+
+GameConfig.Powerups = table.freeze({
+	-- PROPOSITION : probabilité qu'une caisse détruite laisse un bonus.
+	DropChancePerCrate = 0.25,
+	BombPlusAmount = 1,
+	FirePlusAmount = 1,
+	MaxShield = 1,
+})
+
+-- Limites anti-spam appliquées côté serveur, par joueur.
+GameConfig.RemoteLimits = table.freeze({
+	MoveRequestMinInterval = 0.1, -- secondes
+	PlaceBombMinInterval = 0.25,
+	ReadyToggleMinInterval = 0.5,
+	ShopRequestMinInterval = 0.5,
+})
+
+-- PROPOSITION : récompenses en Bomb Coins, attribuées uniquement par le serveur.
+GameConfig.Rewards = table.freeze({
+	ParticipationCoins = 10,
+	WinCoins = 50,
+	DrawCoins = 20,
+})
+
+GameConfig.Data = table.freeze({
+	DataVersion = 1,
+	DataStoreName = "BombBattlePlayerData",
+	AutosaveInterval = 120, -- secondes
+	MaxSaveRetries = 3,
+})
+
+return table.freeze(GameConfig)
