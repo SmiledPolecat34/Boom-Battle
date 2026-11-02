@@ -5,6 +5,7 @@
 
 local Debris = game:GetService("Debris")
 local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
 
 local CameraController = require(script.Parent.CameraController)
 local InputController = require(script.Parent.InputController)
@@ -13,6 +14,7 @@ local SettingsStore = require(script.Parent.SettingsStore)
 local MovementController = {}
 
 local MARKER_LIFETIME = 0.7
+local KEY_REPEAT_INTERVAL = 0.12 -- > GameConfig.RemoteLimits.MoveRequestMinInterval (0,1 s)
 local marker: Part? = nil
 local connections: { RBXScriptConnection } = {}
 
@@ -86,6 +88,37 @@ function MovementController.start(info: CameraController.MapInfo, remotes: Folde
 		showMarker(info, x, y, Color3.new(1, 1, 1))
 		requestMove:FireServer({ x = x, y = y })
 	end)
+
+	-- Clavier (flèches ou WASD) : tant qu'une direction est tenue, on demande la case voisine dans cette direction.
+	-- Le serveur valide et pilote le déplacement comme pour un clic ; la cadence reste sous la limite serveur.
+	local lastKeyRequest = 0
+	table.insert(
+		connections,
+		RunService.Heartbeat:Connect(function()
+			local direction = InputController.getHeldDirection()
+			if not direction or CameraController.isOverridden() then
+				return
+			end
+			local now = os.clock()
+			if now - lastKeyRequest < KEY_REPEAT_INTERVAL then
+				return
+			end
+			local character = Players.LocalPlayer.Character
+			local root = character and character:FindFirstChild("HumanoidRootPart")
+			if not root or not root:IsA("BasePart") then
+				return
+			end
+			local cx = math.floor((root.Position.X - info.origin.X) / info.cellSize) + 1
+			local cy = math.floor((root.Position.Z - info.origin.Z) / info.cellSize) + 1
+			local x, y = cx + direction.X, cy + direction.Y
+			if x < 1 or x > info.size or y < 1 or y > info.size then
+				return
+			end
+			lastKeyRequest = now
+			showMarker(info, x, y, Color3.new(1, 1, 1))
+			requestMove:FireServer({ x = x, y = y })
+		end)
+	)
 
 	table.insert(
 		connections,

@@ -19,6 +19,7 @@ local currentInfo: MapInfo? = nil
 local override: CFrame? = nil
 local overrideFov = 50
 local DEFAULT_FOV = 70
+local overrideConnection: RBXScriptConnection? = nil
 
 local function frame()
 	local info = currentInfo
@@ -28,7 +29,13 @@ local function frame()
 	end
 	if override then
 		camera.CameraType = Enum.CameraType.Scriptable
-		camera.FieldOfView = overrideFov
+		-- L'interface est mise à l'échelle sur 1280 x 720 et centrée : on adapte le champ de vision pour que le décor 3D
+		-- (personnage, pseudo) reste calé sur ce cadre, que l'écran soit large, carré ou en hauteur.
+		local viewport = camera.ViewportSize
+		local fit = math.min(viewport.X / 1280, viewport.Y / 720)
+		local ratio = viewport.Y / math.max(720 * fit, 1)
+		local tanHalf = math.tan(math.rad(overrideFov) / 2) * ratio
+		camera.FieldOfView = math.clamp(math.deg(2 * math.atan(tanHalf)), 20, 110)
 		camera.CFrame = override
 		return
 	end
@@ -57,6 +64,19 @@ function CameraController.setOverride(cframe: CFrame?, fov: number?)
 	override = cframe
 	overrideFov = fov or 50
 	frame()
+	if cframe and not overrideConnection then
+		local camera = workspace.CurrentCamera
+		if camera then
+			overrideConnection = camera:GetPropertyChangedSignal("ViewportSize"):Connect(function()
+				if override then
+					frame()
+				end
+			end)
+		end
+	elseif not cframe and overrideConnection then
+		overrideConnection:Disconnect()
+		overrideConnection = nil
+	end
 end
 
 -- Vrai tant que la caméra du décor de menu est active (les clics ne doivent alors rien déplacer).
