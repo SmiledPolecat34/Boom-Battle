@@ -21,6 +21,7 @@ GameConfig.Round = table.freeze({
 	ReadyCountdown = 10, -- secondes
 	RoundDuration = 150, -- secondes
 	ResultDuration = 8, -- secondes
+	RematchCountdown = 3, -- secondes : compte à rebours court quand tous les joueurs cliquent REJOUER
 	-- PROPOSITION : délai après lequel la manche démarre avec les seuls joueurs prêts (si assez nombreux),
 	-- pour qu'un joueur inactif ne bloque pas le groupe.
 	ReadyTimeout = 45, -- secondes
