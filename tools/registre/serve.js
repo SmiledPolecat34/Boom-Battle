@@ -508,7 +508,10 @@ module.exports = { createServer, collectData, buildHtml, listContributions, list
 async function main() {
   const env = process.env;
   const production = env.NODE_ENV === "production";
-  const port = Number(process.argv[2]) || Number(env.PORT) || 4173;
+  const explicitPort = Number(process.argv[2]) || Number(env.PORT) || null;
+  const defaultPort = 4173;
+  const initialPort = explicitPort || defaultPort;
+  const allowFallback = !explicitPort && !production;
   const host = env.HOST || "127.0.0.1";
   const { createAuth } = require("./auth/service");
   let authStore;
@@ -538,10 +541,47 @@ async function main() {
     initialData, auth, secureCookies: production || env.COOKIE_SECURE === "true", trustProxy: env.TRUST_PROXY === "1" || production,
     allowedHosts: (env.PUBLIC_HOSTS || "").split(",").map((x) => x.trim().toLowerCase()).filter(Boolean),
   });
-  server.listen(port, host, () => {
-    console.log("Registre BOOM BATTLE : http://" + (host === "0.0.0.0" ? "127.0.0.1" : host) + ":" + port + (env.DATABASE_URL ? " (base PostgreSQL)" : " (comptes dans tools/registre/data/auth)"));
-    console.log("Contributions enregistrées dans tools/registre/contributions/ — applique-les avec : node tools/registre/apply.js");
+
+  const actualPort = await new Promise((resolve, reject) => {
+    let currentPort = initialPort;
+    let attempts = 0;
+    const maxAttempts = 10;
+
+    function tryListen() {
+      const onError = (err) => {
+        server.removeListener("listening", onListening);
+        if (err.code === "EADDRINUSE" && allowFallback && attempts < maxAttempts) {
+          attempts++;
+          const nextPort = currentPort + 1;
+          console.warn(`⚠️  Port ${currentPort} déjà utilisé, bascule automatique sur le port ${nextPort}…`);
+          currentPort = nextPort;
+          setTimeout(tryListen, 50);
+          return;
+        }
+        if (err.code === "EADDRINUSE") {
+          console.error(`\n❌ Le port ${currentPort} est déjà utilisé par un autre processus.`);
+          console.error(`👉 Spécifier un autre port : node tools/registre/serve.js ${currentPort + 1}`);
+          console.error(`👉 Ou libérer le port dans PowerShell :`);
+          console.error(`   Get-Process -Id (Get-NetTCPConnection -LocalPort ${currentPort}).OwningProcess | Stop-Process -Force\n`);
+        }
+        reject(err);
+      };
+
+      const onListening = () => {
+        server.removeListener("error", onError);
+        resolve(currentPort);
+      };
+
+      server.once("error", onError);
+      server.once("listening", onListening);
+      server.listen(currentPort, host);
+    }
+
+    tryListen();
   });
+
+  console.log("Registre BOOM BATTLE : http://" + (host === "0.0.0.0" ? "127.0.0.1" : host) + ":" + actualPort + (env.DATABASE_URL ? " (base PostgreSQL)" : " (comptes dans tools/registre/data/auth)"));
+  console.log("Contributions enregistrées dans tools/registre/contributions/ — applique-les avec : node tools/registre/apply.js");
 }
 
 if (require.main === module) {
