@@ -1,0 +1,1508 @@
+{
+ "project": "Boom Battle",
+ "map": "ClassicMap",
+ "units": "1 Blender unit = 1 stud; FBX global_scale 0.01",
+ "pivot": "origin au sol, centre en XY",
+ "models": [
+  {
+   "name": "BB_EXT_TOWER_01_KeepPyramid",
+   "group": "Towers",
+   "variant": "pc",
+   "fbx": "assets/3D/fbx/ClassicMap/PC/Towers/BB_EXT_TOWER_01_KeepPyramid.fbx",
+   "triangles": 5962,
+   "size_studs": [
+    16.2,
+    19.0,
+    44.9
+   ],
+   "albedo": [
+    "TOWER_01_KeepPyramid_albedo.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_TOWER_02_KeepBattlement",
+   "group": "Towers",
+   "variant": "pc",
+   "fbx": "assets/3D/fbx/ClassicMap/PC/Towers/BB_EXT_TOWER_02_KeepBattlement.fbx",
+   "triangles": 5882,
+   "size_studs": [
+    16.2,
+    19.0,
+    35.0
+   ],
+   "albedo": [
+    "TOWER_02_KeepBattlement_albedo.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_TOWER_03_RoundDrum",
+   "group": "Towers",
+   "variant": "pc",
+   "fbx": "assets/3D/fbx/ClassicMap/PC/Towers/BB_EXT_TOWER_03_RoundDrum.fbx",
+   "triangles": 6058,
+   "size_studs": [
+    15.6,
+    18.4,
+    46.35
+   ],
+   "albedo": [
+    "TOWER_03_RoundDrum_albedo.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_TOWER_04_RuinedTower",
+   "group": "Towers",
+   "variant": "pc",
+   "fbx": "assets/3D/fbx/ClassicMap/PC/Towers/BB_EXT_TOWER_04_RuinedTower.fbx",
+   "triangles": 5288,
+   "size_studs": [
+    25.73,
+    28.4,
+    28.42
+   ],
+   "albedo": [
+    "TOWER_04_RuinedTower_albedo.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_TREE_01_Oak",
+   "group": "Trees",
+   "variant": "pc",
+   "fbx": "assets/3D/fbx/ClassicMap/PC/Trees/BB_EXT_TREE_01_Oak.fbx",
+   "triangles": 1646,
+   "size_studs": [
+    19.75,
+    15.1,
+    21.07
+   ],
+   "albedo": [
+    "TREE_01_Oak_albedo.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_TREE_02_Pine",
+   "group": "Trees",
+   "variant": "pc",
+   "fbx": "assets/3D/fbx/ClassicMap/PC/Trees/BB_EXT_TREE_02_Pine.fbx",
+   "triangles": 214,
+   "size_studs": [
+    12.4,
+    10.74,
+    24.0
+   ],
+   "albedo": [
+    "TREE_02_Pine_albedo.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_TREE_03_Birch",
+   "group": "Trees",
+   "variant": "pc",
+   "fbx": "assets/3D/fbx/ClassicMap/PC/Trees/BB_EXT_TREE_03_Birch.fbx",
+   "triangles": 1068,
+   "size_studs": [
+    9.46,
+    10.4,
+    18.21
+   ],
+   "albedo": [
+    "TREE_03_Birch_albedo.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_TREE_04_AutumnMaple",
+   "group": "Trees",
+   "variant": "pc",
+   "fbx": "assets/3D/fbx/ClassicMap/PC/Trees/BB_EXT_TREE_04_AutumnMaple.fbx",
+   "triangles": 1124,
+   "size_studs": [
+    12.53,
+    14.26,
+    15.68
+   ],
+   "albedo": [
+    "TREE_04_AutumnMaple_albedo.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_TREE_05_DeadTree",
+   "group": "Trees",
+   "variant": "pc",
+   "fbx": "assets/3D/fbx/ClassicMap/PC/Trees/BB_EXT_TREE_05_DeadTree.fbx",
+   "triangles": 330,
+   "size_studs": [
+    9.41,
+    8.13,
+    11.13
+   ],
+   "albedo": [
+    "TREE_05_DeadTree_albedo.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_TREE_06_BushTree",
+   "group": "Trees",
+   "variant": "pc",
+   "fbx": "assets/3D/fbx/ClassicMap/PC/Trees/BB_EXT_TREE_06_BushTree.fbx",
+   "triangles": 478,
+   "size_studs": [
+    10.81,
+    11.79,
+    12.01
+   ],
+   "albedo": [
+    "TREE_06_BushTree_albedo.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_ROCK_01_Boulder",
+   "group": "Rocks",
+   "variant": "pc",
+   "fbx": "assets/3D/fbx/ClassicMap/PC/Rocks/BB_EXT_ROCK_01_Boulder.fbx",
+   "triangles": 192,
+   "size_studs": [
+    12.59,
+    8.24,
+    7.67
+   ],
+   "albedo": [
+    "ROCK_01_Boulder_albedo.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_ROCK_02_Menhir",
+   "group": "Rocks",
+   "variant": "pc",
+   "fbx": "assets/3D/fbx/ClassicMap/PC/Rocks/BB_EXT_ROCK_02_Menhir.fbx",
+   "triangles": 136,
+   "size_studs": [
+    5.28,
+    4.09,
+    9.32
+   ],
+   "albedo": [
+    "ROCK_02_Menhir_albedo.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_ROCK_03_RockPile",
+   "group": "Rocks",
+   "variant": "pc",
+   "fbx": "assets/3D/fbx/ClassicMap/PC/Rocks/BB_EXT_ROCK_03_RockPile.fbx",
+   "triangles": 260,
+   "size_studs": [
+    7.84,
+    6.89,
+    5.91
+   ],
+   "albedo": [
+    "ROCK_03_RockPile_albedo.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_ROCK_04_FlatSlab",
+   "group": "Rocks",
+   "variant": "pc",
+   "fbx": "assets/3D/fbx/ClassicMap/PC/Rocks/BB_EXT_ROCK_04_FlatSlab.fbx",
+   "triangles": 160,
+   "size_studs": [
+    10.35,
+    7.42,
+    2.47
+   ],
+   "albedo": [
+    "ROCK_04_FlatSlab_albedo.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_ROCK_05_RockCluster",
+   "group": "Rocks",
+   "variant": "pc",
+   "fbx": "assets/3D/fbx/ClassicMap/PC/Rocks/BB_EXT_ROCK_05_RockCluster.fbx",
+   "triangles": 120,
+   "size_studs": [
+    9.3,
+    6.86,
+    3.29
+   ],
+   "albedo": [
+    "ROCK_05_RockCluster_albedo.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_ROCK_06_SmallRocks",
+   "group": "Rocks",
+   "variant": "pc",
+   "fbx": "assets/3D/fbx/ClassicMap/PC/Rocks/BB_EXT_ROCK_06_SmallRocks.fbx",
+   "triangles": 140,
+   "size_studs": [
+    5.24,
+    5.41,
+    1.41
+   ],
+   "albedo": [
+    "ROCK_06_SmallRocks_albedo.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_FENCE_01_PicketStraight",
+   "group": "Fences",
+   "variant": "pc",
+   "fbx": "assets/3D/fbx/ClassicMap/PC/Fences/BB_EXT_FENCE_01_PicketStraight.fbx",
+   "triangles": 348,
+   "size_studs": [
+    5.05,
+    1.05,
+    5.25
+   ],
+   "albedo": [
+    "FENCE_01_PicketStraight_albedo.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_FENCE_02_PostRail",
+   "group": "Fences",
+   "variant": "pc",
+   "fbx": "assets/3D/fbx/ClassicMap/PC/Fences/BB_EXT_FENCE_02_PostRail.fbx",
+   "triangles": 132,
+   "size_studs": [
+    4.95,
+    0.95,
+    4.45
+   ],
+   "albedo": [
+    "FENCE_02_PostRail_albedo.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_FENCE_03_Gate",
+   "group": "Fences",
+   "variant": "pc",
+   "fbx": "assets/3D/fbx/ClassicMap/PC/Fences/BB_EXT_FENCE_03_Gate.fbx",
+   "triangles": 396,
+   "size_studs": [
+    9.25,
+    1.25,
+    6.28
+   ],
+   "albedo": [
+    "FENCE_03_Gate_albedo.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_FENCE_04_Corner",
+   "group": "Fences",
+   "variant": "pc",
+   "fbx": "assets/3D/fbx/ClassicMap/PC/Fences/BB_EXT_FENCE_04_Corner.fbx",
+   "triangles": 192,
+   "size_studs": [
+    4.43,
+    4.43,
+    5.65
+   ],
+   "albedo": [
+    "FENCE_04_Corner_albedo.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_FENCE_05_Broken",
+   "group": "Fences",
+   "variant": "pc",
+   "fbx": "assets/3D/fbx/ClassicMap/PC/Fences/BB_EXT_FENCE_05_Broken.fbx",
+   "triangles": 226,
+   "size_studs": [
+    5.05,
+    1.84,
+    5.25
+   ],
+   "albedo": [
+    "FENCE_05_Broken_albedo.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_FENCE_06_StoneWall",
+   "group": "Fences",
+   "variant": "pc",
+   "fbx": "assets/3D/fbx/ClassicMap/PC/Fences/BB_EXT_FENCE_06_StoneWall.fbx",
+   "triangles": 228,
+   "size_studs": [
+    4.01,
+    1.83,
+    3.58
+   ],
+   "albedo": [
+    "FENCE_06_StoneWall_albedo.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_FENCE_07_StonePillar",
+   "group": "Fences",
+   "variant": "pc",
+   "fbx": "assets/3D/fbx/ClassicMap/PC/Fences/BB_EXT_FENCE_07_StonePillar.fbx",
+   "triangles": 222,
+   "size_studs": [
+    2.8,
+    2.8,
+    9.83
+   ],
+   "albedo": [
+    "FENCE_07_StonePillar_albedo.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_VEG_01_Bush",
+   "group": "Vegetation",
+   "variant": "pc",
+   "fbx": "assets/3D/fbx/ClassicMap/PC/Vegetation/BB_EXT_VEG_01_Bush.fbx",
+   "triangles": 640,
+   "size_studs": [
+    7.67,
+    6.14,
+    4.05
+   ],
+   "albedo": [
+    "VEG_01_Bush_albedo.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_VEG_02_BerryBush",
+   "group": "Vegetation",
+   "variant": "pc",
+   "fbx": "assets/3D/fbx/ClassicMap/PC/Vegetation/BB_EXT_VEG_02_BerryBush.fbx",
+   "triangles": 720,
+   "size_studs": [
+    6.33,
+    5.24,
+    4.42
+   ],
+   "albedo": [
+    "VEG_02_BerryBush_albedo.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_VEG_03_TallGrass",
+   "group": "Vegetation",
+   "variant": "pc",
+   "fbx": "assets/3D/fbx/ClassicMap/PC/Vegetation/BB_EXT_VEG_03_TallGrass.fbx",
+   "triangles": 260,
+   "size_studs": [
+    4.23,
+    5.34,
+    3.42
+   ],
+   "albedo": [
+    "VEG_03_TallGrass_albedo.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_VEG_04_GrassTuft",
+   "group": "Vegetation",
+   "variant": "pc",
+   "fbx": "assets/3D/fbx/ClassicMap/PC/Vegetation/BB_EXT_VEG_04_GrassTuft.fbx",
+   "triangles": 180,
+   "size_studs": [
+    2.31,
+    1.68,
+    1.49
+   ],
+   "albedo": [
+    "VEG_04_GrassTuft_albedo.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_VEG_05_Fern",
+   "group": "Vegetation",
+   "variant": "pc",
+   "fbx": "assets/3D/fbx/ClassicMap/PC/Vegetation/BB_EXT_VEG_05_Fern.fbx",
+   "triangles": 532,
+   "size_studs": [
+    5.55,
+    4.93,
+    1.88
+   ],
+   "albedo": [
+    "VEG_05_Fern_albedo.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_VEG_06_Daisies",
+   "group": "Vegetation",
+   "variant": "pc",
+   "fbx": "assets/3D/fbx/ClassicMap/PC/Vegetation/BB_EXT_VEG_06_Daisies.fbx",
+   "triangles": 980,
+   "size_studs": [
+    2.48,
+    3.97,
+    1.82
+   ],
+   "albedo": [
+    "VEG_06_Daisies_albedo.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_VEG_07_Tulips",
+   "group": "Vegetation",
+   "variant": "pc",
+   "fbx": "assets/3D/fbx/ClassicMap/PC/Vegetation/BB_EXT_VEG_07_Tulips.fbx",
+   "triangles": 368,
+   "size_studs": [
+    2.57,
+    3.26,
+    2.6
+   ],
+   "albedo": [
+    "VEG_07_Tulips_albedo.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_VEG_08_Mushrooms",
+   "group": "Vegetation",
+   "variant": "pc",
+   "fbx": "assets/3D/fbx/ClassicMap/PC/Vegetation/BB_EXT_VEG_08_Mushrooms.fbx",
+   "triangles": 620,
+   "size_studs": [
+    3.47,
+    3.05,
+    1.67
+   ],
+   "albedo": [
+    "VEG_08_Mushrooms_albedo.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_VEG_09_Cattails",
+   "group": "Vegetation",
+   "variant": "pc",
+   "fbx": "assets/3D/fbx/ClassicMap/PC/Vegetation/BB_EXT_VEG_09_Cattails.fbx",
+   "triangles": 428,
+   "size_studs": [
+    3.73,
+    3.81,
+    6.56
+   ],
+   "albedo": [
+    "VEG_09_Cattails_albedo.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_VEG_10_IvyPanel",
+   "group": "Vegetation",
+   "variant": "pc",
+   "fbx": "assets/3D/fbx/ClassicMap/PC/Vegetation/BB_EXT_VEG_10_IvyPanel.fbx",
+   "triangles": 284,
+   "size_studs": [
+    5.18,
+    0.18,
+    5.42
+   ],
+   "albedo": [
+    "VEG_10_IvyPanel_albedo.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_PATH_01_DirtStraight",
+   "group": "Paths",
+   "variant": "pc",
+   "fbx": "assets/3D/fbx/ClassicMap/PC/Paths/BB_EXT_PATH_01_DirtStraight.fbx",
+   "triangles": 500,
+   "size_studs": [
+    5.15,
+    10.71,
+    0.63
+   ],
+   "albedo": [
+    "PATH_01_DirtStraight_albedo.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_PATH_02_DirtCurve",
+   "group": "Paths",
+   "variant": "pc",
+   "fbx": "assets/3D/fbx/ClassicMap/PC/Paths/BB_EXT_PATH_02_DirtCurve.fbx",
+   "triangles": 500,
+   "size_studs": [
+    8.59,
+    8.95,
+    0.66
+   ],
+   "albedo": [
+    "PATH_02_DirtCurve_albedo.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_PATH_03_DirtCross",
+   "group": "Paths",
+   "variant": "pc",
+   "fbx": "assets/3D/fbx/ClassicMap/PC/Paths/BB_EXT_PATH_03_DirtCross.fbx",
+   "triangles": 340,
+   "size_studs": [
+    12.44,
+    11.99,
+    0.61
+   ],
+   "albedo": [
+    "PATH_03_DirtCross_albedo.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_PATH_04_StepStones",
+   "group": "Paths",
+   "variant": "pc",
+   "fbx": "assets/3D/fbx/ClassicMap/PC/Paths/BB_EXT_PATH_04_StepStones.fbx",
+   "triangles": 132,
+   "size_studs": [
+    3.27,
+    12.36,
+    0.51
+   ],
+   "albedo": [
+    "PATH_04_StepStones_albedo.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_PATH_05_Flagstones",
+   "group": "Paths",
+   "variant": "pc",
+   "fbx": "assets/3D/fbx/ClassicMap/PC/Paths/BB_EXT_PATH_05_Flagstones.fbx",
+   "triangles": 300,
+   "size_studs": [
+    5.94,
+    9.96,
+    0.4
+   ],
+   "albedo": [
+    "PATH_05_Flagstones_albedo.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_PATH_06_Cobblestone",
+   "group": "Paths",
+   "variant": "pc",
+   "fbx": "assets/3D/fbx/ClassicMap/PC/Paths/BB_EXT_PATH_06_Cobblestone.fbx",
+   "triangles": 1960,
+   "size_studs": [
+    7.24,
+    13.29,
+    0.39
+   ],
+   "albedo": [
+    "PATH_06_Cobblestone_albedo.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_PATH_07_PlankWalk",
+   "group": "Paths",
+   "variant": "pc",
+   "fbx": "assets/3D/fbx/ClassicMap/PC/Paths/BB_EXT_PATH_07_PlankWalk.fbx",
+   "triangles": 384,
+   "size_studs": [
+    4.03,
+    9.83,
+    0.46
+   ],
+   "albedo": [
+    "PATH_07_PlankWalk_albedo.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_DECOR_01_Barrel",
+   "group": "Decorations",
+   "variant": "pc",
+   "fbx": "assets/3D/fbx/ClassicMap/PC/Decorations/BB_EXT_DECOR_01_Barrel.fbx",
+   "triangles": 396,
+   "size_studs": [
+    3.96,
+    3.86,
+    3.25
+   ],
+   "albedo": [
+    "DECOR_01_Barrel_albedo.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_DECOR_02_CrateStack",
+   "group": "Decorations",
+   "variant": "pc",
+   "fbx": "assets/3D/fbx/ClassicMap/PC/Decorations/BB_EXT_DECOR_02_CrateStack.fbx",
+   "triangles": 216,
+   "size_studs": [
+    6.1,
+    3.5,
+    5.28
+   ],
+   "albedo": [
+    "DECOR_02_CrateStack_albedo.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_DECOR_03_SignPost",
+   "group": "Decorations",
+   "variant": "pc",
+   "fbx": "assets/3D/fbx/ClassicMap/PC/Decorations/BB_EXT_DECOR_03_SignPost.fbx",
+   "triangles": 90,
+   "size_studs": [
+    5.0,
+    1.0,
+    7.1
+   ],
+   "albedo": [
+    "DECOR_03_SignPost_albedo.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_DECOR_04_LampPost",
+   "group": "Decorations",
+   "variant": "pc",
+   "fbx": "assets/3D/fbx/ClassicMap/PC/Decorations/BB_EXT_DECOR_04_LampPost.fbx",
+   "triangles": 210,
+   "size_studs": [
+    2.2,
+    2.2,
+    10.5
+   ],
+   "albedo": [
+    "DECOR_04_LampPost_albedo.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_DECOR_05_HayBale",
+   "group": "Decorations",
+   "variant": "pc",
+   "fbx": "assets/3D/fbx/ClassicMap/PC/Decorations/BB_EXT_DECOR_05_HayBale.fbx",
+   "triangles": 236,
+   "size_studs": [
+    3.77,
+    2.68,
+    3.65
+   ],
+   "albedo": [
+    "DECOR_05_HayBale_albedo.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_DECOR_06_Bench",
+   "group": "Decorations",
+   "variant": "pc",
+   "fbx": "assets/3D/fbx/ClassicMap/PC/Decorations/BB_EXT_DECOR_06_Bench.fbx",
+   "triangles": 132,
+   "size_studs": [
+    4.4,
+    1.73,
+    3.4
+   ],
+   "albedo": [
+    "DECOR_06_Bench_albedo.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_DECOR_07_Campfire",
+   "group": "Decorations",
+   "variant": "pc",
+   "fbx": "assets/3D/fbx/ClassicMap/PC/Decorations/BB_EXT_DECOR_07_Campfire.fbx",
+   "triangles": 306,
+   "size_studs": [
+    4.42,
+    4.54,
+    2.99
+   ],
+   "albedo": [
+    "DECOR_07_Campfire_albedo.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_DECOR_08_Well",
+   "group": "Decorations",
+   "variant": "pc",
+   "fbx": "assets/3D/fbx/ClassicMap/PC/Decorations/BB_EXT_DECOR_08_Well.fbx",
+   "triangles": 352,
+   "size_studs": [
+    5.8,
+    5.8,
+    9.5
+   ],
+   "albedo": [
+    "DECOR_08_Well_albedo.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_DECOR_09_Cart",
+   "group": "Decorations",
+   "variant": "pc",
+   "fbx": "assets/3D/fbx/ClassicMap/PC/Decorations/BB_EXT_DECOR_09_Cart.fbx",
+   "triangles": 692,
+   "size_studs": [
+    9.56,
+    4.18,
+    3.88
+   ],
+   "albedo": [
+    "DECOR_09_Cart_albedo.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_DECOR_10_Banner",
+   "group": "Decorations",
+   "variant": "pc",
+   "fbx": "assets/3D/fbx/ClassicMap/PC/Decorations/BB_EXT_DECOR_10_Banner.fbx",
+   "triangles": 66,
+   "size_studs": [
+    3.8,
+    1.1,
+    9.0
+   ],
+   "albedo": [
+    "DECOR_10_Banner_albedo.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_TOWER_01_KeepPyramid",
+   "group": "Towers",
+   "variant": "mobile",
+   "fbx": "assets/3D/fbx/ClassicMap/MOBILE/Towers/BB_EXT_TOWER_01_KeepPyramid.fbx",
+   "triangles": 3130,
+   "size_studs": [
+    16.2,
+    19.0,
+    44.9
+   ],
+   "albedo": [
+    "TOWER_01_KeepPyramid_albedo_512.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_TOWER_02_KeepBattlement",
+   "group": "Towers",
+   "variant": "mobile",
+   "fbx": "assets/3D/fbx/ClassicMap/MOBILE/Towers/BB_EXT_TOWER_02_KeepBattlement.fbx",
+   "triangles": 3050,
+   "size_studs": [
+    16.2,
+    19.0,
+    35.0
+   ],
+   "albedo": [
+    "TOWER_02_KeepBattlement_albedo_512.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_TOWER_03_RoundDrum",
+   "group": "Towers",
+   "variant": "mobile",
+   "fbx": "assets/3D/fbx/ClassicMap/MOBILE/Towers/BB_EXT_TOWER_03_RoundDrum.fbx",
+   "triangles": 2962,
+   "size_studs": [
+    15.6,
+    18.4,
+    46.35
+   ],
+   "albedo": [
+    "TOWER_03_RoundDrum_albedo_512.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_TOWER_04_RuinedTower",
+   "group": "Towers",
+   "variant": "mobile",
+   "fbx": "assets/3D/fbx/ClassicMap/MOBILE/Towers/BB_EXT_TOWER_04_RuinedTower.fbx",
+   "triangles": 2840,
+   "size_studs": [
+    29.47,
+    29.16,
+    28.54
+   ],
+   "albedo": [
+    "TOWER_04_RuinedTower_albedo_512.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_TREE_01_Oak",
+   "group": "Trees",
+   "variant": "mobile",
+   "fbx": "assets/3D/fbx/ClassicMap/MOBILE/Trees/BB_EXT_TREE_01_Oak.fbx",
+   "triangles": 740,
+   "size_studs": [
+    20.1,
+    15.22,
+    20.66
+   ],
+   "albedo": [
+    "TREE_01_Oak_albedo_256.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_TREE_02_Pine",
+   "group": "Trees",
+   "variant": "mobile",
+   "fbx": "assets/3D/fbx/ClassicMap/MOBILE/Trees/BB_EXT_TREE_02_Pine.fbx",
+   "triangles": 92,
+   "size_studs": [
+    10.63,
+    10.74,
+    24.0
+   ],
+   "albedo": [
+    "TREE_02_Pine_albedo_256.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_TREE_03_Birch",
+   "group": "Trees",
+   "variant": "mobile",
+   "fbx": "assets/3D/fbx/ClassicMap/MOBILE/Trees/BB_EXT_TREE_03_Birch.fbx",
+   "triangles": 476,
+   "size_studs": [
+    9.35,
+    10.31,
+    18.06
+   ],
+   "albedo": [
+    "TREE_03_Birch_albedo_256.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_TREE_04_AutumnMaple",
+   "group": "Trees",
+   "variant": "mobile",
+   "fbx": "assets/3D/fbx/ClassicMap/MOBILE/Trees/BB_EXT_TREE_04_AutumnMaple.fbx",
+   "triangles": 498,
+   "size_studs": [
+    12.75,
+    14.65,
+    15.4
+   ],
+   "albedo": [
+    "TREE_04_AutumnMaple_albedo_256.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_TREE_05_DeadTree",
+   "group": "Trees",
+   "variant": "mobile",
+   "fbx": "assets/3D/fbx/ClassicMap/MOBILE/Trees/BB_EXT_TREE_05_DeadTree.fbx",
+   "triangles": 148,
+   "size_studs": [
+    9.41,
+    8.13,
+    11.08
+   ],
+   "albedo": [
+    "TREE_05_DeadTree_albedo_256.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_TREE_06_BushTree",
+   "group": "Trees",
+   "variant": "mobile",
+   "fbx": "assets/3D/fbx/ClassicMap/MOBILE/Trees/BB_EXT_TREE_06_BushTree.fbx",
+   "triangles": 214,
+   "size_studs": [
+    10.73,
+    11.98,
+    11.8
+   ],
+   "albedo": [
+    "TREE_06_BushTree_albedo_256.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_ROCK_01_Boulder",
+   "group": "Rocks",
+   "variant": "mobile",
+   "fbx": "assets/3D/fbx/ClassicMap/MOBILE/Rocks/BB_EXT_ROCK_01_Boulder.fbx",
+   "triangles": 92,
+   "size_studs": [
+    12.57,
+    8.44,
+    7.67
+   ],
+   "albedo": [
+    "ROCK_01_Boulder_albedo_128.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_ROCK_02_Menhir",
+   "group": "Rocks",
+   "variant": "mobile",
+   "fbx": "assets/3D/fbx/ClassicMap/MOBILE/Rocks/BB_EXT_ROCK_02_Menhir.fbx",
+   "triangles": 78,
+   "size_studs": [
+    5.28,
+    4.05,
+    9.32
+   ],
+   "albedo": [
+    "ROCK_02_Menhir_albedo_128.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_ROCK_03_RockPile",
+   "group": "Rocks",
+   "variant": "mobile",
+   "fbx": "assets/3D/fbx/ClassicMap/MOBILE/Rocks/BB_EXT_ROCK_03_RockPile.fbx",
+   "triangles": 128,
+   "size_studs": [
+    7.84,
+    6.89,
+    5.91
+   ],
+   "albedo": [
+    "ROCK_03_RockPile_albedo_128.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_ROCK_04_FlatSlab",
+   "group": "Rocks",
+   "variant": "mobile",
+   "fbx": "assets/3D/fbx/ClassicMap/MOBILE/Rocks/BB_EXT_ROCK_04_FlatSlab.fbx",
+   "triangles": 78,
+   "size_studs": [
+    10.35,
+    7.42,
+    2.51
+   ],
+   "albedo": [
+    "ROCK_04_FlatSlab_albedo_128.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_ROCK_05_RockCluster",
+   "group": "Rocks",
+   "variant": "mobile",
+   "fbx": "assets/3D/fbx/ClassicMap/MOBILE/Rocks/BB_EXT_ROCK_05_RockCluster.fbx",
+   "triangles": 108,
+   "size_studs": [
+    9.3,
+    6.86,
+    3.29
+   ],
+   "albedo": [
+    "ROCK_05_RockCluster_albedo_128.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_ROCK_06_SmallRocks",
+   "group": "Rocks",
+   "variant": "mobile",
+   "fbx": "assets/3D/fbx/ClassicMap/MOBILE/Rocks/BB_EXT_ROCK_06_SmallRocks.fbx",
+   "triangles": 74,
+   "size_studs": [
+    5.28,
+    5.45,
+    1.41
+   ],
+   "albedo": [
+    "ROCK_06_SmallRocks_albedo_128.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_FENCE_01_PicketStraight",
+   "group": "Fences",
+   "variant": "mobile",
+   "fbx": "assets/3D/fbx/ClassicMap/MOBILE/Fences/BB_EXT_FENCE_01_PicketStraight.fbx",
+   "triangles": 190,
+   "size_studs": [
+    5.05,
+    1.05,
+    5.27
+   ],
+   "albedo": [
+    "FENCE_01_PicketStraight_albedo_128.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_FENCE_02_PostRail",
+   "group": "Fences",
+   "variant": "mobile",
+   "fbx": "assets/3D/fbx/ClassicMap/MOBILE/Fences/BB_EXT_FENCE_02_PostRail.fbx",
+   "triangles": 72,
+   "size_studs": [
+    4.95,
+    0.95,
+    4.47
+   ],
+   "albedo": [
+    "FENCE_02_PostRail_albedo_128.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_FENCE_03_Gate",
+   "group": "Fences",
+   "variant": "mobile",
+   "fbx": "assets/3D/fbx/ClassicMap/MOBILE/Fences/BB_EXT_FENCE_03_Gate.fbx",
+   "triangles": 216,
+   "size_studs": [
+    9.25,
+    1.25,
+    6.28
+   ],
+   "albedo": [
+    "FENCE_03_Gate_albedo_128.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_FENCE_04_Corner",
+   "group": "Fences",
+   "variant": "mobile",
+   "fbx": "assets/3D/fbx/ClassicMap/MOBILE/Fences/BB_EXT_FENCE_04_Corner.fbx",
+   "triangles": 104,
+   "size_studs": [
+    4.43,
+    4.43,
+    5.67
+   ],
+   "albedo": [
+    "FENCE_04_Corner_albedo_128.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_FENCE_05_Broken",
+   "group": "Fences",
+   "variant": "mobile",
+   "fbx": "assets/3D/fbx/ClassicMap/MOBILE/Fences/BB_EXT_FENCE_05_Broken.fbx",
+   "triangles": 124,
+   "size_studs": [
+    5.05,
+    1.78,
+    5.27
+   ],
+   "albedo": [
+    "FENCE_05_Broken_albedo_128.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_FENCE_06_StoneWall",
+   "group": "Fences",
+   "variant": "mobile",
+   "fbx": "assets/3D/fbx/ClassicMap/MOBILE/Fences/BB_EXT_FENCE_06_StoneWall.fbx",
+   "triangles": 124,
+   "size_studs": [
+    3.99,
+    1.82,
+    3.53
+   ],
+   "albedo": [
+    "FENCE_06_StoneWall_albedo_128.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_FENCE_07_StonePillar",
+   "group": "Fences",
+   "variant": "mobile",
+   "fbx": "assets/3D/fbx/ClassicMap/MOBILE/Fences/BB_EXT_FENCE_07_StonePillar.fbx",
+   "triangles": 122,
+   "size_studs": [
+    2.8,
+    2.8,
+    9.82
+   ],
+   "albedo": [
+    "FENCE_07_StonePillar_albedo_128.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_VEG_01_Bush",
+   "group": "Vegetation",
+   "variant": "mobile",
+   "fbx": "assets/3D/fbx/ClassicMap/MOBILE/Vegetation/BB_EXT_VEG_01_Bush.fbx",
+   "triangles": 448,
+   "size_studs": [
+    7.7,
+    6.19,
+    4.05
+   ],
+   "albedo": [
+    "VEG_01_Bush_albedo_128.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_VEG_02_BerryBush",
+   "group": "Vegetation",
+   "variant": "mobile",
+   "fbx": "assets/3D/fbx/ClassicMap/MOBILE/Vegetation/BB_EXT_VEG_02_BerryBush.fbx",
+   "triangles": 504,
+   "size_studs": [
+    6.33,
+    5.24,
+    4.42
+   ],
+   "albedo": [
+    "VEG_02_BerryBush_albedo_128.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_VEG_03_TallGrass",
+   "group": "Vegetation",
+   "variant": "mobile",
+   "fbx": "assets/3D/fbx/ClassicMap/MOBILE/Vegetation/BB_EXT_VEG_03_TallGrass.fbx",
+   "triangles": 182,
+   "size_studs": [
+    4.23,
+    5.34,
+    3.42
+   ],
+   "albedo": [
+    "VEG_03_TallGrass_albedo_128.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_VEG_04_GrassTuft",
+   "group": "Vegetation",
+   "variant": "mobile",
+   "fbx": "assets/3D/fbx/ClassicMap/MOBILE/Vegetation/BB_EXT_VEG_04_GrassTuft.fbx",
+   "triangles": 126,
+   "size_studs": [
+    2.31,
+    1.68,
+    1.49
+   ],
+   "albedo": [
+    "VEG_04_GrassTuft_albedo_128.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_VEG_05_Fern",
+   "group": "Vegetation",
+   "variant": "mobile",
+   "fbx": "assets/3D/fbx/ClassicMap/MOBILE/Vegetation/BB_EXT_VEG_05_Fern.fbx",
+   "triangles": 372,
+   "size_studs": [
+    5.55,
+    4.93,
+    1.87
+   ],
+   "albedo": [
+    "VEG_05_Fern_albedo_128.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_VEG_06_Daisies",
+   "group": "Vegetation",
+   "variant": "mobile",
+   "fbx": "assets/3D/fbx/ClassicMap/MOBILE/Vegetation/BB_EXT_VEG_06_Daisies.fbx",
+   "triangles": 686,
+   "size_studs": [
+    2.48,
+    3.97,
+    1.82
+   ],
+   "albedo": [
+    "VEG_06_Daisies_albedo_128.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_VEG_07_Tulips",
+   "group": "Vegetation",
+   "variant": "mobile",
+   "fbx": "assets/3D/fbx/ClassicMap/MOBILE/Vegetation/BB_EXT_VEG_07_Tulips.fbx",
+   "triangles": 257,
+   "size_studs": [
+    2.57,
+    3.26,
+    2.59
+   ],
+   "albedo": [
+    "VEG_07_Tulips_albedo_128.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_VEG_08_Mushrooms",
+   "group": "Vegetation",
+   "variant": "mobile",
+   "fbx": "assets/3D/fbx/ClassicMap/MOBILE/Vegetation/BB_EXT_VEG_08_Mushrooms.fbx",
+   "triangles": 434,
+   "size_studs": [
+    3.47,
+    3.05,
+    1.67
+   ],
+   "albedo": [
+    "VEG_08_Mushrooms_albedo_128.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_VEG_09_Cattails",
+   "group": "Vegetation",
+   "variant": "mobile",
+   "fbx": "assets/3D/fbx/ClassicMap/MOBILE/Vegetation/BB_EXT_VEG_09_Cattails.fbx",
+   "triangles": 299,
+   "size_studs": [
+    3.73,
+    3.81,
+    6.56
+   ],
+   "albedo": [
+    "VEG_09_Cattails_albedo_128.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_VEG_10_IvyPanel",
+   "group": "Vegetation",
+   "variant": "mobile",
+   "fbx": "assets/3D/fbx/ClassicMap/MOBILE/Vegetation/BB_EXT_VEG_10_IvyPanel.fbx",
+   "triangles": 198,
+   "size_studs": [
+    5.18,
+    0.18,
+    5.42
+   ],
+   "albedo": [
+    "VEG_10_IvyPanel_albedo_128.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_PATH_01_DirtStraight",
+   "group": "Paths",
+   "variant": "mobile",
+   "fbx": "assets/3D/fbx/ClassicMap/MOBILE/Paths/BB_EXT_PATH_01_DirtStraight.fbx",
+   "triangles": 296,
+   "size_studs": [
+    5.13,
+    10.7,
+    0.61
+   ],
+   "albedo": [
+    "PATH_01_DirtStraight_albedo_256.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_PATH_02_DirtCurve",
+   "group": "Paths",
+   "variant": "mobile",
+   "fbx": "assets/3D/fbx/ClassicMap/MOBILE/Paths/BB_EXT_PATH_02_DirtCurve.fbx",
+   "triangles": 295,
+   "size_studs": [
+    8.6,
+    8.95,
+    0.66
+   ],
+   "albedo": [
+    "PATH_02_DirtCurve_albedo_256.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_PATH_03_DirtCross",
+   "group": "Paths",
+   "variant": "mobile",
+   "fbx": "assets/3D/fbx/ClassicMap/MOBILE/Paths/BB_EXT_PATH_03_DirtCross.fbx",
+   "triangles": 204,
+   "size_studs": [
+    12.44,
+    11.96,
+    0.61
+   ],
+   "albedo": [
+    "PATH_03_DirtCross_albedo_256.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_PATH_04_StepStones",
+   "group": "Paths",
+   "variant": "mobile",
+   "fbx": "assets/3D/fbx/ClassicMap/MOBILE/Paths/BB_EXT_PATH_04_StepStones.fbx",
+   "triangles": 78,
+   "size_studs": [
+    3.27,
+    12.29,
+    0.49
+   ],
+   "albedo": [
+    "PATH_04_StepStones_albedo_256.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_PATH_05_Flagstones",
+   "group": "Paths",
+   "variant": "mobile",
+   "fbx": "assets/3D/fbx/ClassicMap/MOBILE/Paths/BB_EXT_PATH_05_Flagstones.fbx",
+   "triangles": 180,
+   "size_studs": [
+    5.94,
+    9.96,
+    0.4
+   ],
+   "albedo": [
+    "PATH_05_Flagstones_albedo_256.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_PATH_06_Cobblestone",
+   "group": "Paths",
+   "variant": "mobile",
+   "fbx": "assets/3D/fbx/ClassicMap/MOBILE/Paths/BB_EXT_PATH_06_Cobblestone.fbx",
+   "triangles": 1176,
+   "size_studs": [
+    7.24,
+    13.26,
+    0.39
+   ],
+   "albedo": [
+    "PATH_06_Cobblestone_albedo_256.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_PATH_07_PlankWalk",
+   "group": "Paths",
+   "variant": "mobile",
+   "fbx": "assets/3D/fbx/ClassicMap/MOBILE/Paths/BB_EXT_PATH_07_PlankWalk.fbx",
+   "triangles": 230,
+   "size_studs": [
+    4.03,
+    9.83,
+    0.46
+   ],
+   "albedo": [
+    "PATH_07_PlankWalk_albedo_256.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_DECOR_01_Barrel",
+   "group": "Decorations",
+   "variant": "mobile",
+   "fbx": "assets/3D/fbx/ClassicMap/MOBILE/Decorations/BB_EXT_DECOR_01_Barrel.fbx",
+   "triangles": 216,
+   "size_studs": [
+    3.96,
+    3.95,
+    3.23
+   ],
+   "albedo": [
+    "DECOR_01_Barrel_albedo_128.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_DECOR_02_CrateStack",
+   "group": "Decorations",
+   "variant": "mobile",
+   "fbx": "assets/3D/fbx/ClassicMap/MOBILE/Decorations/BB_EXT_DECOR_02_CrateStack.fbx",
+   "triangles": 118,
+   "size_studs": [
+    6.06,
+    3.5,
+    5.26
+   ],
+   "albedo": [
+    "DECOR_02_CrateStack_albedo_128.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_DECOR_03_SignPost",
+   "group": "Decorations",
+   "variant": "mobile",
+   "fbx": "assets/3D/fbx/ClassicMap/MOBILE/Decorations/BB_EXT_DECOR_03_SignPost.fbx",
+   "triangles": 90,
+   "size_studs": [
+    5.0,
+    1.0,
+    7.1
+   ],
+   "albedo": [
+    "DECOR_03_SignPost_albedo_128.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_DECOR_04_LampPost",
+   "group": "Decorations",
+   "variant": "mobile",
+   "fbx": "assets/3D/fbx/ClassicMap/MOBILE/Decorations/BB_EXT_DECOR_04_LampPost.fbx",
+   "triangles": 114,
+   "size_studs": [
+    2.2,
+    2.2,
+    10.48
+   ],
+   "albedo": [
+    "DECOR_04_LampPost_albedo_128.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_DECOR_05_HayBale",
+   "group": "Decorations",
+   "variant": "mobile",
+   "fbx": "assets/3D/fbx/ClassicMap/MOBILE/Decorations/BB_EXT_DECOR_05_HayBale.fbx",
+   "triangles": 128,
+   "size_studs": [
+    3.77,
+    2.68,
+    3.65
+   ],
+   "albedo": [
+    "DECOR_05_HayBale_albedo_128.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_DECOR_06_Bench",
+   "group": "Decorations",
+   "variant": "mobile",
+   "fbx": "assets/3D/fbx/ClassicMap/MOBILE/Decorations/BB_EXT_DECOR_06_Bench.fbx",
+   "triangles": 72,
+   "size_studs": [
+    4.4,
+    1.73,
+    3.4
+   ],
+   "albedo": [
+    "DECOR_06_Bench_albedo_128.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_DECOR_07_Campfire",
+   "group": "Decorations",
+   "variant": "mobile",
+   "fbx": "assets/3D/fbx/ClassicMap/MOBILE/Decorations/BB_EXT_DECOR_07_Campfire.fbx",
+   "triangles": 168,
+   "size_studs": [
+    4.37,
+    4.54,
+    2.99
+   ],
+   "albedo": [
+    "DECOR_07_Campfire_albedo_128.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_DECOR_08_Well",
+   "group": "Decorations",
+   "variant": "mobile",
+   "fbx": "assets/3D/fbx/ClassicMap/MOBILE/Decorations/BB_EXT_DECOR_08_Well.fbx",
+   "triangles": 192,
+   "size_studs": [
+    5.8,
+    5.8,
+    9.5
+   ],
+   "albedo": [
+    "DECOR_08_Well_albedo_128.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_DECOR_09_Cart",
+   "group": "Decorations",
+   "variant": "mobile",
+   "fbx": "assets/3D/fbx/ClassicMap/MOBILE/Decorations/BB_EXT_DECOR_09_Cart.fbx",
+   "triangles": 380,
+   "size_studs": [
+    9.57,
+    4.18,
+    3.88
+   ],
+   "albedo": [
+    "DECOR_09_Cart_albedo_128.png"
+   ]
+  },
+  {
+   "name": "BB_EXT_DECOR_10_Banner",
+   "group": "Decorations",
+   "variant": "mobile",
+   "fbx": "assets/3D/fbx/ClassicMap/MOBILE/Decorations/BB_EXT_DECOR_10_Banner.fbx",
+   "triangles": 66,
+   "size_studs": [
+    3.8,
+    1.1,
+    9.0
+   ],
+   "albedo": [
+    "DECOR_10_Banner_albedo_128.png"
+   ]
+  }
+ ]
+}
