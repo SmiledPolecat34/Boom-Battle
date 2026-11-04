@@ -12,7 +12,6 @@ local RunService = game:GetService("RunService")
 local AssetIds = require(script.Parent.Parent.UI.AssetIds)
 
 local SettingsStore = require(script.Parent.SettingsStore)
-local ScreenSelector = require(script.Parent.ScreenSelector)
 local GameHUD = require(script.Parent.Parent.UI.Screens.GameHUD)
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
@@ -60,8 +59,27 @@ local function findMe(snapshot: any): any
 	return nil
 end
 
--- Quel écran principal afficher ? Logique pure dans ScreenSelector (testée hors Studio).
-local selectScreen = ScreenSelector.select
+-- Quel écran principal afficher ? (pur : même entrée, même sortie)
+local function selectScreen(snapshot: any, me: any): string
+	local state: string = snapshot.state
+	local queued = me ~= nil and me.queued == true
+	local participant = me ~= nil and me.participant == true
+
+	-- Un participant qui a quitté la file (QUITTER dans le menu de pause) retourne au menu, pas aux résultats.
+	if state == "FINISHED" and queued then
+		return "Results"
+	end
+	if state == "COUNTDOWN" or state == "PLAYING" then
+		if queued then
+			return "GameHUD" -- participant, ou spectateur déjà inscrit
+		end
+		return "MainMenu"
+	end
+	if queued then
+		return "Lobby"
+	end
+	return "MainMenu"
+end
 UIController.selectScreen = selectScreen
 
 local function applyScale()
