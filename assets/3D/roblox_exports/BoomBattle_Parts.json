@@ -1,0 +1,10068 @@
+{
+ "generated_for": "BOOM BATTLE",
+ "units": "1 Blender unit = 1 stud",
+ "axis_conversion": "Roblox = (-x, z, y) from Blender (observed in Studio import of BoomBattle_PADS.fbx)",
+ "note": "Positions are pivot origins at rest pose (animation frame 1 with local animated rotations zeroed). Not yet verified in Roblox Studio.",
+ "materials": {
+  "BLK_PadPulse_1": {
+   "texture": null,
+   "emissive": true
+  },
+  "BLK_PadPulse_2": {
+   "texture": null,
+   "emissive": true
+  },
+  "BLK_PadPulse_3": {
+   "texture": null,
+   "emissive": true
+  },
+  "BLK_Ring_1": {
+   "texture": null,
+   "emissive": true
+  },
+  "BLK_Ring_2": {
+   "texture": null,
+   "emissive": true
+  },
+  "BLK_Ring_3": {
+   "texture": null,
+   "emissive": true
+  },
+  "MAT_Apple": {
+   "texture": "T_Palette.png",
+   "emissive": false
+  },
+  "MAT_AppleLeaf": {
+   "texture": "T_Palette.png",
+   "emissive": false
+  },
+  "MAT_AppleStem": {
+   "texture": "T_Palette.png",
+   "emissive": false
+  },
+  "MAT_Bark": {
+   "texture": "T_Bark.png",
+   "emissive": false
+  },
+  "MAT_BombBody": {
+   "texture": "T_Palette.png",
+   "emissive": false
+  },
+  "MAT_BombHighlight": {
+   "texture": "T_Palette.png",
+   "emissive": false
+  },
+  "MAT_BrickA": {
+   "texture": "T_BrickA.png",
+   "emissive": false
+  },
+  "MAT_BrickB": {
+   "texture": "T_BrickB.png",
+   "emissive": false
+  },
+  "MAT_BrickC": {
+   "texture": "T_BrickC.png",
+   "emissive": false
+  },
+  "MAT_ContainerGreen": {
+   "texture": "T_Palette.png",
+   "emissive": false
+  },
+  "MAT_ContainerGreenDark": {
+   "texture": "T_Palette.png",
+   "emissive": false
+  },
+  "MAT_DebrisRed": {
+   "texture": "T_Palette.png",
+   "emissive": false
+  },
+  "MAT_Hazard": {
+   "texture": "T_Palette.png",
+   "emissive": false
+  },
+  "MAT_HazardBlack": {
+   "texture": "T_Palette.png",
+   "emissive": false
+  },
+  "MAT_Joint": {
+   "texture": "T_Joint.png",
+   "emissive": false
+  },
+  "MAT_LeafDark": {
+   "texture": "T_LeafDark.png",
+   "emissive": false
+  },
+  "MAT_LeafLight": {
+   "texture": "T_LeafLight.png",
+   "emissive": false
+  },
+  "MAT_LeafMid": {
+   "texture": "T_LeafMid.png",
+   "emissive": false
+  },
+  "MAT_LoupeGlass": {
+   "texture": "T_Palette.png",
+   "emissive": false
+  },
+  "MAT_LoupeHandle": {
+   "texture": "T_Palette.png",
+   "emissive": false
+  },
+  "MAT_Mortar": {
+   "texture": "T_Mortar.png",
+   "emissive": false
+  },
+  "MAT_Moss": {
+   "texture": "T_Palette.png",
+   "emissive": false
+  },
+  "MAT_PaverA": {
+   "texture": "T_PaverA.png",
+   "emissive": false
+  },
+  "MAT_PaverB": {
+   "texture": "T_PaverB.png",
+   "emissive": false
+  },
+  "MAT_PaverC": {
+   "texture": "T_PaverC.png",
+   "emissive": false
+  },
+  "MAT_PipeSteel": {
+   "texture": "T_PipeSteel.png",
+   "emissive": false
+  },
+  "MAT_Rope": {
+   "texture": "T_Rope.png",
+   "emissive": false
+  },
+  "MAT_SteelDark": {
+   "texture": "T_SteelDark.png",
+   "emissive": false
+  },
+  "MAT_SteelLight": {
+   "texture": "T_SteelLight.png",
+   "emissive": false
+  },
+  "MAT_SteelMid": {
+   "texture": "T_SteelMid.png",
+   "emissive": false
+  },
+  "MAT_SteelPad": {
+   "texture": "T_SteelPad.png",
+   "emissive": false
+  },
+  "MAT_StoneDark": {
+   "texture": "T_StoneDark.png",
+   "emissive": false
+  },
+  "MAT_StoneLight": {
+   "texture": "T_StoneLight.png",
+   "emissive": false
+  },
+  "MAT_ValveRed": {
+   "texture": "T_Palette.png",
+   "emissive": false
+  },
+  "MAT_WoodDark": {
+   "texture": "T_WoodDark.png",
+   "emissive": false
+  },
+  "MAT_WoodLight": {
+   "texture": "T_WoodLight.png",
+   "emissive": false
+  }
+ },
+ "parts": [
+  {
+   "name": "Alcove_Stone_LeftFixing",
+   "category": "ARCH_Details",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_ARCH_Details.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_ARCH_Details.fbx",
+   "material": "MAT_StoneLight",
+   "triangles_pc": 266,
+   "triangles_mobile": 146,
+   "collision": "None",
+   "origin_roblox_studs": [
+    30.9,
+    27.5,
+    90.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    30.879,
+    28.145,
+    88.956
+   ]
+  },
+  {
+   "name": "Alcove_Stone_Pedestal",
+   "category": "ARCH_Details",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_ARCH_Details.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_ARCH_Details.fbx",
+   "material": "MAT_StoneDark",
+   "triangles_pc": 610,
+   "triangles_mobile": 334,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    23.2,
+    0.0,
+    84.9
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    23.196,
+    2.809,
+    84.895
+   ]
+  },
+  {
+   "name": "Alcove_Stone_PedestalTop",
+   "category": "ARCH_Details",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_ARCH_Details.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_ARCH_Details.fbx",
+   "material": "MAT_StoneLight",
+   "triangles_pc": 296,
+   "triangles_mobile": 162,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    23.2,
+    5.5,
+    84.9
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    23.199,
+    6.265,
+    84.895
+   ]
+  },
+  {
+   "name": "Alcove_Stone_RightFixing",
+   "category": "ARCH_Details",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_ARCH_Details.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_ARCH_Details.fbx",
+   "material": "MAT_StoneLight",
+   "triangles_pc": 276,
+   "triangles_mobile": 150,
+   "collision": "None",
+   "origin_roblox_studs": [
+    17.1,
+    27.8,
+    90.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    17.133,
+    28.449,
+    88.995
+   ]
+  },
+  {
+   "name": "Alcove_Stone_UpperBase",
+   "category": "ARCH_Details",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_ARCH_Details.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_ARCH_Details.fbx",
+   "material": "MAT_StoneDark",
+   "triangles_pc": 706,
+   "triangles_mobile": 385,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    24.0,
+    16.3,
+    90.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    23.989,
+    18.104,
+    85.793
+   ]
+  },
+  {
+   "name": "Alcove_Stone_UpperBody",
+   "category": "ARCH_Details",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_ARCH_Details.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_ARCH_Details.fbx",
+   "material": "MAT_StoneLight",
+   "triangles_pc": 716,
+   "triangles_mobile": 392,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    24.0,
+    19.9,
+    90.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    23.993,
+    25.065,
+    86.985
+   ]
+  },
+  {
+   "name": "PILLAR_Left_Tall__Moss",
+   "category": "ARCH_Details",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_ARCH_Details.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_ARCH_Details.fbx",
+   "material": "MAT_Moss",
+   "triangles_pc": 320,
+   "triangles_mobile": 176,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    43.496,
+    0.0,
+    38.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    43.484,
+    14.496,
+    38.116
+   ]
+  },
+  {
+   "name": "PILLAR_Left_Tall__StoneDark",
+   "category": "ARCH_Details",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_ARCH_Details.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_ARCH_Details.fbx",
+   "material": "MAT_StoneDark",
+   "triangles_pc": 1014,
+   "triangles_mobile": 556,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    43.496,
+    0.0,
+    38.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    43.484,
+    14.496,
+    38.116
+   ]
+  },
+  {
+   "name": "PILLAR_Left_Tall__StoneLight",
+   "category": "ARCH_Details",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_ARCH_Details.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_ARCH_Details.fbx",
+   "material": "MAT_StoneLight",
+   "triangles_pc": 1182,
+   "triangles_mobile": 649,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    43.496,
+    0.0,
+    38.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    43.484,
+    14.496,
+    38.116
+   ]
+  },
+  {
+   "name": "PILLAR_Right_Short__Moss",
+   "category": "ARCH_Details",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_ARCH_Details.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_ARCH_Details.fbx",
+   "material": "MAT_Moss",
+   "triangles_pc": 160,
+   "triangles_mobile": 88,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    -43.0,
+    0.0,
+    56.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    -43.989,
+    5.936,
+    56.014
+   ]
+  },
+  {
+   "name": "PILLAR_Right_Short__StoneDark",
+   "category": "ARCH_Details",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_ARCH_Details.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_ARCH_Details.fbx",
+   "material": "MAT_StoneDark",
+   "triangles_pc": 480,
+   "triangles_mobile": 264,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    -43.0,
+    0.0,
+    56.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    -43.989,
+    5.936,
+    56.014
+   ]
+  },
+  {
+   "name": "PILLAR_Right_Short__StoneLight",
+   "category": "ARCH_Details",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_ARCH_Details.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_ARCH_Details.fbx",
+   "material": "MAT_StoneLight",
+   "triangles_pc": 620,
+   "triangles_mobile": 340,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    -43.0,
+    0.0,
+    56.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    -43.989,
+    5.936,
+    56.014
+   ]
+  },
+  {
+   "name": "PILLAR_Right_Tall__Moss",
+   "category": "ARCH_Details",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_ARCH_Details.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_ARCH_Details.fbx",
+   "material": "MAT_Moss",
+   "triangles_pc": 320,
+   "triangles_mobile": 176,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    -43.0,
+    0.0,
+    42.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    -43.391,
+    16.268,
+    42.131
+   ]
+  },
+  {
+   "name": "PILLAR_Right_Tall__StoneDark",
+   "category": "ARCH_Details",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_ARCH_Details.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_ARCH_Details.fbx",
+   "material": "MAT_StoneDark",
+   "triangles_pc": 1324,
+   "triangles_mobile": 728,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    -43.0,
+    0.0,
+    42.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    -43.391,
+    16.268,
+    42.131
+   ]
+  },
+  {
+   "name": "PILLAR_Right_Tall__StoneLight",
+   "category": "ARCH_Details",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_ARCH_Details.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_ARCH_Details.fbx",
+   "material": "MAT_StoneLight",
+   "triangles_pc": 1456,
+   "triangles_mobile": 800,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    -43.0,
+    0.0,
+    42.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    -43.391,
+    16.268,
+    42.131
+   ]
+  },
+  {
+   "name": "STEPS_Stone_Left__StoneDark",
+   "category": "ARCH_Details",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_ARCH_Details.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_ARCH_Details.fbx",
+   "material": "MAT_StoneDark",
+   "triangles_pc": 108,
+   "triangles_mobile": 108,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    18.5,
+    0.0,
+    56.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    18.5,
+    1.8,
+    58.5
+   ]
+  },
+  {
+   "name": "STEPS_Stone_Left__StoneLight",
+   "category": "ARCH_Details",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_ARCH_Details.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_ARCH_Details.fbx",
+   "material": "MAT_StoneLight",
+   "triangles_pc": 216,
+   "triangles_mobile": 118,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    18.5,
+    0.0,
+    56.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    18.5,
+    1.8,
+    58.5
+   ]
+  },
+  {
+   "name": "STONE_Block_A_P01",
+   "category": "ARCH_Details",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_ARCH_Details.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_ARCH_Details.fbx",
+   "material": "MAT_StoneLight",
+   "triangles_pc": 108,
+   "triangles_mobile": 108,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    39.5,
+    0.0,
+    46.5
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.97815,
+    0.0,
+    0.20791,
+    0.0,
+    1.0,
+    0.0,
+    -0.20791,
+    0.0,
+    0.97815
+   ],
+   "bbox_center_roblox_studs": [
+    39.5,
+    1.0,
+    46.5
+   ]
+  },
+  {
+   "name": "STONE_Block_A_P02",
+   "category": "ARCH_Details",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_ARCH_Details.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_ARCH_Details.fbx",
+   "material": "MAT_StoneLight",
+   "triangles_pc": 108,
+   "triangles_mobile": 108,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    -24.0,
+    0.0,
+    49.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.34202,
+    0.0,
+    0.93969,
+    0.0,
+    1.0,
+    0.0,
+    -0.93969,
+    0.0,
+    0.34202
+   ],
+   "bbox_center_roblox_studs": [
+    -24.0,
+    1.0,
+    49.0
+   ]
+  },
+  {
+   "name": "STONE_Block_B_P01",
+   "category": "ARCH_Details",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_ARCH_Details.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_ARCH_Details.fbx",
+   "material": "MAT_StoneDark",
+   "triangles_pc": 108,
+   "triangles_mobile": 108,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    22.0,
+    0.0,
+    47.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.90631,
+    0.0,
+    -0.42262,
+    0.0,
+    1.0,
+    0.0,
+    0.42262,
+    0.0,
+    0.90631
+   ],
+   "bbox_center_roblox_studs": [
+    22.0,
+    0.8,
+    47.0
+   ]
+  },
+  {
+   "name": "STONE_Block_B_P02",
+   "category": "ARCH_Details",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_ARCH_Details.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_ARCH_Details.fbx",
+   "material": "MAT_StoneDark",
+   "triangles_pc": 108,
+   "triangles_mobile": 108,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    -38.5,
+    0.0,
+    33.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.76604,
+    0.0,
+    0.64279,
+    0.0,
+    1.0,
+    0.0,
+    -0.64279,
+    0.0,
+    0.76604
+   ],
+   "bbox_center_roblox_studs": [
+    -38.5,
+    0.8,
+    33.0
+   ]
+  },
+  {
+   "name": "STONE_Block_B_P03",
+   "category": "ARCH_Details",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_ARCH_Details.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_ARCH_Details.fbx",
+   "material": "MAT_StoneDark",
+   "triangles_pc": 108,
+   "triangles_mobile": 108,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    -39.0,
+    0.0,
+    8.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.98481,
+    0.0,
+    0.17365,
+    0.0,
+    1.0,
+    0.0,
+    -0.17365,
+    0.0,
+    0.98481
+   ],
+   "bbox_center_roblox_studs": [
+    -39.0,
+    0.8,
+    8.0
+   ]
+  },
+  {
+   "name": "STONE_Block_C_P01",
+   "category": "ARCH_Details",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_ARCH_Details.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_ARCH_Details.fbx",
+   "material": "MAT_StoneLight",
+   "triangles_pc": 108,
+   "triangles_mobile": 108,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    -37.5,
+    0.0,
+    51.5
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.96593,
+    0.0,
+    -0.25882,
+    0.0,
+    1.0,
+    0.0,
+    0.25882,
+    0.0,
+    0.96593
+   ],
+   "bbox_center_roblox_studs": [
+    -37.5,
+    1.1,
+    51.5
+   ]
+  },
+  {
+   "name": "STONE_Rubble_A_P01",
+   "category": "ARCH_Details",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_ARCH_Details.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_ARCH_Details.fbx",
+   "material": "MAT_StoneLight",
+   "triangles_pc": 46,
+   "triangles_mobile": 46,
+   "collision": "None",
+   "origin_roblox_studs": [
+    38.0,
+    0.0,
+    33.9
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.93969,
+    0.0,
+    0.34202,
+    0.0,
+    1.0,
+    0.0,
+    -0.34202,
+    0.0,
+    0.93969
+   ],
+   "bbox_center_roblox_studs": [
+    38.015,
+    0.8,
+    33.903
+   ]
+  },
+  {
+   "name": "STONE_Rubble_A_P02",
+   "category": "ARCH_Details",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_ARCH_Details.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_ARCH_Details.fbx",
+   "material": "MAT_StoneLight",
+   "triangles_pc": 46,
+   "triangles_mobile": 46,
+   "collision": "None",
+   "origin_roblox_studs": [
+    35.6,
+    0.0,
+    44.8
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    -0.86603,
+    0.0,
+    0.5,
+    0.0,
+    1.0,
+    0.0,
+    -0.5,
+    0.0,
+    -0.86603
+   ],
+   "bbox_center_roblox_studs": [
+    35.592,
+    0.8,
+    44.786
+   ]
+  },
+  {
+   "name": "STONE_Rubble_A_P03",
+   "category": "ARCH_Details",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_ARCH_Details.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_ARCH_Details.fbx",
+   "material": "MAT_StoneLight",
+   "triangles_pc": 46,
+   "triangles_mobile": 46,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -38.4,
+    0.0,
+    36.5
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    -0.93969,
+    0.0,
+    0.34202,
+    0.0,
+    1.0,
+    0.0,
+    -0.34202,
+    0.0,
+    -0.93969
+   ],
+   "bbox_center_roblox_studs": [
+    -38.41,
+    0.8,
+    36.488
+   ]
+  },
+  {
+   "name": "STONE_Rubble_A_P04",
+   "category": "ARCH_Details",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_ARCH_Details.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_ARCH_Details.fbx",
+   "material": "MAT_StoneLight",
+   "triangles_pc": 46,
+   "triangles_mobile": 46,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -38.6,
+    0.0,
+    47.6
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.17365,
+    0.0,
+    0.98481,
+    0.0,
+    1.0,
+    0.0,
+    -0.98481,
+    0.0,
+    0.17365
+   ],
+   "bbox_center_roblox_studs": [
+    -38.59,
+    0.8,
+    47.588
+   ]
+  },
+  {
+   "name": "STONE_Rubble_A_P05",
+   "category": "ARCH_Details",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_ARCH_Details.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_ARCH_Details.fbx",
+   "material": "MAT_StoneLight",
+   "triangles_pc": 46,
+   "triangles_mobile": 46,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -40.6,
+    0.0,
+    49.8
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.93969,
+    0.0,
+    -0.34202,
+    0.0,
+    1.0,
+    0.0,
+    0.34202,
+    0.0,
+    0.93969
+   ],
+   "bbox_center_roblox_studs": [
+    -40.59,
+    0.8,
+    49.812
+   ]
+  },
+  {
+   "name": "STONE_Rubble_B_P01__StoneDark",
+   "category": "ARCH_Details",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_ARCH_Details.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_ARCH_Details.fbx",
+   "material": "MAT_StoneDark",
+   "triangles_pc": 40,
+   "triangles_mobile": 40,
+   "collision": "None",
+   "origin_roblox_studs": [
+    37.0,
+    0.0,
+    36.4
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.34202,
+    0.0,
+    0.93969,
+    0.0,
+    1.0,
+    0.0,
+    -0.93969,
+    0.0,
+    0.34202
+   ],
+   "bbox_center_roblox_studs": [
+    36.996,
+    0.65,
+    36.398
+   ]
+  },
+  {
+   "name": "STONE_Rubble_B_P01__StoneLight",
+   "category": "ARCH_Details",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_ARCH_Details.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_ARCH_Details.fbx",
+   "material": "MAT_StoneLight",
+   "triangles_pc": 8,
+   "triangles_mobile": 8,
+   "collision": "None",
+   "origin_roblox_studs": [
+    37.0,
+    0.0,
+    36.4
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.34202,
+    0.0,
+    0.93969,
+    0.0,
+    1.0,
+    0.0,
+    -0.93969,
+    0.0,
+    0.34202
+   ],
+   "bbox_center_roblox_studs": [
+    36.996,
+    0.65,
+    36.398
+   ]
+  },
+  {
+   "name": "STONE_Rubble_B_P02__StoneDark",
+   "category": "ARCH_Details",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_ARCH_Details.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_ARCH_Details.fbx",
+   "material": "MAT_StoneDark",
+   "triangles_pc": 40,
+   "triangles_mobile": 40,
+   "collision": "None",
+   "origin_roblox_studs": [
+    38.4,
+    0.0,
+    44.2
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    -0.34202,
+    0.0,
+    0.93969,
+    0.0,
+    1.0,
+    0.0,
+    -0.93969,
+    0.0,
+    -0.34202
+   ],
+   "bbox_center_roblox_studs": [
+    38.396,
+    0.65,
+    44.202
+   ]
+  },
+  {
+   "name": "STONE_Rubble_B_P02__StoneLight",
+   "category": "ARCH_Details",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_ARCH_Details.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_ARCH_Details.fbx",
+   "material": "MAT_StoneLight",
+   "triangles_pc": 8,
+   "triangles_mobile": 8,
+   "collision": "None",
+   "origin_roblox_studs": [
+    38.4,
+    0.0,
+    44.2
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    -0.34202,
+    0.0,
+    0.93969,
+    0.0,
+    1.0,
+    0.0,
+    -0.93969,
+    0.0,
+    -0.34202
+   ],
+   "bbox_center_roblox_studs": [
+    38.396,
+    0.65,
+    44.202
+   ]
+  },
+  {
+   "name": "STONE_Rubble_B_P03__StoneDark",
+   "category": "ARCH_Details",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_ARCH_Details.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_ARCH_Details.fbx",
+   "material": "MAT_StoneDark",
+   "triangles_pc": 40,
+   "triangles_mobile": 40,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -37.6,
+    0.0,
+    44.6
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.64279,
+    0.0,
+    -0.76604,
+    0.0,
+    1.0,
+    0.0,
+    0.76604,
+    0.0,
+    0.64279
+   ],
+   "bbox_center_roblox_studs": [
+    -37.596,
+    0.65,
+    44.597
+   ]
+  },
+  {
+   "name": "STONE_Rubble_B_P03__StoneLight",
+   "category": "ARCH_Details",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_ARCH_Details.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_ARCH_Details.fbx",
+   "material": "MAT_StoneLight",
+   "triangles_pc": 8,
+   "triangles_mobile": 8,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -37.6,
+    0.0,
+    44.6
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.64279,
+    0.0,
+    -0.76604,
+    0.0,
+    1.0,
+    0.0,
+    0.76604,
+    0.0,
+    0.64279
+   ],
+   "bbox_center_roblox_studs": [
+    -37.596,
+    0.65,
+    44.597
+   ]
+  },
+  {
+   "name": "STONE_Rubble_B_P04__StoneDark",
+   "category": "ARCH_Details",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_ARCH_Details.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_ARCH_Details.fbx",
+   "material": "MAT_StoneDark",
+   "triangles_pc": 40,
+   "triangles_mobile": 40,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -36.0,
+    0.0,
+    36.8
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.86603,
+    0.0,
+    0.5,
+    0.0,
+    1.0,
+    0.0,
+    -0.5,
+    0.0,
+    0.86603
+   ],
+   "bbox_center_roblox_studs": [
+    -36.002,
+    0.65,
+    36.796
+   ]
+  },
+  {
+   "name": "STONE_Rubble_B_P04__StoneLight",
+   "category": "ARCH_Details",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_ARCH_Details.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_ARCH_Details.fbx",
+   "material": "MAT_StoneLight",
+   "triangles_pc": 8,
+   "triangles_mobile": 8,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -36.0,
+    0.0,
+    36.8
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.86603,
+    0.0,
+    0.5,
+    0.0,
+    1.0,
+    0.0,
+    -0.5,
+    0.0,
+    0.86603
+   ],
+   "bbox_center_roblox_studs": [
+    -36.002,
+    0.65,
+    36.796
+   ]
+  },
+  {
+   "name": "STONE_Rubble_B_P05__StoneDark",
+   "category": "ARCH_Details",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_ARCH_Details.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_ARCH_Details.fbx",
+   "material": "MAT_StoneDark",
+   "triangles_pc": 40,
+   "triangles_mobile": 40,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -39.6,
+    0.0,
+    51.6
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.76604,
+    0.0,
+    0.64279,
+    0.0,
+    1.0,
+    0.0,
+    -0.64279,
+    0.0,
+    0.76604
+   ],
+   "bbox_center_roblox_studs": [
+    -39.603,
+    0.65,
+    51.596
+   ]
+  },
+  {
+   "name": "STONE_Rubble_B_P05__StoneLight",
+   "category": "ARCH_Details",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_ARCH_Details.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_ARCH_Details.fbx",
+   "material": "MAT_StoneLight",
+   "triangles_pc": 8,
+   "triangles_mobile": 8,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -39.6,
+    0.0,
+    51.6
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.76604,
+    0.0,
+    0.64279,
+    0.0,
+    1.0,
+    0.0,
+    -0.64279,
+    0.0,
+    0.76604
+   ],
+   "bbox_center_roblox_studs": [
+    -39.603,
+    0.65,
+    51.596
+   ]
+  },
+  {
+   "name": "STONE_Rubble_C_P01",
+   "category": "ARCH_Details",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_ARCH_Details.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_ARCH_Details.fbx",
+   "material": "MAT_StoneLight",
+   "triangles_pc": 50,
+   "triangles_mobile": 50,
+   "collision": "None",
+   "origin_roblox_studs": [
+    36.6,
+    0.0,
+    41.6
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.86603,
+    0.0,
+    -0.5,
+    0.0,
+    1.0,
+    0.0,
+    0.5,
+    0.0,
+    0.86603
+   ],
+   "bbox_center_roblox_studs": [
+    36.55,
+    0.6,
+    41.654
+   ]
+  },
+  {
+   "name": "STONE_Rubble_C_P02",
+   "category": "ARCH_Details",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_ARCH_Details.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_ARCH_Details.fbx",
+   "material": "MAT_StoneLight",
+   "triangles_pc": 50,
+   "triangles_mobile": 50,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -36.8,
+    0.0,
+    40.5
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.96593,
+    0.0,
+    0.25882,
+    0.0,
+    1.0,
+    0.0,
+    -0.25882,
+    0.0,
+    0.96593
+   ],
+   "bbox_center_roblox_studs": [
+    -36.797,
+    0.6,
+    40.573
+   ]
+  },
+  {
+   "name": "STONE_Rubble_C_P03",
+   "category": "ARCH_Details",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_ARCH_Details.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_ARCH_Details.fbx",
+   "material": "MAT_StoneLight",
+   "triangles_pc": 50,
+   "triangles_mobile": 50,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -37.6,
+    0.0,
+    53.4
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    -0.64279,
+    0.0,
+    0.76604,
+    0.0,
+    1.0,
+    0.0,
+    -0.76604,
+    0.0,
+    -0.64279
+   ],
+   "bbox_center_roblox_studs": [
+    -37.535,
+    0.6,
+    53.366
+   ]
+  },
+  {
+   "name": "STONE_Rubble_D_P01__StoneDark",
+   "category": "ARCH_Details",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_ARCH_Details.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_ARCH_Details.fbx",
+   "material": "MAT_StoneDark",
+   "triangles_pc": 30,
+   "triangles_mobile": 30,
+   "collision": "None",
+   "origin_roblox_studs": [
+    35.4,
+    0.0,
+    38.2
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    -0.08716,
+    0.0,
+    0.99619,
+    0.0,
+    1.0,
+    0.0,
+    -0.99619,
+    0.0,
+    -0.08716
+   ],
+   "bbox_center_roblox_studs": [
+    35.466,
+    0.3,
+    38.375
+   ]
+  },
+  {
+   "name": "STONE_Rubble_D_P01__StoneLight",
+   "category": "ARCH_Details",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_ARCH_Details.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_ARCH_Details.fbx",
+   "material": "MAT_StoneLight",
+   "triangles_pc": 6,
+   "triangles_mobile": 6,
+   "collision": "None",
+   "origin_roblox_studs": [
+    35.4,
+    0.0,
+    38.2
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    -0.08716,
+    0.0,
+    0.99619,
+    0.0,
+    1.0,
+    0.0,
+    -0.99619,
+    0.0,
+    -0.08716
+   ],
+   "bbox_center_roblox_studs": [
+    35.466,
+    0.3,
+    38.375
+   ]
+  },
+  {
+   "name": "STONE_Rubble_D_P02__StoneDark",
+   "category": "ARCH_Details",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_ARCH_Details.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_ARCH_Details.fbx",
+   "material": "MAT_StoneDark",
+   "triangles_pc": 30,
+   "triangles_mobile": 30,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -35.2,
+    0.0,
+    43.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    -0.17365,
+    0.0,
+    0.98481,
+    0.0,
+    1.0,
+    0.0,
+    -0.98481,
+    0.0,
+    -0.17365
+   ],
+   "bbox_center_roblox_studs": [
+    -35.119,
+    0.3,
+    43.169
+   ]
+  },
+  {
+   "name": "STONE_Rubble_D_P02__StoneLight",
+   "category": "ARCH_Details",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_ARCH_Details.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_ARCH_Details.fbx",
+   "material": "MAT_StoneLight",
+   "triangles_pc": 6,
+   "triangles_mobile": 6,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -35.2,
+    0.0,
+    43.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    -0.17365,
+    0.0,
+    0.98481,
+    0.0,
+    1.0,
+    0.0,
+    -0.98481,
+    0.0,
+    -0.17365
+   ],
+   "bbox_center_roblox_studs": [
+    -35.119,
+    0.3,
+    43.169
+   ]
+  },
+  {
+   "name": "FLOOR_Main",
+   "category": "ARCH_Floor",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_ARCH_Floor.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_ARCH_Floor.fbx",
+   "material": "MAT_Joint",
+   "triangles_pc": 12,
+   "triangles_mobile": 12,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    -0.0,
+    -1.2,
+    35.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    -0.0,
+    -1.2,
+    35.0
+   ]
+  },
+  {
+   "name": "FLOOR_Tiles__PaverA",
+   "category": "ARCH_Floor",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_ARCH_Floor.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_ARCH_Floor.fbx",
+   "material": "MAT_PaverA",
+   "triangles_pc": 690,
+   "triangles_mobile": 690,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -0.0,
+    0.0,
+    0.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    -0.0,
+    -0.1,
+    35.0
+   ]
+  },
+  {
+   "name": "FLOOR_Tiles__PaverB",
+   "category": "ARCH_Floor",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_ARCH_Floor.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_ARCH_Floor.fbx",
+   "material": "MAT_PaverB",
+   "triangles_pc": 410,
+   "triangles_mobile": 410,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -0.0,
+    0.0,
+    0.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    -0.0,
+    -0.1,
+    35.0
+   ]
+  },
+  {
+   "name": "FLOOR_Tiles__PaverC",
+   "category": "ARCH_Floor",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_ARCH_Floor.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_ARCH_Floor.fbx",
+   "material": "MAT_PaverC",
+   "triangles_pc": 240,
+   "triangles_mobile": 240,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -0.0,
+    0.0,
+    0.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    -0.0,
+    -0.1,
+    35.0
+   ]
+  },
+  {
+   "name": "COPING_Back__StoneDark",
+   "category": "ARCH_Walls",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_ARCH_Walls.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_ARCH_Walls.fbx",
+   "material": "MAT_StoneDark",
+   "triangles_pc": 648,
+   "triangles_mobile": 388,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -0.0,
+    36.0,
+    92.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    0.0,
+    37.0,
+    92.0
+   ]
+  },
+  {
+   "name": "COPING_Back__StoneLight",
+   "category": "ARCH_Walls",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_ARCH_Walls.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_ARCH_Walls.fbx",
+   "material": "MAT_StoneLight",
+   "triangles_pc": 648,
+   "triangles_mobile": 388,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -0.0,
+    36.0,
+    92.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    0.0,
+    37.0,
+    92.0
+   ]
+  },
+  {
+   "name": "COPING_Left__StoneDark",
+   "category": "ARCH_Walls",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_ARCH_Walls.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_ARCH_Walls.fbx",
+   "material": "MAT_StoneDark",
+   "triangles_pc": 756,
+   "triangles_mobile": 452,
+   "collision": "None",
+   "origin_roblox_studs": [
+    47.0,
+    36.0,
+    0.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    47.0,
+    37.0,
+    34.0
+   ]
+  },
+  {
+   "name": "COPING_Left__StoneLight",
+   "category": "ARCH_Walls",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_ARCH_Walls.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_ARCH_Walls.fbx",
+   "material": "MAT_StoneLight",
+   "triangles_pc": 756,
+   "triangles_mobile": 452,
+   "collision": "None",
+   "origin_roblox_studs": [
+    47.0,
+    36.0,
+    0.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    47.0,
+    37.0,
+    34.0
+   ]
+  },
+  {
+   "name": "COPING_Right__StoneDark",
+   "category": "ARCH_Walls",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_ARCH_Walls.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_ARCH_Walls.fbx",
+   "material": "MAT_StoneDark",
+   "triangles_pc": 756,
+   "triangles_mobile": 452,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -47.0,
+    36.0,
+    0.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    -47.0,
+    37.0,
+    34.0
+   ]
+  },
+  {
+   "name": "COPING_Right__StoneLight",
+   "category": "ARCH_Walls",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_ARCH_Walls.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_ARCH_Walls.fbx",
+   "material": "MAT_StoneLight",
+   "triangles_pc": 756,
+   "triangles_mobile": 452,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -47.0,
+    36.0,
+    0.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    -47.0,
+    37.0,
+    34.0
+   ]
+  },
+  {
+   "name": "WALL_Back",
+   "category": "ARCH_Walls",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_ARCH_Walls.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_ARCH_Walls.fbx",
+   "material": "MAT_Mortar",
+   "triangles_pc": 12,
+   "triangles_mobile": 12,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    -0.0,
+    18.0,
+    92.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    -0.0,
+    18.0,
+    92.0
+   ]
+  },
+  {
+   "name": "WALL_Back_Bricks__BrickA",
+   "category": "ARCH_Walls",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_ARCH_Walls.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_ARCH_Walls.fbx",
+   "material": "MAT_BrickA",
+   "triangles_pc": 1770,
+   "triangles_mobile": 1062,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -0.0,
+    0.0,
+    0.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    -0.0,
+    18.0,
+    89.81
+   ]
+  },
+  {
+   "name": "WALL_Back_Bricks__BrickB",
+   "category": "ARCH_Walls",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_ARCH_Walls.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_ARCH_Walls.fbx",
+   "material": "MAT_BrickB",
+   "triangles_pc": 1130,
+   "triangles_mobile": 678,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -0.0,
+    0.0,
+    0.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    -0.0,
+    18.0,
+    89.81
+   ]
+  },
+  {
+   "name": "WALL_Back_Bricks__BrickC",
+   "category": "ARCH_Walls",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_ARCH_Walls.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_ARCH_Walls.fbx",
+   "material": "MAT_BrickC",
+   "triangles_pc": 900,
+   "triangles_mobile": 540,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -0.0,
+    0.0,
+    0.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    -0.0,
+    18.0,
+    89.81
+   ]
+  },
+  {
+   "name": "WALL_Left",
+   "category": "ARCH_Walls",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_ARCH_Walls.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_ARCH_Walls.fbx",
+   "material": "MAT_Mortar",
+   "triangles_pc": 12,
+   "triangles_mobile": 12,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    47.0,
+    18.0,
+    37.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    47.0,
+    18.0,
+    37.0
+   ]
+  },
+  {
+   "name": "WALL_Left_Bricks__BrickA",
+   "category": "ARCH_Walls",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_ARCH_Walls.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_ARCH_Walls.fbx",
+   "material": "MAT_BrickA",
+   "triangles_pc": 2300,
+   "triangles_mobile": 1380,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -0.0,
+    0.0,
+    0.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    44.81,
+    18.0,
+    35.0
+   ]
+  },
+  {
+   "name": "WALL_Left_Bricks__BrickB",
+   "category": "ARCH_Walls",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_ARCH_Walls.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_ARCH_Walls.fbx",
+   "material": "MAT_BrickB",
+   "triangles_pc": 1390,
+   "triangles_mobile": 834,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -0.0,
+    0.0,
+    0.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    44.81,
+    18.0,
+    35.0
+   ]
+  },
+  {
+   "name": "WALL_Left_Bricks__BrickC",
+   "category": "ARCH_Walls",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_ARCH_Walls.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_ARCH_Walls.fbx",
+   "material": "MAT_BrickC",
+   "triangles_pc": 1060,
+   "triangles_mobile": 636,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -0.0,
+    0.0,
+    0.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    44.81,
+    18.0,
+    35.0
+   ]
+  },
+  {
+   "name": "WALL_Right",
+   "category": "ARCH_Walls",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_ARCH_Walls.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_ARCH_Walls.fbx",
+   "material": "MAT_Mortar",
+   "triangles_pc": 12,
+   "triangles_mobile": 12,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    -47.0,
+    18.0,
+    37.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    -47.0,
+    18.0,
+    37.0
+   ]
+  },
+  {
+   "name": "WALL_Right_Bricks__BrickA",
+   "category": "ARCH_Walls",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_ARCH_Walls.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_ARCH_Walls.fbx",
+   "material": "MAT_BrickA",
+   "triangles_pc": 2190,
+   "triangles_mobile": 1314,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -0.0,
+    0.0,
+    0.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    -44.81,
+    18.0,
+    35.0
+   ]
+  },
+  {
+   "name": "WALL_Right_Bricks__BrickB",
+   "category": "ARCH_Walls",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_ARCH_Walls.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_ARCH_Walls.fbx",
+   "material": "MAT_BrickB",
+   "triangles_pc": 1450,
+   "triangles_mobile": 870,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -0.0,
+    0.0,
+    0.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    -44.81,
+    18.0,
+    35.0
+   ]
+  },
+  {
+   "name": "WALL_Right_Bricks__BrickC",
+   "category": "ARCH_Walls",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_ARCH_Walls.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_ARCH_Walls.fbx",
+   "material": "MAT_BrickC",
+   "triangles_pc": 790,
+   "triangles_mobile": 474,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -0.0,
+    0.0,
+    0.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    -44.81,
+    18.0,
+    35.0
+   ]
+  },
+  {
+   "name": "BOMB_Body_CrateSmallR__BombBody",
+   "category": "BOMBS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_BOMBS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_BOMBS.fbx",
+   "material": "MAT_BombBody",
+   "triangles_pc": 307,
+   "triangles_mobile": 183,
+   "collision": "Hull",
+   "origin_roblox_studs": [
+    -17.0,
+    6.4,
+    55.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    -0.93969,
+    0.0,
+    0.34202,
+    0.0,
+    1.0,
+    0.0,
+    -0.34202,
+    0.0,
+    -0.93969
+   ],
+   "bbox_center_roblox_studs": [
+    -17.0,
+    6.4,
+    55.0
+   ]
+  },
+  {
+   "name": "BOMB_Body_CrateSmallR__BombHighlight",
+   "category": "BOMBS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_BOMBS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_BOMBS.fbx",
+   "material": "MAT_BombHighlight",
+   "triangles_pc": 13,
+   "triangles_mobile": 13,
+   "collision": "Hull",
+   "origin_roblox_studs": [
+    -17.0,
+    6.4,
+    55.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    -0.93969,
+    0.0,
+    0.34202,
+    0.0,
+    1.0,
+    0.0,
+    -0.34202,
+    0.0,
+    -0.93969
+   ],
+   "bbox_center_roblox_studs": [
+    -17.0,
+    6.4,
+    55.0
+   ]
+  },
+  {
+   "name": "BOMB_Body_FloorLeftBig__BombBody",
+   "category": "BOMBS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_BOMBS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_BOMBS.fbx",
+   "material": "MAT_BombBody",
+   "triangles_pc": 307,
+   "triangles_mobile": 183,
+   "collision": "Hull",
+   "origin_roblox_studs": [
+    13.0,
+    2.3,
+    3.5
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.96593,
+    0.0,
+    0.25882,
+    0.0,
+    1.0,
+    0.0,
+    -0.25882,
+    0.0,
+    0.96593
+   ],
+   "bbox_center_roblox_studs": [
+    13.0,
+    2.3,
+    3.5
+   ]
+  },
+  {
+   "name": "BOMB_Body_FloorLeftBig__BombHighlight",
+   "category": "BOMBS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_BOMBS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_BOMBS.fbx",
+   "material": "MAT_BombHighlight",
+   "triangles_pc": 13,
+   "triangles_mobile": 13,
+   "collision": "Hull",
+   "origin_roblox_studs": [
+    13.0,
+    2.3,
+    3.5
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.96593,
+    0.0,
+    0.25882,
+    0.0,
+    1.0,
+    0.0,
+    -0.25882,
+    0.0,
+    0.96593
+   ],
+   "bbox_center_roblox_studs": [
+    13.0,
+    2.3,
+    3.5
+   ]
+  },
+  {
+   "name": "BOMB_Body_FloorLeftSm__BombBody",
+   "category": "BOMBS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_BOMBS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_BOMBS.fbx",
+   "material": "MAT_BombBody",
+   "triangles_pc": 307,
+   "triangles_mobile": 183,
+   "collision": "Hull",
+   "origin_roblox_studs": [
+    17.5,
+    1.6,
+    6.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.76604,
+    0.0,
+    -0.64279,
+    0.0,
+    1.0,
+    0.0,
+    0.64279,
+    0.0,
+    0.76604
+   ],
+   "bbox_center_roblox_studs": [
+    17.5,
+    1.6,
+    6.0
+   ]
+  },
+  {
+   "name": "BOMB_Body_FloorLeftSm__BombHighlight",
+   "category": "BOMBS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_BOMBS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_BOMBS.fbx",
+   "material": "MAT_BombHighlight",
+   "triangles_pc": 13,
+   "triangles_mobile": 13,
+   "collision": "Hull",
+   "origin_roblox_studs": [
+    17.5,
+    1.6,
+    6.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.76604,
+    0.0,
+    -0.64279,
+    0.0,
+    1.0,
+    0.0,
+    0.64279,
+    0.0,
+    0.76604
+   ],
+   "bbox_center_roblox_studs": [
+    17.5,
+    1.6,
+    6.0
+   ]
+  },
+  {
+   "name": "BOMB_Body_FloorRight__BombBody",
+   "category": "BOMBS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_BOMBS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_BOMBS.fbx",
+   "material": "MAT_BombBody",
+   "triangles_pc": 307,
+   "triangles_mobile": 183,
+   "collision": "Hull",
+   "origin_roblox_studs": [
+    -34.0,
+    2.0,
+    46.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    -0.98481,
+    0.0,
+    -0.17365,
+    0.0,
+    1.0,
+    0.0,
+    0.17365,
+    0.0,
+    -0.98481
+   ],
+   "bbox_center_roblox_studs": [
+    -34.0,
+    2.0,
+    46.0
+   ]
+  },
+  {
+   "name": "BOMB_Body_FloorRight__BombHighlight",
+   "category": "BOMBS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_BOMBS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_BOMBS.fbx",
+   "material": "MAT_BombHighlight",
+   "triangles_pc": 13,
+   "triangles_mobile": 13,
+   "collision": "Hull",
+   "origin_roblox_studs": [
+    -34.0,
+    2.0,
+    46.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    -0.98481,
+    0.0,
+    -0.17365,
+    0.0,
+    1.0,
+    0.0,
+    0.17365,
+    0.0,
+    -0.98481
+   ],
+   "bbox_center_roblox_studs": [
+    -34.0,
+    2.0,
+    46.0
+   ]
+  },
+  {
+   "name": "BOMB_Body_OpenCrate__BombBody",
+   "category": "BOMBS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_BOMBS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_BOMBS.fbx",
+   "material": "MAT_BombBody",
+   "triangles_pc": 307,
+   "triangles_mobile": 183,
+   "collision": "Hull",
+   "origin_roblox_studs": [
+    21.0,
+    3.9,
+    -10.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    -0.93969,
+    0.0,
+    -0.34202,
+    0.0,
+    1.0,
+    0.0,
+    0.34202,
+    0.0,
+    -0.93969
+   ],
+   "bbox_center_roblox_studs": [
+    21.0,
+    3.9,
+    -10.0
+   ]
+  },
+  {
+   "name": "BOMB_Body_OpenCrate__BombHighlight",
+   "category": "BOMBS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_BOMBS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_BOMBS.fbx",
+   "material": "MAT_BombHighlight",
+   "triangles_pc": 13,
+   "triangles_mobile": 13,
+   "collision": "Hull",
+   "origin_roblox_studs": [
+    21.0,
+    3.9,
+    -10.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    -0.93969,
+    0.0,
+    -0.34202,
+    0.0,
+    1.0,
+    0.0,
+    0.34202,
+    0.0,
+    -0.93969
+   ],
+   "bbox_center_roblox_studs": [
+    21.0,
+    3.9,
+    -10.0
+   ]
+  },
+  {
+   "name": "BOMB_Body_Pedestal__BombBody",
+   "category": "BOMBS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_BOMBS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_BOMBS.fbx",
+   "material": "MAT_BombBody",
+   "triangles_pc": 307,
+   "triangles_mobile": 183,
+   "collision": "Hull",
+   "origin_roblox_studs": [
+    23.2,
+    8.6,
+    85.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.93969,
+    0.0,
+    0.34202,
+    0.0,
+    1.0,
+    0.0,
+    -0.34202,
+    0.0,
+    0.93969
+   ],
+   "bbox_center_roblox_studs": [
+    23.2,
+    8.6,
+    85.0
+   ]
+  },
+  {
+   "name": "BOMB_Body_Pedestal__BombHighlight",
+   "category": "BOMBS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_BOMBS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_BOMBS.fbx",
+   "material": "MAT_BombHighlight",
+   "triangles_pc": 13,
+   "triangles_mobile": 13,
+   "collision": "Hull",
+   "origin_roblox_studs": [
+    23.2,
+    8.6,
+    85.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.93969,
+    0.0,
+    0.34202,
+    0.0,
+    1.0,
+    0.0,
+    -0.34202,
+    0.0,
+    0.93969
+   ],
+   "bbox_center_roblox_studs": [
+    23.2,
+    8.6,
+    85.0
+   ]
+  },
+  {
+   "name": "BOMB_Body_PlatL__BombBody",
+   "category": "BOMBS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_BOMBS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_BOMBS.fbx",
+   "material": "MAT_BombBody",
+   "triangles_pc": 307,
+   "triangles_mobile": 183,
+   "collision": "Hull",
+   "origin_roblox_studs": [
+    30.2,
+    5.0,
+    18.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.76604,
+    0.0,
+    0.64279,
+    0.0,
+    1.0,
+    0.0,
+    -0.64279,
+    0.0,
+    0.76604
+   ],
+   "bbox_center_roblox_studs": [
+    30.2,
+    5.0,
+    18.0
+   ]
+  },
+  {
+   "name": "BOMB_Body_PlatL__BombHighlight",
+   "category": "BOMBS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_BOMBS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_BOMBS.fbx",
+   "material": "MAT_BombHighlight",
+   "triangles_pc": 13,
+   "triangles_mobile": 13,
+   "collision": "Hull",
+   "origin_roblox_studs": [
+    30.2,
+    5.0,
+    18.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.76604,
+    0.0,
+    0.64279,
+    0.0,
+    1.0,
+    0.0,
+    -0.64279,
+    0.0,
+    0.76604
+   ],
+   "bbox_center_roblox_studs": [
+    30.2,
+    5.0,
+    18.0
+   ]
+  },
+  {
+   "name": "BOMB_Body_PlatR__BombBody",
+   "category": "BOMBS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_BOMBS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_BOMBS.fbx",
+   "material": "MAT_BombBody",
+   "triangles_pc": 307,
+   "triangles_mobile": 183,
+   "collision": "Hull",
+   "origin_roblox_studs": [
+    -31.3,
+    5.0,
+    17.95
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    -0.5,
+    0.0,
+    -0.86603,
+    0.0,
+    1.0,
+    0.0,
+    0.86603,
+    0.0,
+    -0.5
+   ],
+   "bbox_center_roblox_studs": [
+    -31.3,
+    5.0,
+    17.95
+   ]
+  },
+  {
+   "name": "BOMB_Body_PlatR__BombHighlight",
+   "category": "BOMBS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_BOMBS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_BOMBS.fbx",
+   "material": "MAT_BombHighlight",
+   "triangles_pc": 13,
+   "triangles_mobile": 13,
+   "collision": "Hull",
+   "origin_roblox_studs": [
+    -31.3,
+    5.0,
+    17.95
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    -0.5,
+    0.0,
+    -0.86603,
+    0.0,
+    1.0,
+    0.0,
+    0.86603,
+    0.0,
+    -0.5
+   ],
+   "bbox_center_roblox_studs": [
+    -31.3,
+    5.0,
+    17.95
+   ]
+  },
+  {
+   "name": "BOMB_Body_ScaffoldL__BombBody",
+   "category": "BOMBS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_BOMBS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_BOMBS.fbx",
+   "material": "MAT_BombBody",
+   "triangles_pc": 307,
+   "triangles_mobile": 183,
+   "collision": "Hull",
+   "origin_roblox_studs": [
+    37.0,
+    17.1,
+    62.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.86603,
+    0.0,
+    0.5,
+    0.0,
+    1.0,
+    0.0,
+    -0.5,
+    0.0,
+    0.86603
+   ],
+   "bbox_center_roblox_studs": [
+    37.0,
+    17.1,
+    62.0
+   ]
+  },
+  {
+   "name": "BOMB_Body_ScaffoldL__BombHighlight",
+   "category": "BOMBS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_BOMBS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_BOMBS.fbx",
+   "material": "MAT_BombHighlight",
+   "triangles_pc": 13,
+   "triangles_mobile": 13,
+   "collision": "Hull",
+   "origin_roblox_studs": [
+    37.0,
+    17.1,
+    62.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.86603,
+    0.0,
+    0.5,
+    0.0,
+    1.0,
+    0.0,
+    -0.5,
+    0.0,
+    0.86603
+   ],
+   "bbox_center_roblox_studs": [
+    37.0,
+    17.1,
+    62.0
+   ]
+  },
+  {
+   "name": "BOMB_Body_ScaffoldR__BombBody",
+   "category": "BOMBS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_BOMBS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_BOMBS.fbx",
+   "material": "MAT_BombBody",
+   "triangles_pc": 307,
+   "triangles_mobile": 183,
+   "collision": "Hull",
+   "origin_roblox_studs": [
+    -31.0,
+    22.7,
+    62.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    -0.86603,
+    0.0,
+    -0.5,
+    0.0,
+    1.0,
+    0.0,
+    0.5,
+    0.0,
+    -0.86603
+   ],
+   "bbox_center_roblox_studs": [
+    -31.0,
+    22.7,
+    62.0
+   ]
+  },
+  {
+   "name": "BOMB_Body_ScaffoldR__BombHighlight",
+   "category": "BOMBS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_BOMBS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_BOMBS.fbx",
+   "material": "MAT_BombHighlight",
+   "triangles_pc": 13,
+   "triangles_mobile": 13,
+   "collision": "Hull",
+   "origin_roblox_studs": [
+    -31.0,
+    22.7,
+    62.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    -0.86603,
+    0.0,
+    -0.5,
+    0.0,
+    1.0,
+    0.0,
+    0.5,
+    0.0,
+    -0.86603
+   ],
+   "bbox_center_roblox_studs": [
+    -31.0,
+    22.7,
+    62.0
+   ]
+  },
+  {
+   "name": "BOMB_Fuse_CrateSmallR",
+   "category": "BOMBS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_BOMBS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_BOMBS.fbx",
+   "material": "MAT_Rope",
+   "triangles_pc": 604,
+   "triangles_mobile": 362,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -17.0,
+    8.125,
+    55.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    -0.93969,
+    0.0,
+    0.34202,
+    0.0,
+    1.0,
+    0.0,
+    -0.34202,
+    0.0,
+    -0.93969
+   ],
+   "bbox_center_roblox_studs": [
+    -16.386,
+    8.672,
+    55.455
+   ]
+  },
+  {
+   "name": "BOMB_Fuse_FloorLeftBig",
+   "category": "BOMBS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_BOMBS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_BOMBS.fbx",
+   "material": "MAT_Rope",
+   "triangles_pc": 604,
+   "triangles_mobile": 362,
+   "collision": "None",
+   "origin_roblox_studs": [
+    13.0,
+    4.945,
+    3.5
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.96593,
+    0.0,
+    0.25882,
+    0.0,
+    1.0,
+    0.0,
+    -0.25882,
+    0.0,
+    0.96593
+   ],
+   "bbox_center_roblox_studs": [
+    11.829,
+    5.784,
+    3.468
+   ]
+  },
+  {
+   "name": "BOMB_Fuse_FloorLeftSm",
+   "category": "BOMBS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_BOMBS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_BOMBS.fbx",
+   "material": "MAT_Rope",
+   "triangles_pc": 604,
+   "triangles_mobile": 362,
+   "collision": "None",
+   "origin_roblox_studs": [
+    17.5,
+    3.44,
+    6.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.76604,
+    0.0,
+    -0.64279,
+    0.0,
+    1.0,
+    0.0,
+    0.64279,
+    0.0,
+    0.76604
+   ],
+   "bbox_center_roblox_studs": [
+    17.051,
+    4.024,
+    5.32
+   ]
+  },
+  {
+   "name": "BOMB_Fuse_FloorRight",
+   "category": "BOMBS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_BOMBS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_BOMBS.fbx",
+   "material": "MAT_Rope",
+   "triangles_pc": 604,
+   "triangles_mobile": 362,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -34.0,
+    4.3,
+    46.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    -0.98481,
+    0.0,
+    -0.17365,
+    0.0,
+    1.0,
+    0.0,
+    0.17365,
+    0.0,
+    -0.98481
+   ],
+   "bbox_center_roblox_studs": [
+    -32.988,
+    5.03,
+    46.116
+   ]
+  },
+  {
+   "name": "BOMB_Fuse_OpenCrate",
+   "category": "BOMBS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_BOMBS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_BOMBS.fbx",
+   "material": "MAT_Rope",
+   "triangles_pc": 604,
+   "triangles_mobile": 362,
+   "collision": "None",
+   "origin_roblox_studs": [
+    21.0,
+    6.66,
+    -10.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    -0.93969,
+    0.0,
+    -0.34202,
+    0.0,
+    1.0,
+    0.0,
+    0.34202,
+    0.0,
+    -0.93969
+   ],
+   "bbox_center_roblox_studs": [
+    22.22,
+    7.536,
+    -10.073
+   ]
+  },
+  {
+   "name": "BOMB_Fuse_Pedestal",
+   "category": "BOMBS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_BOMBS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_BOMBS.fbx",
+   "material": "MAT_Rope",
+   "triangles_pc": 604,
+   "triangles_mobile": 362,
+   "collision": "None",
+   "origin_roblox_studs": [
+    23.2,
+    10.44,
+    85.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.93969,
+    0.0,
+    0.34202,
+    0.0,
+    1.0,
+    0.0,
+    -0.34202,
+    0.0,
+    0.93969
+   ],
+   "bbox_center_roblox_studs": [
+    22.386,
+    11.024,
+    85.049
+   ]
+  },
+  {
+   "name": "BOMB_Fuse_PlatL",
+   "category": "BOMBS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_BOMBS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_BOMBS.fbx",
+   "material": "MAT_Rope",
+   "triangles_pc": 604,
+   "triangles_mobile": 362,
+   "collision": "None",
+   "origin_roblox_studs": [
+    30.2,
+    6.61,
+    18.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.76604,
+    0.0,
+    0.64279,
+    0.0,
+    1.0,
+    0.0,
+    -0.64279,
+    0.0,
+    0.76604
+   ],
+   "bbox_center_roblox_studs": [
+    29.546,
+    7.121,
+    18.284
+   ]
+  },
+  {
+   "name": "BOMB_Fuse_PlatR",
+   "category": "BOMBS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_BOMBS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_BOMBS.fbx",
+   "material": "MAT_Rope",
+   "triangles_pc": 604,
+   "triangles_mobile": 362,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -31.3,
+    6.61,
+    17.95
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    -0.5,
+    0.0,
+    -0.86603,
+    0.0,
+    1.0,
+    0.0,
+    0.86603,
+    0.0,
+    -0.5
+   ],
+   "bbox_center_roblox_studs": [
+    -30.782,
+    7.121,
+    17.46
+   ]
+  },
+  {
+   "name": "BOMB_Fuse_ScaffoldL",
+   "category": "BOMBS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_BOMBS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_BOMBS.fbx",
+   "material": "MAT_Rope",
+   "triangles_pc": 604,
+   "triangles_mobile": 362,
+   "collision": "None",
+   "origin_roblox_studs": [
+    37.0,
+    18.48,
+    62.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.86603,
+    0.0,
+    0.5,
+    0.0,
+    1.0,
+    0.0,
+    -0.5,
+    0.0,
+    0.86603
+   ],
+   "bbox_center_roblox_studs": [
+    36.405,
+    18.918,
+    62.142
+   ]
+  },
+  {
+   "name": "BOMB_Fuse_ScaffoldR",
+   "category": "BOMBS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_BOMBS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_BOMBS.fbx",
+   "material": "MAT_Rope",
+   "triangles_pc": 604,
+   "triangles_mobile": 362,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -31.0,
+    24.77,
+    62.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    -0.86603,
+    0.0,
+    -0.5,
+    0.0,
+    1.0,
+    0.0,
+    0.5,
+    0.0,
+    -0.86603
+   ],
+   "bbox_center_roblox_studs": [
+    -30.108,
+    25.427,
+    61.787
+   ]
+  },
+  {
+   "name": "BOMB_Neck_CrateSmallR",
+   "category": "BOMBS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_BOMBS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_BOMBS.fbx",
+   "material": "MAT_BombBody",
+   "triangles_pc": 308,
+   "triangles_mobile": 184,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -17.0,
+    4.9,
+    55.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    -0.93969,
+    0.0,
+    0.34202,
+    0.0,
+    1.0,
+    0.0,
+    -0.34202,
+    0.0,
+    -0.93969
+   ],
+   "bbox_center_roblox_studs": [
+    -17.0,
+    7.93,
+    55.0
+   ]
+  },
+  {
+   "name": "BOMB_Neck_FloorLeftBig",
+   "category": "BOMBS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_BOMBS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_BOMBS.fbx",
+   "material": "MAT_BombBody",
+   "triangles_pc": 308,
+   "triangles_mobile": 184,
+   "collision": "None",
+   "origin_roblox_studs": [
+    13.0,
+    0.0,
+    3.5
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.96593,
+    0.0,
+    0.25882,
+    0.0,
+    1.0,
+    0.0,
+    -0.25882,
+    0.0,
+    0.96593
+   ],
+   "bbox_center_roblox_studs": [
+    13.0,
+    4.646,
+    3.5
+   ]
+  },
+  {
+   "name": "BOMB_Neck_FloorLeftSm",
+   "category": "BOMBS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_BOMBS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_BOMBS.fbx",
+   "material": "MAT_BombBody",
+   "triangles_pc": 308,
+   "triangles_mobile": 184,
+   "collision": "None",
+   "origin_roblox_studs": [
+    17.5,
+    0.0,
+    6.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.76604,
+    0.0,
+    -0.64279,
+    0.0,
+    1.0,
+    0.0,
+    0.64279,
+    0.0,
+    0.76604
+   ],
+   "bbox_center_roblox_studs": [
+    17.5,
+    3.232,
+    6.0
+   ]
+  },
+  {
+   "name": "BOMB_Neck_FloorRight",
+   "category": "BOMBS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_BOMBS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_BOMBS.fbx",
+   "material": "MAT_BombBody",
+   "triangles_pc": 308,
+   "triangles_mobile": 184,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -34.0,
+    0.0,
+    46.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    -0.98481,
+    0.0,
+    -0.17365,
+    0.0,
+    1.0,
+    0.0,
+    0.17365,
+    0.0,
+    -0.98481
+   ],
+   "bbox_center_roblox_studs": [
+    -34.0,
+    4.04,
+    46.0
+   ]
+  },
+  {
+   "name": "BOMB_Neck_OpenCrate",
+   "category": "BOMBS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_BOMBS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_BOMBS.fbx",
+   "material": "MAT_BombBody",
+   "triangles_pc": 308,
+   "triangles_mobile": 184,
+   "collision": "None",
+   "origin_roblox_studs": [
+    21.0,
+    1.5,
+    -10.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    -0.93969,
+    0.0,
+    -0.34202,
+    0.0,
+    1.0,
+    0.0,
+    0.34202,
+    0.0,
+    -0.93969
+   ],
+   "bbox_center_roblox_studs": [
+    21.0,
+    6.348,
+    -10.0
+   ]
+  },
+  {
+   "name": "BOMB_Neck_Pedestal",
+   "category": "BOMBS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_BOMBS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_BOMBS.fbx",
+   "material": "MAT_BombBody",
+   "triangles_pc": 308,
+   "triangles_mobile": 184,
+   "collision": "None",
+   "origin_roblox_studs": [
+    23.2,
+    7.0,
+    85.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.93969,
+    0.0,
+    0.34202,
+    0.0,
+    1.0,
+    0.0,
+    -0.34202,
+    0.0,
+    0.93969
+   ],
+   "bbox_center_roblox_studs": [
+    23.2,
+    10.232,
+    85.0
+   ]
+  },
+  {
+   "name": "BOMB_Neck_PlatL",
+   "category": "BOMBS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_BOMBS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_BOMBS.fbx",
+   "material": "MAT_BombBody",
+   "triangles_pc": 308,
+   "triangles_mobile": 184,
+   "collision": "None",
+   "origin_roblox_studs": [
+    30.2,
+    3.6,
+    18.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.76604,
+    0.0,
+    0.64279,
+    0.0,
+    1.0,
+    0.0,
+    -0.64279,
+    0.0,
+    0.76604
+   ],
+   "bbox_center_roblox_studs": [
+    30.2,
+    6.428,
+    18.0
+   ]
+  },
+  {
+   "name": "BOMB_Neck_PlatR",
+   "category": "BOMBS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_BOMBS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_BOMBS.fbx",
+   "material": "MAT_BombBody",
+   "triangles_pc": 308,
+   "triangles_mobile": 184,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -31.3,
+    3.6,
+    17.95
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    -0.5,
+    0.0,
+    -0.86603,
+    0.0,
+    1.0,
+    0.0,
+    0.86603,
+    0.0,
+    -0.5
+   ],
+   "bbox_center_roblox_studs": [
+    -31.3,
+    6.428,
+    17.95
+   ]
+  },
+  {
+   "name": "BOMB_Neck_ScaffoldL",
+   "category": "BOMBS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_BOMBS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_BOMBS.fbx",
+   "material": "MAT_BombBody",
+   "triangles_pc": 308,
+   "triangles_mobile": 184,
+   "collision": "None",
+   "origin_roblox_studs": [
+    37.0,
+    15.9,
+    62.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.86603,
+    0.0,
+    0.5,
+    0.0,
+    1.0,
+    0.0,
+    -0.5,
+    0.0,
+    0.86603
+   ],
+   "bbox_center_roblox_studs": [
+    37.0,
+    18.324,
+    62.0
+   ]
+  },
+  {
+   "name": "BOMB_Neck_ScaffoldR",
+   "category": "BOMBS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_BOMBS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_BOMBS.fbx",
+   "material": "MAT_BombBody",
+   "triangles_pc": 308,
+   "triangles_mobile": 184,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -31.0,
+    20.9,
+    62.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    -0.86603,
+    0.0,
+    -0.5,
+    0.0,
+    1.0,
+    0.0,
+    0.5,
+    0.0,
+    -0.86603
+   ],
+   "bbox_center_roblox_studs": [
+    -31.0,
+    24.536,
+    62.0
+   ]
+  },
+  {
+   "name": "CRATE_Damaged_P01__SteelDark",
+   "category": "CRATES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_CRATES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_CRATES.fbx",
+   "material": "MAT_SteelDark",
+   "triangles_pc": 280,
+   "triangles_mobile": 140,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    25.0,
+    0.0,
+    43.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.96593,
+    0.0,
+    0.25882,
+    0.0,
+    1.0,
+    0.0,
+    -0.25882,
+    0.0,
+    0.96593
+   ],
+   "bbox_center_roblox_studs": [
+    25.0,
+    3.25,
+    43.0
+   ]
+  },
+  {
+   "name": "CRATE_Damaged_P01__WoodDark",
+   "category": "CRATES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_CRATES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_CRATES.fbx",
+   "material": "MAT_WoodDark",
+   "triangles_pc": 528,
+   "triangles_mobile": 264,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    25.0,
+    0.0,
+    43.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.96593,
+    0.0,
+    0.25882,
+    0.0,
+    1.0,
+    0.0,
+    -0.25882,
+    0.0,
+    0.96593
+   ],
+   "bbox_center_roblox_studs": [
+    25.0,
+    3.25,
+    43.0
+   ]
+  },
+  {
+   "name": "CRATE_Damaged_P01__WoodLight",
+   "category": "CRATES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_CRATES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_CRATES.fbx",
+   "material": "MAT_WoodLight",
+   "triangles_pc": 880,
+   "triangles_mobile": 440,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    25.0,
+    0.0,
+    43.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.96593,
+    0.0,
+    0.25882,
+    0.0,
+    1.0,
+    0.0,
+    -0.25882,
+    0.0,
+    0.96593
+   ],
+   "bbox_center_roblox_studs": [
+    25.0,
+    3.25,
+    43.0
+   ]
+  },
+  {
+   "name": "CRATE_Flat_P01__WoodDark",
+   "category": "CRATES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_CRATES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_CRATES.fbx",
+   "material": "MAT_WoodDark",
+   "triangles_pc": 528,
+   "triangles_mobile": 264,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    34.0,
+    0.0,
+    38.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.99756,
+    0.0,
+    0.06976,
+    0.0,
+    1.0,
+    0.0,
+    -0.06976,
+    0.0,
+    0.99756
+   ],
+   "bbox_center_roblox_studs": [
+    34.0,
+    1.7,
+    38.0
+   ]
+  },
+  {
+   "name": "CRATE_Flat_P01__WoodLight",
+   "category": "CRATES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_CRATES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_CRATES.fbx",
+   "material": "MAT_WoodLight",
+   "triangles_pc": 528,
+   "triangles_mobile": 264,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    34.0,
+    0.0,
+    38.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.99756,
+    0.0,
+    0.06976,
+    0.0,
+    1.0,
+    0.0,
+    -0.06976,
+    0.0,
+    0.99756
+   ],
+   "bbox_center_roblox_studs": [
+    34.0,
+    1.7,
+    38.0
+   ]
+  },
+  {
+   "name": "CRATE_Large_P01__SteelDark",
+   "category": "CRATES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_CRATES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_CRATES.fbx",
+   "material": "MAT_SteelDark",
+   "triangles_pc": 320,
+   "triangles_mobile": 160,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    31.0,
+    0.0,
+    -6.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.99027,
+    0.0,
+    0.13917,
+    0.0,
+    1.0,
+    0.0,
+    -0.13917,
+    0.0,
+    0.99027
+   ],
+   "bbox_center_roblox_studs": [
+    31.0,
+    3.5,
+    -6.0
+   ]
+  },
+  {
+   "name": "CRATE_Large_P01__WoodDark",
+   "category": "CRATES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_CRATES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_CRATES.fbx",
+   "material": "MAT_WoodDark",
+   "triangles_pc": 528,
+   "triangles_mobile": 264,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    31.0,
+    0.0,
+    -6.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.99027,
+    0.0,
+    0.13917,
+    0.0,
+    1.0,
+    0.0,
+    -0.13917,
+    0.0,
+    0.99027
+   ],
+   "bbox_center_roblox_studs": [
+    31.0,
+    3.5,
+    -6.0
+   ]
+  },
+  {
+   "name": "CRATE_Large_P01__WoodLight",
+   "category": "CRATES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_CRATES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_CRATES.fbx",
+   "material": "MAT_WoodLight",
+   "triangles_pc": 1056,
+   "triangles_mobile": 528,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    31.0,
+    0.0,
+    -6.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.99027,
+    0.0,
+    0.13917,
+    0.0,
+    1.0,
+    0.0,
+    -0.13917,
+    0.0,
+    0.99027
+   ],
+   "bbox_center_roblox_studs": [
+    31.0,
+    3.5,
+    -6.0
+   ]
+  },
+  {
+   "name": "CRATE_Large_P02__SteelDark",
+   "category": "CRATES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_CRATES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_CRATES.fbx",
+   "material": "MAT_SteelDark",
+   "triangles_pc": 320,
+   "triangles_mobile": 160,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    -34.0,
+    0.0,
+    -6.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.99027,
+    0.0,
+    -0.13917,
+    0.0,
+    1.0,
+    0.0,
+    0.13917,
+    0.0,
+    0.99027
+   ],
+   "bbox_center_roblox_studs": [
+    -34.0,
+    3.5,
+    -6.0
+   ]
+  },
+  {
+   "name": "CRATE_Large_P02__WoodDark",
+   "category": "CRATES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_CRATES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_CRATES.fbx",
+   "material": "MAT_WoodDark",
+   "triangles_pc": 528,
+   "triangles_mobile": 264,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    -34.0,
+    0.0,
+    -6.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.99027,
+    0.0,
+    -0.13917,
+    0.0,
+    1.0,
+    0.0,
+    0.13917,
+    0.0,
+    0.99027
+   ],
+   "bbox_center_roblox_studs": [
+    -34.0,
+    3.5,
+    -6.0
+   ]
+  },
+  {
+   "name": "CRATE_Large_P02__WoodLight",
+   "category": "CRATES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_CRATES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_CRATES.fbx",
+   "material": "MAT_WoodLight",
+   "triangles_pc": 1056,
+   "triangles_mobile": 528,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    -34.0,
+    0.0,
+    -6.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.99027,
+    0.0,
+    -0.13917,
+    0.0,
+    1.0,
+    0.0,
+    0.13917,
+    0.0,
+    0.99027
+   ],
+   "bbox_center_roblox_studs": [
+    -34.0,
+    3.5,
+    -6.0
+   ]
+  },
+  {
+   "name": "CRATE_Medium_P01__SteelDark",
+   "category": "CRATES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_CRATES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_CRATES.fbx",
+   "material": "MAT_SteelDark",
+   "triangles_pc": 320,
+   "triangles_mobile": 160,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    36.0,
+    0.0,
+    50.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.99452,
+    0.0,
+    0.10453,
+    0.0,
+    1.0,
+    0.0,
+    -0.10453,
+    0.0,
+    0.99452
+   ],
+   "bbox_center_roblox_studs": [
+    36.0,
+    3.5,
+    50.0
+   ]
+  },
+  {
+   "name": "CRATE_Medium_P01__WoodDark",
+   "category": "CRATES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_CRATES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_CRATES.fbx",
+   "material": "MAT_WoodDark",
+   "triangles_pc": 528,
+   "triangles_mobile": 264,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    36.0,
+    0.0,
+    50.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.99452,
+    0.0,
+    0.10453,
+    0.0,
+    1.0,
+    0.0,
+    -0.10453,
+    0.0,
+    0.99452
+   ],
+   "bbox_center_roblox_studs": [
+    36.0,
+    3.5,
+    50.0
+   ]
+  },
+  {
+   "name": "CRATE_Medium_P01__WoodLight",
+   "category": "CRATES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_CRATES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_CRATES.fbx",
+   "material": "MAT_WoodLight",
+   "triangles_pc": 1232,
+   "triangles_mobile": 616,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    36.0,
+    0.0,
+    50.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.99452,
+    0.0,
+    0.10453,
+    0.0,
+    1.0,
+    0.0,
+    -0.10453,
+    0.0,
+    0.99452
+   ],
+   "bbox_center_roblox_studs": [
+    36.0,
+    3.5,
+    50.0
+   ]
+  },
+  {
+   "name": "CRATE_Medium_P02__SteelDark",
+   "category": "CRATES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_CRATES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_CRATES.fbx",
+   "material": "MAT_SteelDark",
+   "triangles_pc": 320,
+   "triangles_mobile": 160,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    -28.0,
+    0.0,
+    62.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    -28.0,
+    3.5,
+    62.0
+   ]
+  },
+  {
+   "name": "CRATE_Medium_P02__WoodDark",
+   "category": "CRATES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_CRATES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_CRATES.fbx",
+   "material": "MAT_WoodDark",
+   "triangles_pc": 528,
+   "triangles_mobile": 264,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    -28.0,
+    0.0,
+    62.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    -28.0,
+    3.5,
+    62.0
+   ]
+  },
+  {
+   "name": "CRATE_Medium_P02__WoodLight",
+   "category": "CRATES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_CRATES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_CRATES.fbx",
+   "material": "MAT_WoodLight",
+   "triangles_pc": 1232,
+   "triangles_mobile": 616,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    -28.0,
+    0.0,
+    62.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    -28.0,
+    3.5,
+    62.0
+   ]
+  },
+  {
+   "name": "CRATE_Medium_P03__SteelDark",
+   "category": "CRATES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_CRATES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_CRATES.fbx",
+   "material": "MAT_SteelDark",
+   "triangles_pc": 320,
+   "triangles_mobile": 160,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    -35.8,
+    0.0,
+    24.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.97815,
+    0.0,
+    -0.20791,
+    0.0,
+    1.0,
+    0.0,
+    0.20791,
+    0.0,
+    0.97815
+   ],
+   "bbox_center_roblox_studs": [
+    -35.8,
+    3.5,
+    24.0
+   ]
+  },
+  {
+   "name": "CRATE_Medium_P03__WoodDark",
+   "category": "CRATES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_CRATES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_CRATES.fbx",
+   "material": "MAT_WoodDark",
+   "triangles_pc": 528,
+   "triangles_mobile": 264,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    -35.8,
+    0.0,
+    24.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.97815,
+    0.0,
+    -0.20791,
+    0.0,
+    1.0,
+    0.0,
+    0.20791,
+    0.0,
+    0.97815
+   ],
+   "bbox_center_roblox_studs": [
+    -35.8,
+    3.5,
+    24.0
+   ]
+  },
+  {
+   "name": "CRATE_Medium_P03__WoodLight",
+   "category": "CRATES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_CRATES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_CRATES.fbx",
+   "material": "MAT_WoodLight",
+   "triangles_pc": 1232,
+   "triangles_mobile": 616,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    -35.8,
+    0.0,
+    24.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.97815,
+    0.0,
+    -0.20791,
+    0.0,
+    1.0,
+    0.0,
+    0.20791,
+    0.0,
+    0.97815
+   ],
+   "bbox_center_roblox_studs": [
+    -35.8,
+    3.5,
+    24.0
+   ]
+  },
+  {
+   "name": "CRATE_Open_P01__SteelDark",
+   "category": "CRATES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_CRATES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_CRATES.fbx",
+   "material": "MAT_SteelDark",
+   "triangles_pc": 320,
+   "triangles_mobile": 160,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    21.0,
+    0.0,
+    -10.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.98481,
+    0.0,
+    -0.17365,
+    0.0,
+    1.0,
+    0.0,
+    0.17365,
+    0.0,
+    0.98481
+   ],
+   "bbox_center_roblox_studs": [
+    21.0,
+    2.75,
+    -10.0
+   ]
+  },
+  {
+   "name": "CRATE_Open_P01__WoodDark",
+   "category": "CRATES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_CRATES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_CRATES.fbx",
+   "material": "MAT_WoodDark",
+   "triangles_pc": 528,
+   "triangles_mobile": 264,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    21.0,
+    0.0,
+    -10.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.98481,
+    0.0,
+    -0.17365,
+    0.0,
+    1.0,
+    0.0,
+    0.17365,
+    0.0,
+    0.98481
+   ],
+   "bbox_center_roblox_studs": [
+    21.0,
+    2.75,
+    -10.0
+   ]
+  },
+  {
+   "name": "CRATE_Open_P01__WoodLight",
+   "category": "CRATES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_CRATES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_CRATES.fbx",
+   "material": "MAT_WoodLight",
+   "triangles_pc": 924,
+   "triangles_mobile": 462,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    21.0,
+    0.0,
+    -10.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.98481,
+    0.0,
+    -0.17365,
+    0.0,
+    1.0,
+    0.0,
+    0.17365,
+    0.0,
+    0.98481
+   ],
+   "bbox_center_roblox_studs": [
+    21.0,
+    2.75,
+    -10.0
+   ]
+  },
+  {
+   "name": "CRATE_Small_P01__SteelDark",
+   "category": "CRATES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_CRATES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_CRATES.fbx",
+   "material": "MAT_SteelDark",
+   "triangles_pc": 320,
+   "triangles_mobile": 160,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    28.5,
+    0.0,
+    53.5
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.9703,
+    0.0,
+    -0.24192,
+    0.0,
+    1.0,
+    0.0,
+    0.24192,
+    0.0,
+    0.9703
+   ],
+   "bbox_center_roblox_studs": [
+    28.5,
+    2.5,
+    53.5
+   ]
+  },
+  {
+   "name": "CRATE_Small_P01__WoodDark",
+   "category": "CRATES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_CRATES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_CRATES.fbx",
+   "material": "MAT_WoodDark",
+   "triangles_pc": 528,
+   "triangles_mobile": 264,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    28.5,
+    0.0,
+    53.5
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.9703,
+    0.0,
+    -0.24192,
+    0.0,
+    1.0,
+    0.0,
+    0.24192,
+    0.0,
+    0.9703
+   ],
+   "bbox_center_roblox_studs": [
+    28.5,
+    2.5,
+    53.5
+   ]
+  },
+  {
+   "name": "CRATE_Small_P01__WoodLight",
+   "category": "CRATES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_CRATES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_CRATES.fbx",
+   "material": "MAT_WoodLight",
+   "triangles_pc": 836,
+   "triangles_mobile": 418,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    28.5,
+    0.0,
+    53.5
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.9703,
+    0.0,
+    -0.24192,
+    0.0,
+    1.0,
+    0.0,
+    0.24192,
+    0.0,
+    0.9703
+   ],
+   "bbox_center_roblox_studs": [
+    28.5,
+    2.5,
+    53.5
+   ]
+  },
+  {
+   "name": "CRATE_Small_P02__SteelDark",
+   "category": "CRATES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_CRATES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_CRATES.fbx",
+   "material": "MAT_SteelDark",
+   "triangles_pc": 320,
+   "triangles_mobile": 160,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    -28.0,
+    7.0,
+    62.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.98481,
+    0.0,
+    0.17365,
+    0.0,
+    1.0,
+    0.0,
+    -0.17365,
+    0.0,
+    0.98481
+   ],
+   "bbox_center_roblox_studs": [
+    -28.0,
+    9.5,
+    62.0
+   ]
+  },
+  {
+   "name": "CRATE_Small_P02__WoodDark",
+   "category": "CRATES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_CRATES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_CRATES.fbx",
+   "material": "MAT_WoodDark",
+   "triangles_pc": 528,
+   "triangles_mobile": 264,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    -28.0,
+    7.0,
+    62.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.98481,
+    0.0,
+    0.17365,
+    0.0,
+    1.0,
+    0.0,
+    -0.17365,
+    0.0,
+    0.98481
+   ],
+   "bbox_center_roblox_studs": [
+    -28.0,
+    9.5,
+    62.0
+   ]
+  },
+  {
+   "name": "CRATE_Small_P02__WoodLight",
+   "category": "CRATES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_CRATES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_CRATES.fbx",
+   "material": "MAT_WoodLight",
+   "triangles_pc": 836,
+   "triangles_mobile": 418,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    -28.0,
+    7.0,
+    62.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.98481,
+    0.0,
+    0.17365,
+    0.0,
+    1.0,
+    0.0,
+    -0.17365,
+    0.0,
+    0.98481
+   ],
+   "bbox_center_roblox_studs": [
+    -28.0,
+    9.5,
+    62.0
+   ]
+  },
+  {
+   "name": "CRATE_Small_P03__SteelDark",
+   "category": "CRATES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_CRATES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_CRATES.fbx",
+   "material": "MAT_SteelDark",
+   "triangles_pc": 320,
+   "triangles_mobile": 160,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    -36.0,
+    0.0,
+    62.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.99619,
+    0.0,
+    -0.08716,
+    0.0,
+    1.0,
+    0.0,
+    0.08716,
+    0.0,
+    0.99619
+   ],
+   "bbox_center_roblox_studs": [
+    -36.0,
+    2.5,
+    62.0
+   ]
+  },
+  {
+   "name": "CRATE_Small_P03__WoodDark",
+   "category": "CRATES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_CRATES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_CRATES.fbx",
+   "material": "MAT_WoodDark",
+   "triangles_pc": 528,
+   "triangles_mobile": 264,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    -36.0,
+    0.0,
+    62.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.99619,
+    0.0,
+    -0.08716,
+    0.0,
+    1.0,
+    0.0,
+    0.08716,
+    0.0,
+    0.99619
+   ],
+   "bbox_center_roblox_studs": [
+    -36.0,
+    2.5,
+    62.0
+   ]
+  },
+  {
+   "name": "CRATE_Small_P03__WoodLight",
+   "category": "CRATES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_CRATES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_CRATES.fbx",
+   "material": "MAT_WoodLight",
+   "triangles_pc": 836,
+   "triangles_mobile": 418,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    -36.0,
+    0.0,
+    62.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.99619,
+    0.0,
+    -0.08716,
+    0.0,
+    1.0,
+    0.0,
+    0.08716,
+    0.0,
+    0.99619
+   ],
+   "bbox_center_roblox_studs": [
+    -36.0,
+    2.5,
+    62.0
+   ]
+  },
+  {
+   "name": "CRATE_Small_P04__SteelDark",
+   "category": "CRATES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_CRATES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_CRATES.fbx",
+   "material": "MAT_SteelDark",
+   "triangles_pc": 320,
+   "triangles_mobile": 160,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    -17.0,
+    0.0,
+    55.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.99863,
+    0.0,
+    0.05234,
+    0.0,
+    1.0,
+    0.0,
+    -0.05234,
+    0.0,
+    0.99863
+   ],
+   "bbox_center_roblox_studs": [
+    -17.0,
+    2.5,
+    55.0
+   ]
+  },
+  {
+   "name": "CRATE_Small_P04__WoodDark",
+   "category": "CRATES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_CRATES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_CRATES.fbx",
+   "material": "MAT_WoodDark",
+   "triangles_pc": 528,
+   "triangles_mobile": 264,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    -17.0,
+    0.0,
+    55.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.99863,
+    0.0,
+    0.05234,
+    0.0,
+    1.0,
+    0.0,
+    -0.05234,
+    0.0,
+    0.99863
+   ],
+   "bbox_center_roblox_studs": [
+    -17.0,
+    2.5,
+    55.0
+   ]
+  },
+  {
+   "name": "CRATE_Small_P04__WoodLight",
+   "category": "CRATES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_CRATES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_CRATES.fbx",
+   "material": "MAT_WoodLight",
+   "triangles_pc": 836,
+   "triangles_mobile": 418,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    -17.0,
+    0.0,
+    55.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.99863,
+    0.0,
+    0.05234,
+    0.0,
+    1.0,
+    0.0,
+    -0.05234,
+    0.0,
+    0.99863
+   ],
+   "bbox_center_roblox_studs": [
+    -17.0,
+    2.5,
+    55.0
+   ]
+  },
+  {
+   "name": "CRATE_Small_PF1__SteelDark",
+   "category": "CRATES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_CRATES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_CRATES.fbx",
+   "material": "MAT_SteelDark",
+   "triangles_pc": 320,
+   "triangles_mobile": 160,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    29.0,
+    0.0,
+    25.5
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.93969,
+    0.0,
+    0.34202,
+    0.0,
+    1.0,
+    0.0,
+    -0.34202,
+    0.0,
+    0.93969
+   ],
+   "bbox_center_roblox_studs": [
+    29.0,
+    2.5,
+    25.5
+   ]
+  },
+  {
+   "name": "CRATE_Small_PF1__WoodDark",
+   "category": "CRATES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_CRATES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_CRATES.fbx",
+   "material": "MAT_WoodDark",
+   "triangles_pc": 528,
+   "triangles_mobile": 264,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    29.0,
+    0.0,
+    25.5
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.93969,
+    0.0,
+    0.34202,
+    0.0,
+    1.0,
+    0.0,
+    -0.34202,
+    0.0,
+    0.93969
+   ],
+   "bbox_center_roblox_studs": [
+    29.0,
+    2.5,
+    25.5
+   ]
+  },
+  {
+   "name": "CRATE_Small_PF1__WoodLight",
+   "category": "CRATES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_CRATES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_CRATES.fbx",
+   "material": "MAT_WoodLight",
+   "triangles_pc": 836,
+   "triangles_mobile": 418,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    29.0,
+    0.0,
+    25.5
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.93969,
+    0.0,
+    0.34202,
+    0.0,
+    1.0,
+    0.0,
+    -0.34202,
+    0.0,
+    0.93969
+   ],
+   "bbox_center_roblox_studs": [
+    29.0,
+    2.5,
+    25.5
+   ]
+  },
+  {
+   "name": "CRATE_Small_PF2__SteelDark",
+   "category": "CRATES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_CRATES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_CRATES.fbx",
+   "material": "MAT_SteelDark",
+   "triangles_pc": 320,
+   "triangles_mobile": 160,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    -29.5,
+    0.0,
+    26.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.98481,
+    0.0,
+    0.17365,
+    0.0,
+    1.0,
+    0.0,
+    -0.17365,
+    0.0,
+    0.98481
+   ],
+   "bbox_center_roblox_studs": [
+    -29.5,
+    2.5,
+    26.0
+   ]
+  },
+  {
+   "name": "CRATE_Small_PF2__WoodDark",
+   "category": "CRATES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_CRATES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_CRATES.fbx",
+   "material": "MAT_WoodDark",
+   "triangles_pc": 528,
+   "triangles_mobile": 264,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    -29.5,
+    0.0,
+    26.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.98481,
+    0.0,
+    0.17365,
+    0.0,
+    1.0,
+    0.0,
+    -0.17365,
+    0.0,
+    0.98481
+   ],
+   "bbox_center_roblox_studs": [
+    -29.5,
+    2.5,
+    26.0
+   ]
+  },
+  {
+   "name": "CRATE_Small_PF2__WoodLight",
+   "category": "CRATES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_CRATES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_CRATES.fbx",
+   "material": "MAT_WoodLight",
+   "triangles_pc": 836,
+   "triangles_mobile": 418,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    -29.5,
+    0.0,
+    26.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.98481,
+    0.0,
+    0.17365,
+    0.0,
+    1.0,
+    0.0,
+    -0.17365,
+    0.0,
+    0.98481
+   ],
+   "bbox_center_roblox_studs": [
+    -29.5,
+    2.5,
+    26.0
+   ]
+  },
+  {
+   "name": "CRATE_Stackable_P01__SteelDark",
+   "category": "CRATES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_CRATES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_CRATES.fbx",
+   "material": "MAT_SteelDark",
+   "triangles_pc": 320,
+   "triangles_mobile": 160,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    39.0,
+    0.0,
+    18.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.99452,
+    0.0,
+    -0.10453,
+    0.0,
+    1.0,
+    0.0,
+    0.10453,
+    0.0,
+    0.99452
+   ],
+   "bbox_center_roblox_studs": [
+    39.0,
+    3.2,
+    18.0
+   ]
+  },
+  {
+   "name": "CRATE_Stackable_P01__WoodDark",
+   "category": "CRATES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_CRATES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_CRATES.fbx",
+   "material": "MAT_WoodDark",
+   "triangles_pc": 704,
+   "triangles_mobile": 352,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    39.0,
+    0.0,
+    18.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.99452,
+    0.0,
+    -0.10453,
+    0.0,
+    1.0,
+    0.0,
+    0.10453,
+    0.0,
+    0.99452
+   ],
+   "bbox_center_roblox_studs": [
+    39.0,
+    3.2,
+    18.0
+   ]
+  },
+  {
+   "name": "CRATE_Stackable_P01__WoodLight",
+   "category": "CRATES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_CRATES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_CRATES.fbx",
+   "material": "MAT_WoodLight",
+   "triangles_pc": 1056,
+   "triangles_mobile": 528,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    39.0,
+    0.0,
+    18.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.99452,
+    0.0,
+    -0.10453,
+    0.0,
+    1.0,
+    0.0,
+    0.10453,
+    0.0,
+    0.99452
+   ],
+   "bbox_center_roblox_studs": [
+    39.0,
+    3.2,
+    18.0
+   ]
+  },
+  {
+   "name": "DEBRIS_Bolt_P01",
+   "category": "DEBRIS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_DEBRIS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_DEBRIS.fbx",
+   "material": "MAT_SteelMid",
+   "triangles_pc": 48,
+   "triangles_mobile": 48,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -16.5,
+    0.0,
+    4.8
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.96593,
+    0.0,
+    0.25882,
+    0.0,
+    1.0,
+    0.0,
+    -0.25882,
+    0.0,
+    0.96593
+   ],
+   "bbox_center_roblox_studs": [
+    -16.391,
+    0.42,
+    4.771
+   ]
+  },
+  {
+   "name": "DEBRIS_Bolt_P02",
+   "category": "DEBRIS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_DEBRIS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_DEBRIS.fbx",
+   "material": "MAT_SteelMid",
+   "triangles_pc": 48,
+   "triangles_mobile": 48,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -33.0,
+    0.0,
+    56.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    -0.64279,
+    0.0,
+    0.76604,
+    0.0,
+    1.0,
+    0.0,
+    -0.76604,
+    0.0,
+    -0.64279
+   ],
+   "bbox_center_roblox_studs": [
+    -33.072,
+    0.42,
+    55.914
+   ]
+  },
+  {
+   "name": "DEBRIS_Bolt_P03",
+   "category": "DEBRIS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_DEBRIS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_DEBRIS.fbx",
+   "material": "MAT_SteelMid",
+   "triangles_pc": 48,
+   "triangles_mobile": 48,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -27.5,
+    0.0,
+    18.2
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    -0.93969,
+    0.0,
+    0.34202,
+    0.0,
+    1.0,
+    0.0,
+    -0.34202,
+    0.0,
+    -0.93969
+   ],
+   "bbox_center_roblox_studs": [
+    -27.606,
+    0.42,
+    18.162
+   ]
+  },
+  {
+   "name": "DEBRIS_Brick_Fragments_P01",
+   "category": "DEBRIS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_DEBRIS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_DEBRIS.fbx",
+   "material": "MAT_BrickB",
+   "triangles_pc": 132,
+   "triangles_mobile": 132,
+   "collision": "None",
+   "origin_roblox_studs": [
+    22.5,
+    0.0,
+    7.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.76604,
+    0.0,
+    0.64279,
+    0.0,
+    1.0,
+    0.0,
+    -0.64279,
+    0.0,
+    0.76604
+   ],
+   "bbox_center_roblox_studs": [
+    22.533,
+    0.298,
+    7.327
+   ]
+  },
+  {
+   "name": "DEBRIS_Brick_Fragments_P02",
+   "category": "DEBRIS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_DEBRIS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_DEBRIS.fbx",
+   "material": "MAT_BrickB",
+   "triangles_pc": 132,
+   "triangles_mobile": 132,
+   "collision": "None",
+   "origin_roblox_studs": [
+    41.5,
+    0.0,
+    46.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.96593,
+    0.0,
+    0.25882,
+    0.0,
+    1.0,
+    0.0,
+    -0.25882,
+    0.0,
+    0.96593
+   ],
+   "bbox_center_roblox_studs": [
+    41.392,
+    0.298,
+    46.31
+   ]
+  },
+  {
+   "name": "DEBRIS_Brick_Fragments_P03",
+   "category": "DEBRIS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_DEBRIS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_DEBRIS.fbx",
+   "material": "MAT_BrickB",
+   "triangles_pc": 132,
+   "triangles_mobile": 132,
+   "collision": "None",
+   "origin_roblox_studs": [
+    6.0,
+    0.0,
+    70.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.86603,
+    0.0,
+    0.5,
+    0.0,
+    1.0,
+    0.0,
+    -0.5,
+    0.0,
+    0.86603
+   ],
+   "bbox_center_roblox_studs": [
+    5.976,
+    0.298,
+    70.328
+   ]
+  },
+  {
+   "name": "DEBRIS_Brick_Half_P01",
+   "category": "DEBRIS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_DEBRIS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_DEBRIS.fbx",
+   "material": "MAT_BrickB",
+   "triangles_pc": 44,
+   "triangles_mobile": 44,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -14.0,
+    0.0,
+    7.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.76604,
+    0.0,
+    -0.64279,
+    0.0,
+    1.0,
+    0.0,
+    0.64279,
+    0.0,
+    0.76604
+   ],
+   "bbox_center_roblox_studs": [
+    -13.96,
+    0.6,
+    7.034
+   ]
+  },
+  {
+   "name": "DEBRIS_Brick_Half_P02",
+   "category": "DEBRIS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_DEBRIS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_DEBRIS.fbx",
+   "material": "MAT_BrickB",
+   "triangles_pc": 44,
+   "triangles_mobile": 44,
+   "collision": "None",
+   "origin_roblox_studs": [
+    39.0,
+    0.0,
+    33.6
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.90631,
+    0.0,
+    0.42262,
+    0.0,
+    1.0,
+    0.0,
+    -0.42262,
+    0.0,
+    0.90631
+   ],
+   "bbox_center_roblox_studs": [
+    39.048,
+    0.6,
+    33.578
+   ]
+  },
+  {
+   "name": "DEBRIS_Brick_Half_P03",
+   "category": "DEBRIS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_DEBRIS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_DEBRIS.fbx",
+   "material": "MAT_BrickB",
+   "triangles_pc": 44,
+   "triangles_mobile": 44,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -37.6,
+    0.0,
+    37.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.93969,
+    0.0,
+    -0.34202,
+    0.0,
+    1.0,
+    0.0,
+    0.34202,
+    0.0,
+    0.93969
+   ],
+   "bbox_center_roblox_studs": [
+    -37.55,
+    0.6,
+    37.018
+   ]
+  },
+  {
+   "name": "DEBRIS_Brick_Half_P04",
+   "category": "DEBRIS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_DEBRIS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_DEBRIS.fbx",
+   "material": "MAT_BrickB",
+   "triangles_pc": 44,
+   "triangles_mobile": 44,
+   "collision": "None",
+   "origin_roblox_studs": [
+    27.4,
+    0.0,
+    35.5
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.93969,
+    0.0,
+    0.34202,
+    0.0,
+    1.0,
+    0.0,
+    -0.34202,
+    0.0,
+    0.93969
+   ],
+   "bbox_center_roblox_studs": [
+    27.45,
+    0.6,
+    35.482
+   ]
+  },
+  {
+   "name": "DEBRIS_Brick_Whole_P01",
+   "category": "DEBRIS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_DEBRIS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_DEBRIS.fbx",
+   "material": "MAT_BrickB",
+   "triangles_pc": 50,
+   "triangles_mobile": 50,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -11.5,
+    0.0,
+    5.5
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.93969,
+    0.0,
+    0.34202,
+    0.0,
+    1.0,
+    0.0,
+    -0.34202,
+    0.0,
+    0.93969
+   ],
+   "bbox_center_roblox_studs": [
+    -11.5,
+    0.6,
+    5.5
+   ]
+  },
+  {
+   "name": "DEBRIS_Brick_Whole_P02",
+   "category": "DEBRIS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_DEBRIS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_DEBRIS.fbx",
+   "material": "MAT_BrickB",
+   "triangles_pc": 50,
+   "triangles_mobile": 50,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -11.0,
+    0.0,
+    58.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.96593,
+    0.0,
+    -0.25882,
+    0.0,
+    1.0,
+    0.0,
+    0.25882,
+    0.0,
+    0.96593
+   ],
+   "bbox_center_roblox_studs": [
+    -11.0,
+    0.6,
+    58.0
+   ]
+  },
+  {
+   "name": "DEBRIS_Loupe_P01__LoupeGlass",
+   "category": "DEBRIS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_DEBRIS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_DEBRIS.fbx",
+   "material": "MAT_LoupeGlass",
+   "triangles_pc": 76,
+   "triangles_mobile": 76,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -15.6,
+    0.0,
+    9.4
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.81915,
+    0.0,
+    0.57358,
+    0.0,
+    1.0,
+    0.0,
+    -0.57358,
+    0.0,
+    0.81915
+   ],
+   "bbox_center_roblox_studs": [
+    -16.8,
+    0.188,
+    10.24
+   ]
+  },
+  {
+   "name": "DEBRIS_Loupe_P01__LoupeHandle",
+   "category": "DEBRIS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_DEBRIS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_DEBRIS.fbx",
+   "material": "MAT_LoupeHandle",
+   "triangles_pc": 56,
+   "triangles_mobile": 56,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -15.6,
+    0.0,
+    9.4
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.81915,
+    0.0,
+    0.57358,
+    0.0,
+    1.0,
+    0.0,
+    -0.57358,
+    0.0,
+    0.81915
+   ],
+   "bbox_center_roblox_studs": [
+    -16.8,
+    0.188,
+    10.24
+   ]
+  },
+  {
+   "name": "DEBRIS_Loupe_P01__SteelMid",
+   "category": "DEBRIS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_DEBRIS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_DEBRIS.fbx",
+   "material": "MAT_SteelMid",
+   "triangles_pc": 196,
+   "triangles_mobile": 156,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -15.6,
+    0.0,
+    9.4
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.81915,
+    0.0,
+    0.57358,
+    0.0,
+    1.0,
+    0.0,
+    -0.57358,
+    0.0,
+    0.81915
+   ],
+   "bbox_center_roblox_studs": [
+    -16.8,
+    0.188,
+    10.24
+   ]
+  },
+  {
+   "name": "DEBRIS_MetalScrap_P01__SteelDark",
+   "category": "DEBRIS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_DEBRIS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_DEBRIS.fbx",
+   "material": "MAT_SteelDark",
+   "triangles_pc": 20,
+   "triangles_mobile": 20,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -26.5,
+    0.0,
+    4.6
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.93969,
+    0.0,
+    -0.34202,
+    0.0,
+    1.0,
+    0.0,
+    0.34202,
+    0.0,
+    0.93969
+   ],
+   "bbox_center_roblox_studs": [
+    -26.931,
+    0.472,
+    4.443
+   ]
+  },
+  {
+   "name": "DEBRIS_MetalScrap_P01__SteelMid",
+   "category": "DEBRIS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_DEBRIS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_DEBRIS.fbx",
+   "material": "MAT_SteelMid",
+   "triangles_pc": 88,
+   "triangles_mobile": 88,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -26.5,
+    0.0,
+    4.6
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.93969,
+    0.0,
+    -0.34202,
+    0.0,
+    1.0,
+    0.0,
+    0.34202,
+    0.0,
+    0.93969
+   ],
+   "bbox_center_roblox_studs": [
+    -26.931,
+    0.472,
+    4.443
+   ]
+  },
+  {
+   "name": "DEBRIS_MetalScrap_P02__SteelDark",
+   "category": "DEBRIS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_DEBRIS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_DEBRIS.fbx",
+   "material": "MAT_SteelDark",
+   "triangles_pc": 20,
+   "triangles_mobile": 20,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -38.5,
+    0.0,
+    39.5
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.93969,
+    0.0,
+    0.34202,
+    0.0,
+    1.0,
+    0.0,
+    -0.34202,
+    0.0,
+    0.93969
+   ],
+   "bbox_center_roblox_studs": [
+    -38.931,
+    0.472,
+    39.657
+   ]
+  },
+  {
+   "name": "DEBRIS_MetalScrap_P02__SteelMid",
+   "category": "DEBRIS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_DEBRIS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_DEBRIS.fbx",
+   "material": "MAT_SteelMid",
+   "triangles_pc": 88,
+   "triangles_mobile": 88,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -38.5,
+    0.0,
+    39.5
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.93969,
+    0.0,
+    0.34202,
+    0.0,
+    1.0,
+    0.0,
+    -0.34202,
+    0.0,
+    0.93969
+   ],
+   "bbox_center_roblox_studs": [
+    -38.931,
+    0.472,
+    39.657
+   ]
+  },
+  {
+   "name": "DEBRIS_Nail_P01",
+   "category": "DEBRIS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_DEBRIS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_DEBRIS.fbx",
+   "material": "MAT_SteelDark",
+   "triangles_pc": 48,
+   "triangles_mobile": 48,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -17.8,
+    0.0,
+    6.5
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.86603,
+    0.0,
+    -0.5,
+    0.0,
+    1.0,
+    0.0,
+    0.5,
+    0.0,
+    0.86603
+   ],
+   "bbox_center_roblox_studs": [
+    -17.765,
+    0.12,
+    6.52
+   ]
+  },
+  {
+   "name": "DEBRIS_Nail_P02",
+   "category": "DEBRIS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_DEBRIS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_DEBRIS.fbx",
+   "material": "MAT_SteelDark",
+   "triangles_pc": 48,
+   "triangles_mobile": 48,
+   "collision": "None",
+   "origin_roblox_studs": [
+    31.0,
+    0.0,
+    48.8
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.17365,
+    0.0,
+    0.98481,
+    0.0,
+    1.0,
+    0.0,
+    -0.98481,
+    0.0,
+    0.17365
+   ],
+   "bbox_center_roblox_studs": [
+    31.007,
+    0.12,
+    48.761
+   ]
+  },
+  {
+   "name": "DEBRIS_Nail_P03",
+   "category": "DEBRIS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_DEBRIS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_DEBRIS.fbx",
+   "material": "MAT_SteelDark",
+   "triangles_pc": 48,
+   "triangles_mobile": 48,
+   "collision": "None",
+   "origin_roblox_studs": [
+    28.0,
+    0.0,
+    22.2
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.76604,
+    0.0,
+    0.64279,
+    0.0,
+    1.0,
+    0.0,
+    -0.64279,
+    0.0,
+    0.76604
+   ],
+   "bbox_center_roblox_studs": [
+    28.031,
+    0.12,
+    22.174
+   ]
+  },
+  {
+   "name": "DEBRIS_Pebble_A_P01",
+   "category": "DEBRIS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_DEBRIS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_DEBRIS.fbx",
+   "material": "MAT_StoneLight",
+   "triangles_pc": 20,
+   "triangles_mobile": 20,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -9.0,
+    0.0,
+    6.8
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.5,
+    0.0,
+    0.86603,
+    0.0,
+    1.0,
+    0.0,
+    -0.86603,
+    0.0,
+    0.5
+   ],
+   "bbox_center_roblox_studs": [
+    -9.0,
+    0.352,
+    6.8
+   ]
+  },
+  {
+   "name": "DEBRIS_Pebble_A_P02",
+   "category": "DEBRIS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_DEBRIS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_DEBRIS.fbx",
+   "material": "MAT_StoneLight",
+   "triangles_pc": 20,
+   "triangles_mobile": 20,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -32.5,
+    0.0,
+    20.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    -32.5,
+    0.352,
+    20.0
+   ]
+  },
+  {
+   "name": "DEBRIS_Pebble_A_P03",
+   "category": "DEBRIS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_DEBRIS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_DEBRIS.fbx",
+   "material": "MAT_StoneLight",
+   "triangles_pc": 20,
+   "triangles_mobile": 20,
+   "collision": "None",
+   "origin_roblox_studs": [
+    12.0,
+    0.0,
+    80.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    12.0,
+    0.352,
+    80.0
+   ]
+  },
+  {
+   "name": "DEBRIS_Pebble_A_P04",
+   "category": "DEBRIS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_DEBRIS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_DEBRIS.fbx",
+   "material": "MAT_StoneLight",
+   "triangles_pc": 20,
+   "triangles_mobile": 20,
+   "collision": "None",
+   "origin_roblox_studs": [
+    27.2,
+    0.0,
+    14.8
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    27.2,
+    0.352,
+    14.8
+   ]
+  },
+  {
+   "name": "DEBRIS_Pebble_B_P01",
+   "category": "DEBRIS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_DEBRIS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_DEBRIS.fbx",
+   "material": "MAT_StoneLight",
+   "triangles_pc": 20,
+   "triangles_mobile": 20,
+   "collision": "None",
+   "origin_roblox_studs": [
+    8.8,
+    0.0,
+    4.8
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    8.8,
+    0.264,
+    4.8
+   ]
+  },
+  {
+   "name": "DEBRIS_Pebble_B_P02",
+   "category": "DEBRIS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_DEBRIS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_DEBRIS.fbx",
+   "material": "MAT_StoneLight",
+   "triangles_pc": 20,
+   "triangles_mobile": 20,
+   "collision": "None",
+   "origin_roblox_studs": [
+    39.0,
+    0.0,
+    31.2
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    39.0,
+    0.264,
+    31.2
+   ]
+  },
+  {
+   "name": "DEBRIS_Pebble_B_P03",
+   "category": "DEBRIS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_DEBRIS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_DEBRIS.fbx",
+   "material": "MAT_StoneLight",
+   "triangles_pc": 20,
+   "triangles_mobile": 20,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -6.0,
+    0.0,
+    62.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    -6.0,
+    0.264,
+    62.0
+   ]
+  },
+  {
+   "name": "DEBRIS_Pebble_B_P04",
+   "category": "DEBRIS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_DEBRIS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_DEBRIS.fbx",
+   "material": "MAT_StoneLight",
+   "triangles_pc": 20,
+   "triangles_mobile": 20,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -27.8,
+    0.0,
+    35.2
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    -27.8,
+    0.264,
+    35.2
+   ]
+  },
+  {
+   "name": "DEBRIS_Pebble_C_P01",
+   "category": "DEBRIS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_DEBRIS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_DEBRIS.fbx",
+   "material": "MAT_StoneLight",
+   "triangles_pc": 20,
+   "triangles_mobile": 20,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -31.5,
+    0.0,
+    42.5
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    -31.5,
+    0.4,
+    42.5
+   ]
+  },
+  {
+   "name": "DEBRIS_Pebble_C_P02",
+   "category": "DEBRIS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_DEBRIS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_DEBRIS.fbx",
+   "material": "MAT_StoneLight",
+   "triangles_pc": 20,
+   "triangles_mobile": 20,
+   "collision": "None",
+   "origin_roblox_studs": [
+    36.5,
+    0.0,
+    21.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    36.5,
+    0.4,
+    21.0
+   ]
+  },
+  {
+   "name": "DEBRIS_Plank_Broken_A_P01__SteelDark",
+   "category": "DEBRIS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_DEBRIS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_DEBRIS.fbx",
+   "material": "MAT_SteelDark",
+   "triangles_pc": 60,
+   "triangles_mobile": 60,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -22.0,
+    0.0,
+    52.5
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.90631,
+    0.0,
+    -0.42262,
+    0.0,
+    1.0,
+    0.0,
+    0.42262,
+    0.0,
+    0.90631
+   ],
+   "bbox_center_roblox_studs": [
+    -22.958,
+    0.485,
+    52.577
+   ]
+  },
+  {
+   "name": "DEBRIS_Plank_Broken_A_P01__WoodLight",
+   "category": "DEBRIS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_DEBRIS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_DEBRIS.fbx",
+   "material": "MAT_WoodLight",
+   "triangles_pc": 80,
+   "triangles_mobile": 80,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -22.0,
+    0.0,
+    52.5
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.90631,
+    0.0,
+    -0.42262,
+    0.0,
+    1.0,
+    0.0,
+    0.42262,
+    0.0,
+    0.90631
+   ],
+   "bbox_center_roblox_studs": [
+    -22.958,
+    0.485,
+    52.577
+   ]
+  },
+  {
+   "name": "DEBRIS_Plank_Broken_B_P01__SteelDark",
+   "category": "DEBRIS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_DEBRIS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_DEBRIS.fbx",
+   "material": "MAT_SteelDark",
+   "triangles_pc": 20,
+   "triangles_mobile": 20,
+   "collision": "None",
+   "origin_roblox_studs": [
+    24.5,
+    0.0,
+    51.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.81915,
+    0.0,
+    0.57358,
+    0.0,
+    1.0,
+    0.0,
+    -0.57358,
+    0.0,
+    0.81915
+   ],
+   "bbox_center_roblox_studs": [
+    24.654,
+    0.305,
+    50.892
+   ]
+  },
+  {
+   "name": "DEBRIS_Plank_Broken_B_P01__WoodLight",
+   "category": "DEBRIS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_DEBRIS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_DEBRIS.fbx",
+   "material": "MAT_WoodLight",
+   "triangles_pc": 36,
+   "triangles_mobile": 36,
+   "collision": "None",
+   "origin_roblox_studs": [
+    24.5,
+    0.0,
+    51.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.81915,
+    0.0,
+    0.57358,
+    0.0,
+    1.0,
+    0.0,
+    -0.57358,
+    0.0,
+    0.81915
+   ],
+   "bbox_center_roblox_studs": [
+    24.654,
+    0.305,
+    50.892
+   ]
+  },
+  {
+   "name": "DEBRIS_Plank_Broken_B_P02__SteelDark",
+   "category": "DEBRIS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_DEBRIS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_DEBRIS.fbx",
+   "material": "MAT_SteelDark",
+   "triangles_pc": 20,
+   "triangles_mobile": 20,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -8.0,
+    0.0,
+    76.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    -0.17365,
+    0.0,
+    0.98481,
+    0.0,
+    1.0,
+    0.0,
+    -0.98481,
+    0.0,
+    -0.17365
+   ],
+   "bbox_center_roblox_studs": [
+    -8.033,
+    0.305,
+    75.815
+   ]
+  },
+  {
+   "name": "DEBRIS_Plank_Broken_B_P02__WoodLight",
+   "category": "DEBRIS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_DEBRIS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_DEBRIS.fbx",
+   "material": "MAT_WoodLight",
+   "triangles_pc": 36,
+   "triangles_mobile": 36,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -8.0,
+    0.0,
+    76.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    -0.17365,
+    0.0,
+    0.98481,
+    0.0,
+    1.0,
+    0.0,
+    -0.98481,
+    0.0,
+    -0.17365
+   ],
+   "bbox_center_roblox_studs": [
+    -8.033,
+    0.305,
+    75.815
+   ]
+  },
+  {
+   "name": "DEBRIS_RedBlock_A_P01",
+   "category": "DEBRIS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_DEBRIS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_DEBRIS.fbx",
+   "material": "MAT_DebrisRed",
+   "triangles_pc": 44,
+   "triangles_mobile": 44,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -24.5,
+    0.0,
+    6.4
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.96593,
+    0.0,
+    0.25882,
+    0.0,
+    1.0,
+    0.0,
+    -0.25882,
+    0.0,
+    0.96593
+   ],
+   "bbox_center_roblox_studs": [
+    -24.5,
+    0.5,
+    6.4
+   ]
+  },
+  {
+   "name": "DEBRIS_RedBlock_A_P02",
+   "category": "DEBRIS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_DEBRIS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_DEBRIS.fbx",
+   "material": "MAT_DebrisRed",
+   "triangles_pc": 44,
+   "triangles_mobile": 44,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -30.8,
+    0.0,
+    45.3
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.93969,
+    0.0,
+    0.34202,
+    0.0,
+    1.0,
+    0.0,
+    -0.34202,
+    0.0,
+    0.93969
+   ],
+   "bbox_center_roblox_studs": [
+    -30.8,
+    0.5,
+    45.3
+   ]
+  },
+  {
+   "name": "DEBRIS_RedBlock_B_P01",
+   "category": "DEBRIS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_DEBRIS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_DEBRIS.fbx",
+   "material": "MAT_DebrisRed",
+   "triangles_pc": 44,
+   "triangles_mobile": 44,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -37.8,
+    0.0,
+    43.6
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.5,
+    0.0,
+    0.86603,
+    0.0,
+    1.0,
+    0.0,
+    -0.86603,
+    0.0,
+    0.5
+   ],
+   "bbox_center_roblox_studs": [
+    -37.8,
+    0.55,
+    43.6
+   ]
+  },
+  {
+   "name": "DEBRIS_Screw_P01",
+   "category": "DEBRIS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_DEBRIS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_DEBRIS.fbx",
+   "material": "MAT_SteelMid",
+   "triangles_pc": 56,
+   "triangles_mobile": 56,
+   "collision": "None",
+   "origin_roblox_studs": [
+    12.2,
+    0.0,
+    6.6
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.93969,
+    0.0,
+    0.34202,
+    0.0,
+    1.0,
+    0.0,
+    -0.34202,
+    0.0,
+    0.93969
+   ],
+   "bbox_center_roblox_studs": [
+    12.27,
+    0.2,
+    6.574
+   ]
+  },
+  {
+   "name": "DEBRIS_Screw_P02",
+   "category": "DEBRIS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_DEBRIS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_DEBRIS.fbx",
+   "material": "MAT_SteelMid",
+   "triangles_pc": 56,
+   "triangles_mobile": 56,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -21.5,
+    0.0,
+    49.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.25882,
+    0.0,
+    0.96593,
+    0.0,
+    1.0,
+    0.0,
+    -0.96593,
+    0.0,
+    0.25882
+   ],
+   "bbox_center_roblox_studs": [
+    -21.481,
+    0.2,
+    48.928
+   ]
+  },
+  {
+   "name": "DEBRIS_Screw_P03",
+   "category": "DEBRIS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_DEBRIS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_DEBRIS.fbx",
+   "material": "MAT_SteelMid",
+   "triangles_pc": 56,
+   "triangles_mobile": 56,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -28.5,
+    0.0,
+    29.5
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.86603,
+    0.0,
+    -0.5,
+    0.0,
+    1.0,
+    0.0,
+    0.5,
+    0.0,
+    0.86603
+   ],
+   "bbox_center_roblox_studs": [
+    -28.435,
+    0.2,
+    29.538
+   ]
+  },
+  {
+   "name": "DEBRIS_Tool_RedHandle_P01__DebrisRed",
+   "category": "DEBRIS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_DEBRIS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_DEBRIS.fbx",
+   "material": "MAT_DebrisRed",
+   "triangles_pc": 44,
+   "triangles_mobile": 44,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -19.5,
+    0.0,
+    7.2
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    -0.96593,
+    0.0,
+    0.25882,
+    0.0,
+    1.0,
+    0.0,
+    -0.25882,
+    0.0,
+    -0.96593
+   ],
+   "bbox_center_roblox_studs": [
+    -18.631,
+    0.5,
+    7.433
+   ]
+  },
+  {
+   "name": "DEBRIS_Tool_RedHandle_P01__SteelMid",
+   "category": "DEBRIS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_DEBRIS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_DEBRIS.fbx",
+   "material": "MAT_SteelMid",
+   "triangles_pc": 72,
+   "triangles_mobile": 72,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -19.5,
+    0.0,
+    7.2
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    -0.96593,
+    0.0,
+    0.25882,
+    0.0,
+    1.0,
+    0.0,
+    -0.25882,
+    0.0,
+    -0.96593
+   ],
+   "bbox_center_roblox_studs": [
+    -18.631,
+    0.5,
+    7.433
+   ]
+  },
+  {
+   "name": "DEBRIS_Tray_Red_Apple_P01__Apple",
+   "category": "DEBRIS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_DEBRIS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_DEBRIS.fbx",
+   "material": "MAT_Apple",
+   "triangles_pc": 224,
+   "triangles_mobile": 178,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -21.6,
+    0.0,
+    9.6
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.99027,
+    0.0,
+    0.13917,
+    0.0,
+    1.0,
+    0.0,
+    -0.13917,
+    0.0,
+    0.99027
+   ],
+   "bbox_center_roblox_studs": [
+    -21.6,
+    0.958,
+    9.6
+   ]
+  },
+  {
+   "name": "DEBRIS_Tray_Red_Apple_P01__AppleLeaf",
+   "category": "DEBRIS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_DEBRIS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_DEBRIS.fbx",
+   "material": "MAT_AppleLeaf",
+   "triangles_pc": 12,
+   "triangles_mobile": 12,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -21.6,
+    0.0,
+    9.6
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.99027,
+    0.0,
+    0.13917,
+    0.0,
+    1.0,
+    0.0,
+    -0.13917,
+    0.0,
+    0.99027
+   ],
+   "bbox_center_roblox_studs": [
+    -21.6,
+    0.958,
+    9.6
+   ]
+  },
+  {
+   "name": "DEBRIS_Tray_Red_Apple_P01__AppleStem",
+   "category": "DEBRIS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_DEBRIS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_DEBRIS.fbx",
+   "material": "MAT_AppleStem",
+   "triangles_pc": 20,
+   "triangles_mobile": 20,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -21.6,
+    0.0,
+    9.6
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.99027,
+    0.0,
+    0.13917,
+    0.0,
+    1.0,
+    0.0,
+    -0.13917,
+    0.0,
+    0.99027
+   ],
+   "bbox_center_roblox_studs": [
+    -21.6,
+    0.958,
+    9.6
+   ]
+  },
+  {
+   "name": "DEBRIS_Tray_Red_Apple_P01__DebrisRed",
+   "category": "DEBRIS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_DEBRIS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_DEBRIS.fbx",
+   "material": "MAT_DebrisRed",
+   "triangles_pc": 220,
+   "triangles_mobile": 176,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -21.6,
+    0.0,
+    9.6
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.99027,
+    0.0,
+    0.13917,
+    0.0,
+    1.0,
+    0.0,
+    -0.13917,
+    0.0,
+    0.99027
+   ],
+   "bbox_center_roblox_studs": [
+    -21.6,
+    0.958,
+    9.6
+   ]
+  },
+  {
+   "name": "DEBRIS_Trowel_P01",
+   "category": "DEBRIS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_DEBRIS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_DEBRIS.fbx",
+   "material": "MAT_SteelMid",
+   "triangles_pc": 88,
+   "triangles_mobile": 88,
+   "collision": "None",
+   "origin_roblox_studs": [
+    20.5,
+    0.0,
+    5.2
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.17365,
+    0.0,
+    0.98481,
+    0.0,
+    1.0,
+    0.0,
+    -0.98481,
+    0.0,
+    0.17365
+   ],
+   "bbox_center_roblox_studs": [
+    20.613,
+    0.35,
+    4.56
+   ]
+  },
+  {
+   "name": "DEBRIS_WoodChip_A_P01",
+   "category": "DEBRIS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_DEBRIS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_DEBRIS.fbx",
+   "material": "MAT_WoodLight",
+   "triangles_pc": 88,
+   "triangles_mobile": 88,
+   "collision": "None",
+   "origin_roblox_studs": [
+    10.5,
+    0.0,
+    5.5
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.86603,
+    0.0,
+    0.5,
+    0.0,
+    1.0,
+    0.0,
+    -0.5,
+    0.0,
+    0.86603
+   ],
+   "bbox_center_roblox_studs": [
+    10.294,
+    0.18,
+    5.928
+   ]
+  },
+  {
+   "name": "DEBRIS_WoodChip_A_P02",
+   "category": "DEBRIS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_DEBRIS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_DEBRIS.fbx",
+   "material": "MAT_WoodLight",
+   "triangles_pc": 88,
+   "triangles_mobile": 88,
+   "collision": "None",
+   "origin_roblox_studs": [
+    33.5,
+    0.0,
+    24.8
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.76604,
+    0.0,
+    -0.64279,
+    0.0,
+    1.0,
+    0.0,
+    0.64279,
+    0.0,
+    0.76604
+   ],
+   "bbox_center_roblox_studs": [
+    33.027,
+    0.18,
+    24.753
+   ]
+  },
+  {
+   "name": "DEBRIS_WoodChip_A_P03",
+   "category": "DEBRIS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_DEBRIS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_DEBRIS.fbx",
+   "material": "MAT_WoodLight",
+   "triangles_pc": 88,
+   "triangles_mobile": 88,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -14.0,
+    0.0,
+    52.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.34202,
+    0.0,
+    0.93969,
+    0.0,
+    1.0,
+    0.0,
+    -0.93969,
+    0.0,
+    0.34202
+   ],
+   "bbox_center_roblox_studs": [
+    -13.883,
+    0.18,
+    52.461
+   ]
+  },
+  {
+   "name": "DEBRIS_WoodChip_A_P04",
+   "category": "DEBRIS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_DEBRIS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_DEBRIS.fbx",
+   "material": "MAT_WoodLight",
+   "triangles_pc": 88,
+   "triangles_mobile": 88,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -27.4,
+    0.0,
+    22.5
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.93969,
+    0.0,
+    0.34202,
+    0.0,
+    1.0,
+    0.0,
+    -0.34202,
+    0.0,
+    0.93969
+   ],
+   "bbox_center_roblox_studs": [
+    -27.678,
+    0.18,
+    22.886
+   ]
+  },
+  {
+   "name": "DEBRIS_WoodChip_B_P01",
+   "category": "DEBRIS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_DEBRIS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_DEBRIS.fbx",
+   "material": "MAT_WoodLight",
+   "triangles_pc": 132,
+   "triangles_mobile": 132,
+   "collision": "None",
+   "origin_roblox_studs": [
+    9.5,
+    0.0,
+    7.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    -0.17365,
+    0.0,
+    0.98481,
+    0.0,
+    1.0,
+    0.0,
+    -0.98481,
+    0.0,
+    -0.17365
+   ],
+   "bbox_center_roblox_studs": [
+    9.584,
+    0.148,
+    6.948
+   ]
+  },
+  {
+   "name": "DEBRIS_WoodChip_B_P02",
+   "category": "DEBRIS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_DEBRIS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_DEBRIS.fbx",
+   "material": "MAT_WoodLight",
+   "triangles_pc": 132,
+   "triangles_mobile": 132,
+   "collision": "None",
+   "origin_roblox_studs": [
+    30.8,
+    0.0,
+    46.2
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.98481,
+    0.0,
+    0.17365,
+    0.0,
+    1.0,
+    0.0,
+    -0.17365,
+    0.0,
+    0.98481
+   ],
+   "bbox_center_roblox_studs": [
+    30.852,
+    0.148,
+    46.284
+   ]
+  },
+  {
+   "name": "DEBRIS_WoodSplinter_P01",
+   "category": "DEBRIS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_DEBRIS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_DEBRIS.fbx",
+   "material": "MAT_WoodLight",
+   "triangles_pc": 88,
+   "triangles_mobile": 88,
+   "collision": "None",
+   "origin_roblox_studs": [
+    33.5,
+    0.0,
+    44.5
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.93969,
+    0.0,
+    -0.34202,
+    0.0,
+    1.0,
+    0.0,
+    0.34202,
+    0.0,
+    0.93969
+   ],
+   "bbox_center_roblox_studs": [
+    33.323,
+    0.13,
+    44.671
+   ]
+  },
+  {
+   "name": "DEBRIS_WoodSplinter_P02",
+   "category": "DEBRIS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_DEBRIS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_DEBRIS.fbx",
+   "material": "MAT_WoodLight",
+   "triangles_pc": 88,
+   "triangles_mobile": 88,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -33.0,
+    0.0,
+    24.5
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.76604,
+    0.0,
+    0.64279,
+    0.0,
+    1.0,
+    0.0,
+    -0.64279,
+    0.0,
+    0.76604
+   ],
+   "bbox_center_roblox_studs": [
+    -32.94,
+    0.13,
+    24.738
+   ]
+  },
+  {
+   "name": "DEBRIS_WoodSplinter_P03",
+   "category": "DEBRIS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_DEBRIS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_DEBRIS.fbx",
+   "material": "MAT_WoodLight",
+   "triangles_pc": 88,
+   "triangles_mobile": 88,
+   "collision": "None",
+   "origin_roblox_studs": [
+    27.0,
+    0.0,
+    28.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    -0.17365,
+    0.0,
+    0.98481,
+    0.0,
+    1.0,
+    0.0,
+    -0.98481,
+    0.0,
+    -0.17365
+   ],
+   "bbox_center_roblox_studs": [
+    27.236,
+    0.13,
+    28.068
+   ]
+  },
+  {
+   "name": "PAD_1_Base__SteelMid",
+   "category": "PADS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_PADS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_PADS.fbx",
+   "material": "MAT_SteelMid",
+   "triangles_pc": 586,
+   "triangles_mobile": 284,
+   "collision": "Hull",
+   "origin_roblox_studs": [
+    12.0,
+    1.16,
+    25.6
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    12.0,
+    1.16,
+    25.6
+   ]
+  },
+  {
+   "name": "PAD_1_Base__SteelPad",
+   "category": "PADS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_PADS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_PADS.fbx",
+   "material": "MAT_SteelPad",
+   "triangles_pc": 1106,
+   "triangles_mobile": 552,
+   "collision": "Hull",
+   "origin_roblox_studs": [
+    12.0,
+    1.16,
+    25.6
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    12.0,
+    1.16,
+    25.6
+   ]
+  },
+  {
+   "name": "PAD_1_Pulse",
+   "category": "PADS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_PADS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_PADS.fbx",
+   "material": "BLK_PadPulse_1",
+   "triangles_pc": 480,
+   "triangles_mobile": 240,
+   "collision": "None",
+   "origin_roblox_studs": [
+    12.0,
+    1.72,
+    25.6
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    12.0,
+    1.72,
+    25.6
+   ]
+  },
+  {
+   "name": "PAD_1_Ring",
+   "category": "PADS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_PADS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_PADS.fbx",
+   "material": "BLK_Ring_1",
+   "triangles_pc": 640,
+   "triangles_mobile": 320,
+   "collision": "None",
+   "origin_roblox_studs": [
+    12.0,
+    1.7,
+    25.6
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    12.0,
+    1.7,
+    25.6
+   ]
+  },
+  {
+   "name": "PAD_1_Top",
+   "category": "PADS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_PADS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_PADS.fbx",
+   "material": "MAT_SteelPad",
+   "triangles_pc": 1098,
+   "triangles_mobile": 548,
+   "collision": "Hull",
+   "origin_roblox_studs": [
+    12.0,
+    1.62,
+    25.6
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    12.0,
+    1.62,
+    25.6
+   ]
+  },
+  {
+   "name": "PAD_2_Base__SteelMid",
+   "category": "PADS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_PADS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_PADS.fbx",
+   "material": "MAT_SteelMid",
+   "triangles_pc": 586,
+   "triangles_mobile": 286,
+   "collision": "Hull",
+   "origin_roblox_studs": [
+    -0.0,
+    1.16,
+    25.6
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    -0.0,
+    1.16,
+    25.6
+   ]
+  },
+  {
+   "name": "PAD_2_Base__SteelPad",
+   "category": "PADS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_PADS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_PADS.fbx",
+   "material": "MAT_SteelPad",
+   "triangles_pc": 1108,
+   "triangles_mobile": 554,
+   "collision": "Hull",
+   "origin_roblox_studs": [
+    -0.0,
+    1.16,
+    25.6
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    -0.0,
+    1.16,
+    25.6
+   ]
+  },
+  {
+   "name": "PAD_2_Pulse",
+   "category": "PADS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_PADS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_PADS.fbx",
+   "material": "BLK_PadPulse_2",
+   "triangles_pc": 480,
+   "triangles_mobile": 240,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -0.0,
+    1.72,
+    25.6
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    -0.0,
+    1.72,
+    25.6
+   ]
+  },
+  {
+   "name": "PAD_2_Ring",
+   "category": "PADS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_PADS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_PADS.fbx",
+   "material": "BLK_Ring_2",
+   "triangles_pc": 640,
+   "triangles_mobile": 320,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -0.0,
+    1.7,
+    25.6
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    -0.0,
+    1.7,
+    25.6
+   ]
+  },
+  {
+   "name": "PAD_2_Top",
+   "category": "PADS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_PADS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_PADS.fbx",
+   "material": "MAT_SteelPad",
+   "triangles_pc": 1092,
+   "triangles_mobile": 546,
+   "collision": "Hull",
+   "origin_roblox_studs": [
+    -0.0,
+    1.62,
+    25.6
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    -0.0,
+    1.62,
+    25.6
+   ]
+  },
+  {
+   "name": "PAD_3_Base__SteelMid",
+   "category": "PADS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_PADS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_PADS.fbx",
+   "material": "MAT_SteelMid",
+   "triangles_pc": 586,
+   "triangles_mobile": 286,
+   "collision": "Hull",
+   "origin_roblox_studs": [
+    -12.0,
+    1.16,
+    25.6
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    -12.0,
+    1.16,
+    25.6
+   ]
+  },
+  {
+   "name": "PAD_3_Base__SteelPad",
+   "category": "PADS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_PADS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_PADS.fbx",
+   "material": "MAT_SteelPad",
+   "triangles_pc": 1100,
+   "triangles_mobile": 550,
+   "collision": "Hull",
+   "origin_roblox_studs": [
+    -12.0,
+    1.16,
+    25.6
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    -12.0,
+    1.16,
+    25.6
+   ]
+  },
+  {
+   "name": "PAD_3_Pulse",
+   "category": "PADS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_PADS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_PADS.fbx",
+   "material": "BLK_PadPulse_3",
+   "triangles_pc": 480,
+   "triangles_mobile": 240,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -12.0,
+    1.72,
+    25.6
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    -12.0,
+    1.72,
+    25.6
+   ]
+  },
+  {
+   "name": "PAD_3_Ring",
+   "category": "PADS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_PADS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_PADS.fbx",
+   "material": "BLK_Ring_3",
+   "triangles_pc": 640,
+   "triangles_mobile": 320,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -12.0,
+    1.7,
+    25.6
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    -12.0,
+    1.7,
+    25.6
+   ]
+  },
+  {
+   "name": "PAD_3_Top",
+   "category": "PADS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_PADS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_PADS.fbx",
+   "material": "MAT_SteelPad",
+   "triangles_pc": 1098,
+   "triangles_mobile": 548,
+   "collision": "Hull",
+   "origin_roblox_studs": [
+    -12.0,
+    1.62,
+    25.6
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    -12.0,
+    1.62,
+    25.6
+   ]
+  },
+  {
+   "name": "PIPE_Valve_Body_A",
+   "category": "PIPES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_PIPES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_PIPES.fbx",
+   "material": "MAT_SteelDark",
+   "triangles_pc": 124,
+   "triangles_mobile": 124,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -43.2,
+    0.0,
+    36.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    -43.2,
+    12.925,
+    28.0
+   ]
+  },
+  {
+   "name": "PIPE_Valve_Body_B",
+   "category": "PIPES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_PIPES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_PIPES.fbx",
+   "material": "MAT_SteelDark",
+   "triangles_pc": 124,
+   "triangles_mobile": 124,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -43.2,
+    0.0,
+    86.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    -43.2,
+    12.925,
+    78.0
+   ]
+  },
+  {
+   "name": "PIPE_Valve_Wheel_A",
+   "category": "PIPES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_PIPES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_PIPES.fbx",
+   "material": "MAT_ValveRed",
+   "triangles_pc": 252,
+   "triangles_mobile": 150,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -43.2,
+    15.6,
+    28.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    -43.2,
+    15.6,
+    28.0
+   ]
+  },
+  {
+   "name": "PIPE_Valve_Wheel_B",
+   "category": "PIPES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_PIPES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_PIPES.fbx",
+   "material": "MAT_ValveRed",
+   "triangles_pc": 252,
+   "triangles_mobile": 150,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -43.2,
+    15.6,
+    78.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    -43.2,
+    15.6,
+    78.0
+   ]
+  },
+  {
+   "name": "PIPE_Vent_A_1",
+   "category": "PIPES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_PIPES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_PIPES.fbx",
+   "material": "MAT_SteelDark",
+   "triangles_pc": 132,
+   "triangles_mobile": 132,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -43.2,
+    12.95,
+    30.8
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    -43.2,
+    13.635,
+    30.8
+   ]
+  },
+  {
+   "name": "PIPE_Vent_A_2",
+   "category": "PIPES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_PIPES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_PIPES.fbx",
+   "material": "MAT_SteelDark",
+   "triangles_pc": 132,
+   "triangles_mobile": 132,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -42.15,
+    25.0,
+    36.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.0,
+    1.0,
+    0.0,
+    -1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    -41.465,
+    25.0,
+    36.0
+   ]
+  },
+  {
+   "name": "PIPE_Vent_B_1",
+   "category": "PIPES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_PIPES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_PIPES.fbx",
+   "material": "MAT_SteelDark",
+   "triangles_pc": 132,
+   "triangles_mobile": 132,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -43.2,
+    12.95,
+    80.8
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    -43.2,
+    13.635,
+    80.8
+   ]
+  },
+  {
+   "name": "PIPE_Vent_B_2",
+   "category": "PIPES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_PIPES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_PIPES.fbx",
+   "material": "MAT_SteelDark",
+   "triangles_pc": 132,
+   "triangles_mobile": 132,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -42.15,
+    25.0,
+    86.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.0,
+    1.0,
+    0.0,
+    -1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    -41.465,
+    25.0,
+    86.0
+   ]
+  },
+  {
+   "name": "PIPE_Wall_Fittings_A",
+   "category": "PIPES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_PIPES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_PIPES.fbx",
+   "material": "MAT_SteelDark",
+   "triangles_pc": 1552,
+   "triangles_mobile": 930,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -43.2,
+    0.0,
+    36.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    -43.35,
+    16.59,
+    28.0
+   ]
+  },
+  {
+   "name": "PIPE_Wall_Fittings_B",
+   "category": "PIPES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_PIPES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_PIPES.fbx",
+   "material": "MAT_SteelDark",
+   "triangles_pc": 1552,
+   "triangles_mobile": 930,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -43.2,
+    0.0,
+    86.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    -43.35,
+    16.59,
+    78.0
+   ]
+  },
+  {
+   "name": "PIPE_Wall_Tubes_A",
+   "category": "PIPES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_PIPES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_PIPES.fbx",
+   "material": "MAT_PipeSteel",
+   "triangles_pc": 612,
+   "triangles_mobile": 366,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -43.2,
+    0.0,
+    36.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    -43.2,
+    16.7,
+    28.0
+   ]
+  },
+  {
+   "name": "PIPE_Wall_Tubes_B",
+   "category": "PIPES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_PIPES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_PIPES.fbx",
+   "material": "MAT_PipeSteel",
+   "triangles_pc": 612,
+   "triangles_mobile": 366,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -43.2,
+    0.0,
+    86.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    -43.2,
+    16.7,
+    78.0
+   ]
+  },
+  {
+   "name": "PLATFORM_Border_Back",
+   "category": "PLATFORM",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_PLATFORM.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_PLATFORM.fbx",
+   "material": "MAT_Hazard",
+   "triangles_pc": 136,
+   "triangles_mobile": 136,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    -0.0,
+    0.64,
+    35.6
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    -0.0,
+    0.64,
+    35.6
+   ]
+  },
+  {
+   "name": "PLATFORM_Border_Front",
+   "category": "PLATFORM",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_PLATFORM.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_PLATFORM.fbx",
+   "material": "MAT_Hazard",
+   "triangles_pc": 140,
+   "triangles_mobile": 140,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    -0.0,
+    0.64,
+    12.4
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    -0.0,
+    0.64,
+    12.4
+   ]
+  },
+  {
+   "name": "PLATFORM_Border_Left",
+   "category": "PLATFORM",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_PLATFORM.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_PLATFORM.fbx",
+   "material": "MAT_Hazard",
+   "triangles_pc": 140,
+   "triangles_mobile": 140,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    23.6,
+    0.64,
+    24.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    23.6,
+    0.64,
+    24.0
+   ]
+  },
+  {
+   "name": "PLATFORM_Border_Right",
+   "category": "PLATFORM",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_PLATFORM.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_PLATFORM.fbx",
+   "material": "MAT_Hazard",
+   "triangles_pc": 140,
+   "triangles_mobile": 140,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    -23.6,
+    0.64,
+    24.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    -23.6,
+    0.64,
+    24.0
+   ]
+  },
+  {
+   "name": "PLATFORM_Brackets",
+   "category": "PLATFORM",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_PLATFORM.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_PLATFORM.fbx",
+   "material": "MAT_SteelMid",
+   "triangles_pc": 496,
+   "triangles_mobile": 296,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -0.0,
+    0.0,
+    0.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    -0.0,
+    1.475,
+    24.0
+   ]
+  },
+  {
+   "name": "PLATFORM_DiamondPlate",
+   "category": "PLATFORM",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_PLATFORM.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_PLATFORM.fbx",
+   "material": "MAT_SteelLight",
+   "triangles_pc": 3190,
+   "triangles_mobile": 1914,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -0.0,
+    0.0,
+    0.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    -0.01,
+    0.865,
+    23.66
+   ]
+  },
+  {
+   "name": "PLATFORM_DiamondPlate_Path",
+   "category": "PLATFORM",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_PLATFORM.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_PLATFORM.fbx",
+   "material": "MAT_SteelLight",
+   "triangles_pc": 2250,
+   "triangles_mobile": 1350,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -0.0,
+    0.0,
+    0.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    -0.04,
+    0.665,
+    -4.05
+   ]
+  },
+  {
+   "name": "PLATFORM_Path",
+   "category": "PLATFORM",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_PLATFORM.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_PLATFORM.fbx",
+   "material": "MAT_SteelDark",
+   "triangles_pc": 44,
+   "triangles_mobile": 44,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    -0.0,
+    0.3,
+    -4.4
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    -0.0,
+    0.3,
+    -4.4
+   ]
+  },
+  {
+   "name": "PLATFORM_Path_RailL__StoneDark",
+   "category": "PLATFORM",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_PLATFORM.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_PLATFORM.fbx",
+   "material": "MAT_StoneDark",
+   "triangles_pc": 586,
+   "triangles_mobile": 350,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    7.0,
+    0.0,
+    0.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    7.0,
+    0.8,
+    -4.4
+   ]
+  },
+  {
+   "name": "PLATFORM_Path_RailL__StoneLight",
+   "category": "PLATFORM",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_PLATFORM.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_PLATFORM.fbx",
+   "material": "MAT_StoneLight",
+   "triangles_pc": 644,
+   "triangles_mobile": 386,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    7.0,
+    0.0,
+    0.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    7.0,
+    0.8,
+    -4.4
+   ]
+  },
+  {
+   "name": "PLATFORM_Path_RailR__StoneDark",
+   "category": "PLATFORM",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_PLATFORM.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_PLATFORM.fbx",
+   "material": "MAT_StoneDark",
+   "triangles_pc": 566,
+   "triangles_mobile": 338,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    -7.0,
+    0.0,
+    0.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    -7.0,
+    0.8,
+    -4.4
+   ]
+  },
+  {
+   "name": "PLATFORM_Path_RailR__StoneLight",
+   "category": "PLATFORM",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_PLATFORM.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_PLATFORM.fbx",
+   "material": "MAT_StoneLight",
+   "triangles_pc": 616,
+   "triangles_mobile": 368,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    -7.0,
+    0.0,
+    0.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    -7.0,
+    0.8,
+    -4.4
+   ]
+  },
+  {
+   "name": "PLATFORM_Plate",
+   "category": "PLATFORM",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_PLATFORM.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_PLATFORM.fbx",
+   "material": "MAT_SteelDark",
+   "triangles_pc": 12,
+   "triangles_mobile": 12,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    -0.0,
+    0.4,
+    24.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    -0.0,
+    0.4,
+    24.0
+   ]
+  },
+  {
+   "name": "PLATFORM_Stripes",
+   "category": "PLATFORM",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_PLATFORM.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_PLATFORM.fbx",
+   "material": "MAT_HazardBlack",
+   "triangles_pc": 452,
+   "triangles_mobile": 270,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -0.0,
+    0.0,
+    0.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    -0.0,
+    1.345,
+    24.0
+   ]
+  },
+  {
+   "name": "CONTAINER_Green__ContainerGreen",
+   "category": "PROPS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_PROPS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_PROPS.fbx",
+   "material": "MAT_ContainerGreen",
+   "triangles_pc": 216,
+   "triangles_mobile": 128,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    40.5,
+    0.0,
+    27.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    40.496,
+    3.087,
+    26.888
+   ]
+  },
+  {
+   "name": "CONTAINER_Green__ContainerGreenDark",
+   "category": "PROPS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_PROPS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_PROPS.fbx",
+   "material": "MAT_ContainerGreenDark",
+   "triangles_pc": 864,
+   "triangles_mobile": 518,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    40.5,
+    0.0,
+    27.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    40.496,
+    3.087,
+    26.888
+   ]
+  },
+  {
+   "name": "CONTAINER_Green__SteelMid",
+   "category": "PROPS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_PROPS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_PROPS.fbx",
+   "material": "MAT_SteelMid",
+   "triangles_pc": 652,
+   "triangles_mobile": 390,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    40.5,
+    0.0,
+    27.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    40.496,
+    3.087,
+    26.888
+   ]
+  },
+  {
+   "name": "PROP_Bollard_Hazard_P01__Hazard",
+   "category": "PROPS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_PROPS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_PROPS.fbx",
+   "material": "MAT_Hazard",
+   "triangles_pc": 120,
+   "triangles_mobile": 120,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    26.8,
+    0.0,
+    9.6
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    26.8,
+    1.98,
+    9.6
+   ]
+  },
+  {
+   "name": "PROP_Bollard_Hazard_P01__HazardBlack",
+   "category": "PROPS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_PROPS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_PROPS.fbx",
+   "material": "MAT_HazardBlack",
+   "triangles_pc": 180,
+   "triangles_mobile": 108,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    26.8,
+    0.0,
+    9.6
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    26.8,
+    1.98,
+    9.6
+   ]
+  },
+  {
+   "name": "PROP_Bollard_Hazard_P01__SteelMid",
+   "category": "PROPS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_PROPS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_PROPS.fbx",
+   "material": "MAT_SteelMid",
+   "triangles_pc": 60,
+   "triangles_mobile": 60,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    26.8,
+    0.0,
+    9.6
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    26.8,
+    1.98,
+    9.6
+   ]
+  },
+  {
+   "name": "PROP_Bollard_Hazard_P02__Hazard",
+   "category": "PROPS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_PROPS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_PROPS.fbx",
+   "material": "MAT_Hazard",
+   "triangles_pc": 120,
+   "triangles_mobile": 120,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    -26.8,
+    0.0,
+    9.6
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    -26.8,
+    1.98,
+    9.6
+   ]
+  },
+  {
+   "name": "PROP_Bollard_Hazard_P02__HazardBlack",
+   "category": "PROPS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_PROPS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_PROPS.fbx",
+   "material": "MAT_HazardBlack",
+   "triangles_pc": 180,
+   "triangles_mobile": 108,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    -26.8,
+    0.0,
+    9.6
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    -26.8,
+    1.98,
+    9.6
+   ]
+  },
+  {
+   "name": "PROP_Bollard_Hazard_P02__SteelMid",
+   "category": "PROPS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_PROPS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_PROPS.fbx",
+   "material": "MAT_SteelMid",
+   "triangles_pc": 60,
+   "triangles_mobile": 60,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    -26.8,
+    0.0,
+    9.6
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    -26.8,
+    1.98,
+    9.6
+   ]
+  },
+  {
+   "name": "PROP_Bollard_Hazard_P03__Hazard",
+   "category": "PROPS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_PROPS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_PROPS.fbx",
+   "material": "MAT_Hazard",
+   "triangles_pc": 120,
+   "triangles_mobile": 120,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    26.8,
+    0.0,
+    38.4
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    26.8,
+    1.98,
+    38.4
+   ]
+  },
+  {
+   "name": "PROP_Bollard_Hazard_P03__HazardBlack",
+   "category": "PROPS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_PROPS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_PROPS.fbx",
+   "material": "MAT_HazardBlack",
+   "triangles_pc": 180,
+   "triangles_mobile": 108,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    26.8,
+    0.0,
+    38.4
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    26.8,
+    1.98,
+    38.4
+   ]
+  },
+  {
+   "name": "PROP_Bollard_Hazard_P03__SteelMid",
+   "category": "PROPS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_PROPS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_PROPS.fbx",
+   "material": "MAT_SteelMid",
+   "triangles_pc": 60,
+   "triangles_mobile": 60,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    26.8,
+    0.0,
+    38.4
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    26.8,
+    1.98,
+    38.4
+   ]
+  },
+  {
+   "name": "PROP_Bollard_Hazard_P04__Hazard",
+   "category": "PROPS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_PROPS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_PROPS.fbx",
+   "material": "MAT_Hazard",
+   "triangles_pc": 120,
+   "triangles_mobile": 120,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    -26.8,
+    0.0,
+    38.4
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    -26.8,
+    1.98,
+    38.4
+   ]
+  },
+  {
+   "name": "PROP_Bollard_Hazard_P04__HazardBlack",
+   "category": "PROPS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_PROPS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_PROPS.fbx",
+   "material": "MAT_HazardBlack",
+   "triangles_pc": 180,
+   "triangles_mobile": 108,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    -26.8,
+    0.0,
+    38.4
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    -26.8,
+    1.98,
+    38.4
+   ]
+  },
+  {
+   "name": "PROP_Bollard_Hazard_P04__SteelMid",
+   "category": "PROPS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_PROPS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_PROPS.fbx",
+   "material": "MAT_SteelMid",
+   "triangles_pc": 60,
+   "triangles_mobile": 60,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    -26.8,
+    0.0,
+    38.4
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    -26.8,
+    1.98,
+    38.4
+   ]
+  },
+  {
+   "name": "PROP_BrickPile_P01",
+   "category": "PROPS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_PROPS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_PROPS.fbx",
+   "material": "MAT_BrickB",
+   "triangles_pc": 308,
+   "triangles_mobile": 184,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    30.5,
+    0.0,
+    18.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.99027,
+    0.0,
+    0.13917,
+    0.0,
+    1.0,
+    0.0,
+    -0.13917,
+    0.0,
+    0.99027
+   ],
+   "bbox_center_roblox_studs": [
+    30.18,
+    1.8,
+    19.074
+   ]
+  },
+  {
+   "name": "PROP_BrickPile_P02",
+   "category": "PROPS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_PROPS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_PROPS.fbx",
+   "material": "MAT_BrickB",
+   "triangles_pc": 308,
+   "triangles_mobile": 184,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    -31.0,
+    0.0,
+    18.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.98481,
+    0.0,
+    -0.17365,
+    0.0,
+    1.0,
+    0.0,
+    0.17365,
+    0.0,
+    0.98481
+   ],
+   "bbox_center_roblox_studs": [
+    -31.636,
+    1.8,
+    18.923
+   ]
+  },
+  {
+   "name": "PROP_PlankStack_P01__SteelDark",
+   "category": "PROPS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_PROPS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_PROPS.fbx",
+   "material": "MAT_SteelDark",
+   "triangles_pc": 40,
+   "triangles_mobile": 40,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    30.0,
+    0.0,
+    31.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.17365,
+    0.0,
+    0.98481,
+    0.0,
+    1.0,
+    0.0,
+    -0.98481,
+    0.0,
+    0.17365
+   ],
+   "bbox_center_roblox_studs": [
+    29.999,
+    1.2,
+    31.004
+   ]
+  },
+  {
+   "name": "PROP_PlankStack_P01__WoodDark",
+   "category": "PROPS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_PROPS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_PROPS.fbx",
+   "material": "MAT_WoodDark",
+   "triangles_pc": 88,
+   "triangles_mobile": 88,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    30.0,
+    0.0,
+    31.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.17365,
+    0.0,
+    0.98481,
+    0.0,
+    1.0,
+    0.0,
+    -0.98481,
+    0.0,
+    0.17365
+   ],
+   "bbox_center_roblox_studs": [
+    29.999,
+    1.2,
+    31.004
+   ]
+  },
+  {
+   "name": "PROP_PlankStack_P01__WoodLight",
+   "category": "PROPS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_PROPS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_PROPS.fbx",
+   "material": "MAT_WoodLight",
+   "triangles_pc": 220,
+   "triangles_mobile": 132,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    30.0,
+    0.0,
+    31.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.17365,
+    0.0,
+    0.98481,
+    0.0,
+    1.0,
+    0.0,
+    -0.98481,
+    0.0,
+    0.17365
+   ],
+   "bbox_center_roblox_studs": [
+    29.999,
+    1.2,
+    31.004
+   ]
+  },
+  {
+   "name": "PROP_PlankStack_P02__SteelDark",
+   "category": "PROPS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_PROPS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_PROPS.fbx",
+   "material": "MAT_SteelDark",
+   "triangles_pc": 40,
+   "triangles_mobile": 40,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    -30.0,
+    0.0,
+    32.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.17365,
+    0.0,
+    -0.98481,
+    0.0,
+    1.0,
+    0.0,
+    0.98481,
+    0.0,
+    0.17365
+   ],
+   "bbox_center_roblox_studs": [
+    -30.001,
+    1.2,
+    31.996
+   ]
+  },
+  {
+   "name": "PROP_PlankStack_P02__WoodDark",
+   "category": "PROPS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_PROPS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_PROPS.fbx",
+   "material": "MAT_WoodDark",
+   "triangles_pc": 88,
+   "triangles_mobile": 88,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    -30.0,
+    0.0,
+    32.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.17365,
+    0.0,
+    -0.98481,
+    0.0,
+    1.0,
+    0.0,
+    0.98481,
+    0.0,
+    0.17365
+   ],
+   "bbox_center_roblox_studs": [
+    -30.001,
+    1.2,
+    31.996
+   ]
+  },
+  {
+   "name": "PROP_PlankStack_P02__WoodLight",
+   "category": "PROPS",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_PROPS.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_PROPS.fbx",
+   "material": "MAT_WoodLight",
+   "triangles_pc": 220,
+   "triangles_mobile": 132,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    -30.0,
+    0.0,
+    32.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.17365,
+    0.0,
+    -0.98481,
+    0.0,
+    1.0,
+    0.0,
+    0.98481,
+    0.0,
+    0.17365
+   ],
+   "bbox_center_roblox_studs": [
+    -30.001,
+    1.2,
+    31.996
+   ]
+  },
+  {
+   "name": "TREE_Oak_Foliage_P02__LeafDark",
+   "category": "TREES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_TREES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_TREES.fbx",
+   "material": "MAT_LeafDark",
+   "triangles_pc": 960,
+   "triangles_mobile": 480,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -65.461,
+    24.0,
+    94.771
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    -0.93969,
+    0.0,
+    -0.34202,
+    0.0,
+    1.0,
+    0.0,
+    0.34202,
+    0.0,
+    -0.93969
+   ],
+   "bbox_center_roblox_studs": [
+    -67.887,
+    43.746,
+    92.908
+   ]
+  },
+  {
+   "name": "TREE_Oak_Foliage_P02__LeafLight",
+   "category": "TREES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_TREES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_TREES.fbx",
+   "material": "MAT_LeafLight",
+   "triangles_pc": 1280,
+   "triangles_mobile": 640,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -65.461,
+    24.0,
+    94.771
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    -0.93969,
+    0.0,
+    -0.34202,
+    0.0,
+    1.0,
+    0.0,
+    0.34202,
+    0.0,
+    -0.93969
+   ],
+   "bbox_center_roblox_studs": [
+    -67.887,
+    43.746,
+    92.908
+   ]
+  },
+  {
+   "name": "TREE_Oak_Foliage_P02__LeafMid",
+   "category": "TREES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_TREES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_TREES.fbx",
+   "material": "MAT_LeafMid",
+   "triangles_pc": 640,
+   "triangles_mobile": 320,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -65.461,
+    24.0,
+    94.771
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    -0.93969,
+    0.0,
+    -0.34202,
+    0.0,
+    1.0,
+    0.0,
+    0.34202,
+    0.0,
+    -0.93969
+   ],
+   "bbox_center_roblox_studs": [
+    -67.887,
+    43.746,
+    92.908
+   ]
+  },
+  {
+   "name": "TREE_Oak_Foliage_P03__LeafDark",
+   "category": "TREES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_TREES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_TREES.fbx",
+   "material": "MAT_LeafDark",
+   "triangles_pc": 960,
+   "triangles_mobile": 480,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -21.34,
+    24.0,
+    113.914
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.64279,
+    0.0,
+    -0.76604,
+    0.0,
+    1.0,
+    0.0,
+    0.76604,
+    0.0,
+    0.64279
+   ],
+   "bbox_center_roblox_studs": [
+    -22.26,
+    43.746,
+    116.831
+   ]
+  },
+  {
+   "name": "TREE_Oak_Foliage_P03__LeafLight",
+   "category": "TREES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_TREES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_TREES.fbx",
+   "material": "MAT_LeafLight",
+   "triangles_pc": 1280,
+   "triangles_mobile": 640,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -21.34,
+    24.0,
+    113.914
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.64279,
+    0.0,
+    -0.76604,
+    0.0,
+    1.0,
+    0.0,
+    0.76604,
+    0.0,
+    0.64279
+   ],
+   "bbox_center_roblox_studs": [
+    -22.26,
+    43.746,
+    116.831
+   ]
+  },
+  {
+   "name": "TREE_Oak_Foliage_P03__LeafMid",
+   "category": "TREES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_TREES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_TREES.fbx",
+   "material": "MAT_LeafMid",
+   "triangles_pc": 640,
+   "triangles_mobile": 320,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -21.34,
+    24.0,
+    113.914
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.64279,
+    0.0,
+    -0.76604,
+    0.0,
+    1.0,
+    0.0,
+    0.76604,
+    0.0,
+    0.64279
+   ],
+   "bbox_center_roblox_studs": [
+    -22.26,
+    43.746,
+    116.831
+   ]
+  },
+  {
+   "name": "TREE_Oak_Foliage__LeafDark",
+   "category": "TREES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_TREES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_TREES.fbx",
+   "material": "MAT_LeafDark",
+   "triangles_pc": 960,
+   "triangles_mobile": 480,
+   "collision": "None",
+   "origin_roblox_studs": [
+    61.461,
+    24.0,
+    73.229
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.93969,
+    0.0,
+    0.34202,
+    0.0,
+    1.0,
+    0.0,
+    -0.34202,
+    0.0,
+    0.93969
+   ],
+   "bbox_center_roblox_studs": [
+    63.887,
+    43.746,
+    75.092
+   ]
+  },
+  {
+   "name": "TREE_Oak_Foliage__LeafLight",
+   "category": "TREES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_TREES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_TREES.fbx",
+   "material": "MAT_LeafLight",
+   "triangles_pc": 1280,
+   "triangles_mobile": 640,
+   "collision": "None",
+   "origin_roblox_studs": [
+    61.461,
+    24.0,
+    73.229
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.93969,
+    0.0,
+    0.34202,
+    0.0,
+    1.0,
+    0.0,
+    -0.34202,
+    0.0,
+    0.93969
+   ],
+   "bbox_center_roblox_studs": [
+    63.887,
+    43.746,
+    75.092
+   ]
+  },
+  {
+   "name": "TREE_Oak_Foliage__LeafMid",
+   "category": "TREES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_TREES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_TREES.fbx",
+   "material": "MAT_LeafMid",
+   "triangles_pc": 640,
+   "triangles_mobile": 320,
+   "collision": "None",
+   "origin_roblox_studs": [
+    61.461,
+    24.0,
+    73.229
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.93969,
+    0.0,
+    0.34202,
+    0.0,
+    1.0,
+    0.0,
+    -0.34202,
+    0.0,
+    0.93969
+   ],
+   "bbox_center_roblox_studs": [
+    63.887,
+    43.746,
+    75.092
+   ]
+  },
+  {
+   "name": "TREE_Oak_Trunk",
+   "category": "TREES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_TREES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_TREES.fbx",
+   "material": "MAT_Bark",
+   "triangles_pc": 488,
+   "triangles_mobile": 244,
+   "collision": "None",
+   "origin_roblox_studs": [
+    62.0,
+    0.0,
+    72.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.93969,
+    0.0,
+    0.34202,
+    0.0,
+    1.0,
+    0.0,
+    -0.34202,
+    0.0,
+    0.93969
+   ],
+   "bbox_center_roblox_studs": [
+    61.958,
+    17.856,
+    72.015
+   ]
+  },
+  {
+   "name": "TREE_Oak_Trunk_P02",
+   "category": "TREES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_TREES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_TREES.fbx",
+   "material": "MAT_Bark",
+   "triangles_pc": 488,
+   "triangles_mobile": 244,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -66.0,
+    0.0,
+    96.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    -0.93969,
+    0.0,
+    -0.34202,
+    0.0,
+    1.0,
+    0.0,
+    0.34202,
+    0.0,
+    -0.93969
+   ],
+   "bbox_center_roblox_studs": [
+    -65.958,
+    17.856,
+    95.985
+   ]
+  },
+  {
+   "name": "TREE_Oak_Trunk_P03",
+   "category": "TREES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_TREES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_TREES.fbx",
+   "material": "MAT_Bark",
+   "triangles_pc": 488,
+   "triangles_mobile": 244,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -20.0,
+    0.0,
+    114.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.64279,
+    0.0,
+    -0.76604,
+    0.0,
+    1.0,
+    0.0,
+    0.76604,
+    0.0,
+    0.64279
+   ],
+   "bbox_center_roblox_studs": [
+    -20.029,
+    17.856,
+    113.966
+   ]
+  },
+  {
+   "name": "TREE_Round_Foliage_P02__LeafDark",
+   "category": "TREES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_TREES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_TREES.fbx",
+   "material": "MAT_LeafDark",
+   "triangles_pc": 320,
+   "triangles_mobile": 160,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -68.968,
+    20.8,
+    33.064
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.86603,
+    0.0,
+    0.5,
+    0.0,
+    1.0,
+    0.0,
+    -0.5,
+    0.0,
+    0.86603
+   ],
+   "bbox_center_roblox_studs": [
+    -65.894,
+    34.45,
+    32.832
+   ]
+  },
+  {
+   "name": "TREE_Round_Foliage_P02__LeafLight",
+   "category": "TREES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_TREES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_TREES.fbx",
+   "material": "MAT_LeafLight",
+   "triangles_pc": 960,
+   "triangles_mobile": 480,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -68.968,
+    20.8,
+    33.064
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.86603,
+    0.0,
+    0.5,
+    0.0,
+    1.0,
+    0.0,
+    -0.5,
+    0.0,
+    0.86603
+   ],
+   "bbox_center_roblox_studs": [
+    -65.894,
+    34.45,
+    32.832
+   ]
+  },
+  {
+   "name": "TREE_Round_Foliage_P02__LeafMid",
+   "category": "TREES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_TREES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_TREES.fbx",
+   "material": "MAT_LeafMid",
+   "triangles_pc": 960,
+   "triangles_mobile": 480,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -68.968,
+    20.8,
+    33.064
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.86603,
+    0.0,
+    0.5,
+    0.0,
+    1.0,
+    0.0,
+    -0.5,
+    0.0,
+    0.86603
+   ],
+   "bbox_center_roblox_studs": [
+    -65.894,
+    34.45,
+    32.832
+   ]
+  },
+  {
+   "name": "TREE_Round_Foliage_P03__LeafDark",
+   "category": "TREES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_TREES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_TREES.fbx",
+   "material": "MAT_LeafDark",
+   "triangles_pc": 320,
+   "triangles_mobile": 160,
+   "collision": "None",
+   "origin_roblox_studs": [
+    24.694,
+    20.8,
+    109.674
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.5,
+    0.0,
+    0.86603,
+    0.0,
+    1.0,
+    0.0,
+    -0.86603,
+    0.0,
+    0.5
+   ],
+   "bbox_center_roblox_studs": [
+    27.24,
+    34.45,
+    107.936
+   ]
+  },
+  {
+   "name": "TREE_Round_Foliage_P03__LeafLight",
+   "category": "TREES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_TREES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_TREES.fbx",
+   "material": "MAT_LeafLight",
+   "triangles_pc": 960,
+   "triangles_mobile": 480,
+   "collision": "None",
+   "origin_roblox_studs": [
+    24.694,
+    20.8,
+    109.674
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.5,
+    0.0,
+    0.86603,
+    0.0,
+    1.0,
+    0.0,
+    -0.86603,
+    0.0,
+    0.5
+   ],
+   "bbox_center_roblox_studs": [
+    27.24,
+    34.45,
+    107.936
+   ]
+  },
+  {
+   "name": "TREE_Round_Foliage_P03__LeafMid",
+   "category": "TREES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_TREES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_TREES.fbx",
+   "material": "MAT_LeafMid",
+   "triangles_pc": 960,
+   "triangles_mobile": 480,
+   "collision": "None",
+   "origin_roblox_studs": [
+    24.694,
+    20.8,
+    109.674
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.5,
+    0.0,
+    0.86603,
+    0.0,
+    1.0,
+    0.0,
+    -0.86603,
+    0.0,
+    0.5
+   ],
+   "bbox_center_roblox_studs": [
+    27.24,
+    34.45,
+    107.936
+   ]
+  },
+  {
+   "name": "TREE_Round_Foliage__LeafDark",
+   "category": "TREES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_TREES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_TREES.fbx",
+   "material": "MAT_LeafDark",
+   "triangles_pc": 320,
+   "triangles_mobile": 160,
+   "collision": "None",
+   "origin_roblox_studs": [
+    65.452,
+    20.8,
+    31.23
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    -0.76604,
+    0.0,
+    0.64279,
+    0.0,
+    1.0,
+    0.0,
+    -0.64279,
+    0.0,
+    -0.76604
+   ],
+   "bbox_center_roblox_studs": [
+    64.183,
+    34.45,
+    28.421
+   ]
+  },
+  {
+   "name": "TREE_Round_Foliage__LeafLight",
+   "category": "TREES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_TREES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_TREES.fbx",
+   "material": "MAT_LeafLight",
+   "triangles_pc": 960,
+   "triangles_mobile": 480,
+   "collision": "None",
+   "origin_roblox_studs": [
+    65.452,
+    20.8,
+    31.23
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    -0.76604,
+    0.0,
+    0.64279,
+    0.0,
+    1.0,
+    0.0,
+    -0.64279,
+    0.0,
+    -0.76604
+   ],
+   "bbox_center_roblox_studs": [
+    64.183,
+    34.45,
+    28.421
+   ]
+  },
+  {
+   "name": "TREE_Round_Foliage__LeafMid",
+   "category": "TREES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_TREES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_TREES.fbx",
+   "material": "MAT_LeafMid",
+   "triangles_pc": 960,
+   "triangles_mobile": 480,
+   "collision": "None",
+   "origin_roblox_studs": [
+    65.452,
+    20.8,
+    31.23
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    -0.76604,
+    0.0,
+    0.64279,
+    0.0,
+    1.0,
+    0.0,
+    -0.64279,
+    0.0,
+    -0.76604
+   ],
+   "bbox_center_roblox_studs": [
+    64.183,
+    34.45,
+    28.421
+   ]
+  },
+  {
+   "name": "TREE_Round_Trunk",
+   "category": "TREES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_TREES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_TREES.fbx",
+   "material": "MAT_Bark",
+   "triangles_pc": 488,
+   "triangles_mobile": 244,
+   "collision": "None",
+   "origin_roblox_studs": [
+    66.0,
+    0.0,
+    30.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    -0.76604,
+    0.0,
+    0.64279,
+    0.0,
+    1.0,
+    0.0,
+    -0.64279,
+    0.0,
+    -0.76604
+   ],
+   "bbox_center_roblox_studs": [
+    66.0,
+    14.842,
+    30.0
+   ]
+  },
+  {
+   "name": "TREE_Round_Trunk_P02",
+   "category": "TREES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_TREES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_TREES.fbx",
+   "material": "MAT_Bark",
+   "triangles_pc": 488,
+   "triangles_mobile": 244,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -68.0,
+    0.0,
+    34.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.86603,
+    0.0,
+    0.5,
+    0.0,
+    1.0,
+    0.0,
+    -0.5,
+    0.0,
+    0.86603
+   ],
+   "bbox_center_roblox_studs": [
+    -68.0,
+    14.842,
+    34.0
+   ]
+  },
+  {
+   "name": "TREE_Round_Trunk_P03",
+   "category": "TREES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_TREES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_TREES.fbx",
+   "material": "MAT_Bark",
+   "triangles_pc": 488,
+   "triangles_mobile": 244,
+   "collision": "None",
+   "origin_roblox_studs": [
+    26.0,
+    0.0,
+    110.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.5,
+    0.0,
+    0.86603,
+    0.0,
+    1.0,
+    0.0,
+    -0.86603,
+    0.0,
+    0.5
+   ],
+   "bbox_center_roblox_studs": [
+    26.0,
+    14.842,
+    110.0
+   ]
+  },
+  {
+   "name": "TREE_Tall_Foliage_P02__LeafDark",
+   "category": "TREES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_TREES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_TREES.fbx",
+   "material": "MAT_LeafDark",
+   "triangles_pc": 320,
+   "triangles_mobile": 160,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -60.31,
+    30.4,
+    59.733
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.17365,
+    0.0,
+    0.98481,
+    0.0,
+    1.0,
+    0.0,
+    -0.98481,
+    0.0,
+    0.17365
+   ],
+   "bbox_center_roblox_studs": [
+    -62.357,
+    51.836,
+    60.222
+   ]
+  },
+  {
+   "name": "TREE_Tall_Foliage_P02__LeafLight",
+   "category": "TREES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_TREES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_TREES.fbx",
+   "material": "MAT_LeafLight",
+   "triangles_pc": 960,
+   "triangles_mobile": 480,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -60.31,
+    30.4,
+    59.733
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.17365,
+    0.0,
+    0.98481,
+    0.0,
+    1.0,
+    0.0,
+    -0.98481,
+    0.0,
+    0.17365
+   ],
+   "bbox_center_roblox_studs": [
+    -62.357,
+    51.836,
+    60.222
+   ]
+  },
+  {
+   "name": "TREE_Tall_Foliage_P02__LeafMid",
+   "category": "TREES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_TREES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_TREES.fbx",
+   "material": "MAT_LeafMid",
+   "triangles_pc": 640,
+   "triangles_mobile": 320,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -60.31,
+    30.4,
+    59.733
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.17365,
+    0.0,
+    0.98481,
+    0.0,
+    1.0,
+    0.0,
+    -0.98481,
+    0.0,
+    0.17365
+   ],
+   "bbox_center_roblox_studs": [
+    -62.357,
+    51.836,
+    60.222
+   ]
+  },
+  {
+   "name": "TREE_Tall_Foliage__LeafDark",
+   "category": "TREES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_TREES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_TREES.fbx",
+   "material": "MAT_LeafDark",
+   "triangles_pc": 320,
+   "triangles_mobile": 160,
+   "collision": "None",
+   "origin_roblox_studs": [
+    58.289,
+    30.4,
+    103.969
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    -0.34202,
+    0.0,
+    -0.93969,
+    0.0,
+    1.0,
+    0.0,
+    0.93969,
+    0.0,
+    -0.34202
+   ],
+   "bbox_center_roblox_studs": [
+    60.39,
+    51.836,
+    103.843
+   ]
+  },
+  {
+   "name": "TREE_Tall_Foliage__LeafLight",
+   "category": "TREES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_TREES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_TREES.fbx",
+   "material": "MAT_LeafLight",
+   "triangles_pc": 960,
+   "triangles_mobile": 480,
+   "collision": "None",
+   "origin_roblox_studs": [
+    58.289,
+    30.4,
+    103.969
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    -0.34202,
+    0.0,
+    -0.93969,
+    0.0,
+    1.0,
+    0.0,
+    0.93969,
+    0.0,
+    -0.34202
+   ],
+   "bbox_center_roblox_studs": [
+    60.39,
+    51.836,
+    103.843
+   ]
+  },
+  {
+   "name": "TREE_Tall_Foliage__LeafMid",
+   "category": "TREES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_TREES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_TREES.fbx",
+   "material": "MAT_LeafMid",
+   "triangles_pc": 640,
+   "triangles_mobile": 320,
+   "collision": "None",
+   "origin_roblox_studs": [
+    58.289,
+    30.4,
+    103.969
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    -0.34202,
+    0.0,
+    -0.93969,
+    0.0,
+    1.0,
+    0.0,
+    0.93969,
+    0.0,
+    -0.34202
+   ],
+   "bbox_center_roblox_studs": [
+    60.39,
+    51.836,
+    103.843
+   ]
+  },
+  {
+   "name": "TREE_Tall_Trunk",
+   "category": "TREES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_TREES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_TREES.fbx",
+   "material": "MAT_Bark",
+   "triangles_pc": 488,
+   "triangles_mobile": 244,
+   "collision": "None",
+   "origin_roblox_studs": [
+    60.0,
+    0.0,
+    104.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    -0.34202,
+    0.0,
+    -0.93969,
+    0.0,
+    1.0,
+    0.0,
+    0.93969,
+    0.0,
+    -0.34202
+   ],
+   "bbox_center_roblox_studs": [
+    60.0,
+    23.448,
+    104.0
+   ]
+  },
+  {
+   "name": "TREE_Tall_Trunk_P02",
+   "category": "TREES",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_TREES.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_TREES.fbx",
+   "material": "MAT_Bark",
+   "triangles_pc": 488,
+   "triangles_mobile": 244,
+   "collision": "None",
+   "origin_roblox_studs": [
+    -62.0,
+    0.0,
+    60.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    0.17365,
+    0.0,
+    0.98481,
+    0.0,
+    1.0,
+    0.0,
+    -0.98481,
+    0.0,
+    0.17365
+   ],
+   "bbox_center_roblox_studs": [
+    -62.0,
+    23.448,
+    60.0
+   ]
+  },
+  {
+   "name": "SCAFFOLD_Left_Deck__SteelDark",
+   "category": "WOOD",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_WOOD.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_WOOD.fbx",
+   "material": "MAT_SteelDark",
+   "triangles_pc": 200,
+   "triangles_mobile": 120,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    32.0,
+    0.0,
+    62.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    31.986,
+    15.167,
+    62.0
+   ]
+  },
+  {
+   "name": "SCAFFOLD_Left_Deck__WoodDark",
+   "category": "WOOD",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_WOOD.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_WOOD.fbx",
+   "material": "MAT_WoodDark",
+   "triangles_pc": 176,
+   "triangles_mobile": 104,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    32.0,
+    0.0,
+    62.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    31.986,
+    15.167,
+    62.0
+   ]
+  },
+  {
+   "name": "SCAFFOLD_Left_Deck__WoodLight",
+   "category": "WOOD",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_WOOD.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_WOOD.fbx",
+   "material": "MAT_WoodLight",
+   "triangles_pc": 220,
+   "triangles_mobile": 132,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    32.0,
+    0.0,
+    62.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    31.986,
+    15.167,
+    62.0
+   ]
+  },
+  {
+   "name": "SCAFFOLD_Left_Frame__Rope",
+   "category": "WOOD",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_WOOD.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_WOOD.fbx",
+   "material": "MAT_Rope",
+   "triangles_pc": 288,
+   "triangles_mobile": 172,
+   "collision": "Default",
+   "origin_roblox_studs": [
+    32.0,
+    0.0,
+    62.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    32.0,
+    11.002,
+    62.0
+   ]
+  },
+  {
+   "name": "SCAFFOLD_Left_Frame__SteelDark",
+   "category": "WOOD",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_WOOD.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_WOOD.fbx",
+   "material": "MAT_SteelDark",
+   "triangles_pc": 240,
+   "triangles_mobile": 144,
+   "collision": "Default",
+   "origin_roblox_studs": [
+    32.0,
+    0.0,
+    62.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    32.0,
+    11.002,
+    62.0
+   ]
+  },
+  {
+   "name": "SCAFFOLD_Left_Frame__WoodDark",
+   "category": "WOOD",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_WOOD.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_WOOD.fbx",
+   "material": "MAT_WoodDark",
+   "triangles_pc": 1320,
+   "triangles_mobile": 792,
+   "collision": "Default",
+   "origin_roblox_studs": [
+    32.0,
+    0.0,
+    62.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    32.0,
+    11.002,
+    62.0
+   ]
+  },
+  {
+   "name": "SCAFFOLD_Right_Deck__SteelDark",
+   "category": "WOOD",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_WOOD.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_WOOD.fbx",
+   "material": "MAT_SteelDark",
+   "triangles_pc": 200,
+   "triangles_mobile": 120,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    -30.0,
+    0.0,
+    62.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    -29.944,
+    20.171,
+    62.0
+   ]
+  },
+  {
+   "name": "SCAFFOLD_Right_Deck__WoodDark",
+   "category": "WOOD",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_WOOD.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_WOOD.fbx",
+   "material": "MAT_WoodDark",
+   "triangles_pc": 176,
+   "triangles_mobile": 104,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    -30.0,
+    0.0,
+    62.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    -29.944,
+    20.171,
+    62.0
+   ]
+  },
+  {
+   "name": "SCAFFOLD_Right_Deck__WoodLight",
+   "category": "WOOD",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_WOOD.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_WOOD.fbx",
+   "material": "MAT_WoodLight",
+   "triangles_pc": 220,
+   "triangles_mobile": 132,
+   "collision": "Box",
+   "origin_roblox_studs": [
+    -30.0,
+    0.0,
+    62.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    -29.944,
+    20.171,
+    62.0
+   ]
+  },
+  {
+   "name": "SCAFFOLD_Right_Frame__Rope",
+   "category": "WOOD",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_WOOD.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_WOOD.fbx",
+   "material": "MAT_Rope",
+   "triangles_pc": 288,
+   "triangles_mobile": 172,
+   "collision": "Default",
+   "origin_roblox_studs": [
+    -30.0,
+    0.0,
+    62.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    -30.0,
+    13.002,
+    62.0
+   ]
+  },
+  {
+   "name": "SCAFFOLD_Right_Frame__SteelDark",
+   "category": "WOOD",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_WOOD.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_WOOD.fbx",
+   "material": "MAT_SteelDark",
+   "triangles_pc": 240,
+   "triangles_mobile": 144,
+   "collision": "Default",
+   "origin_roblox_studs": [
+    -30.0,
+    0.0,
+    62.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    -30.0,
+    13.002,
+    62.0
+   ]
+  },
+  {
+   "name": "SCAFFOLD_Right_Frame__WoodDark",
+   "category": "WOOD",
+   "file_pc": "MODELS_FBX/PC/BoomBattle_WOOD.fbx",
+   "file_mobile": "MODELS_FBX/MOBILE/BoomBattle_WOOD.fbx",
+   "material": "MAT_WoodDark",
+   "triangles_pc": 1320,
+   "triangles_mobile": 792,
+   "collision": "Default",
+   "origin_roblox_studs": [
+    -30.0,
+    0.0,
+    62.0
+   ],
+   "rotation_roblox_3x3_rowmajor": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "bbox_center_roblox_studs": [
+    -30.0,
+    13.002,
+    62.0
+   ]
+  }
+ ],
+ "scale_note": "FBX files are written at 1/100 scale; Studio's importer multiplies by 100, giving 1 Blender unit = 1 stud."
+}

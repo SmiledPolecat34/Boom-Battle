@@ -1,0 +1,1452 @@
+{
+ "grid": {
+  "cell_studs": 4.0,
+  "unit": "1 unité Blender = 1 stud",
+  "origin_rule": "Origine de chaque modèle = centre de la case, sol (face haute des tuiles) à y=0. Les tuiles de sol sont sous y=0, tout le reste est posé dessus.",
+  "checker_pair": [
+   "BB_FLOOR_01_Grass",
+   "BB_FLOOR_08_GrassDark"
+  ],
+  "footprint_studs": {
+   "floor": 4.0,
+   "wall_indestructible": 3.84,
+   "obstacle_destructible": 3.6,
+   "decor_ground": "<1.4"
+  },
+  "axes": "Roblox = (-x, z, y) depuis Blender (constaté sur l'arène). pivot_offset_roblox_studs = position de l'origine Blender par rapport au centre de la boîte englobante, en axes Roblox.",
+  "fbx_scale": "FBX écrits à 1/100 (global_scale 0.01), comme l'export de l'arène",
+  "tested_in_studio": false
+ },
+ "assets": [
+  {
+   "name": "BB_FLOOR_01_Grass",
+   "category": "floor",
+   "weight": 6,
+   "desc": "Herbe claire + touffes",
+   "destructible": false,
+   "blocks_explosion": false,
+   "blocks_movement": false,
+   "collision": {
+    "CanCollide": true,
+    "CanQuery": true,
+    "CanTouch": true,
+    "CollisionFidelity": "Box"
+   },
+   "tris_pc": 172,
+   "tris_mobile": 140,
+   "fbx_pc": "MODELS_FBX/MODULAR_MAP/PC/BB_FLOOR_01_Grass.fbx",
+   "fbx_mobile": "MODELS_FBX/MODULAR_MAP/MOBILE/BB_FLOOR_01_Grass.fbx",
+   "texture_pc": "TEXTURES_PNG/MODULAR_MAP/BB_FLOOR_01_Grass_albedo.png",
+   "texture_mobile": "TEXTURES_PNG/MODULAR_MAP/MOBILE_256/BB_FLOOR_01_Grass_albedo_256.png",
+   "pc": {
+    "size_studs": [
+     4.0,
+     0.954,
+     4.0
+    ],
+    "bbox_center_roblox_studs": [
+     -0.0,
+     -0.023,
+     0.0
+    ],
+    "pivot_offset_roblox_studs": [
+     0.0,
+     0.023,
+     -0.0
+    ]
+   },
+   "mobile": {
+    "size_studs": [
+     4.0,
+     0.954,
+     4.0
+    ],
+    "bbox_center_roblox_studs": [
+     -0.0,
+     -0.023,
+     0.0
+    ],
+    "pivot_offset_roblox_studs": [
+     0.0,
+     0.023,
+     -0.0
+    ]
+   }
+  },
+  {
+   "name": "BB_FLOOR_02_GrassFlowers",
+   "category": "floor",
+   "weight": 2,
+   "desc": "Herbe claire + fleurs blanches",
+   "destructible": false,
+   "blocks_explosion": false,
+   "blocks_movement": false,
+   "collision": {
+    "CanCollide": true,
+    "CanQuery": true,
+    "CanTouch": true,
+    "CollisionFidelity": "Box"
+   },
+   "tris_pc": 592,
+   "tris_mobile": 140,
+   "fbx_pc": "MODELS_FBX/MODULAR_MAP/PC/BB_FLOOR_02_GrassFlowers.fbx",
+   "fbx_mobile": "MODELS_FBX/MODULAR_MAP/MOBILE/BB_FLOOR_02_GrassFlowers.fbx",
+   "texture_pc": "TEXTURES_PNG/MODULAR_MAP/BB_FLOOR_02_GrassFlowers_albedo.png",
+   "texture_mobile": "TEXTURES_PNG/MODULAR_MAP/MOBILE_256/BB_FLOOR_02_GrassFlowers_albedo_256.png",
+   "pc": {
+    "size_studs": [
+     4.0,
+     0.963,
+     4.0
+    ],
+    "bbox_center_roblox_studs": [
+     -0.0,
+     -0.018,
+     0.0
+    ],
+    "pivot_offset_roblox_studs": [
+     0.0,
+     0.018,
+     -0.0
+    ]
+   },
+   "mobile": {
+    "size_studs": [
+     3.935,
+     0.963,
+     3.935
+    ],
+    "bbox_center_roblox_studs": [
+     -0.0,
+     -0.018,
+     0.0
+    ],
+    "pivot_offset_roblox_studs": [
+     0.0,
+     0.018,
+     -0.0
+    ]
+   }
+  },
+  {
+   "name": "BB_FLOOR_03_Sand",
+   "category": "floor",
+   "weight": 2,
+   "desc": "Terre orange + cailloux",
+   "destructible": false,
+   "blocks_explosion": false,
+   "blocks_movement": false,
+   "collision": {
+    "CanCollide": true,
+    "CanQuery": true,
+    "CanTouch": true,
+    "CollisionFidelity": "Box"
+   },
+   "tris_pc": 236,
+   "tris_mobile": 140,
+   "fbx_pc": "MODELS_FBX/MODULAR_MAP/PC/BB_FLOOR_03_Sand.fbx",
+   "fbx_mobile": "MODELS_FBX/MODULAR_MAP/MOBILE/BB_FLOOR_03_Sand.fbx",
+   "texture_pc": "TEXTURES_PNG/MODULAR_MAP/BB_FLOOR_03_Sand_albedo.png",
+   "texture_mobile": "TEXTURES_PNG/MODULAR_MAP/MOBILE_256/BB_FLOOR_03_Sand_albedo_256.png",
+   "pc": {
+    "size_studs": [
+     4.0,
+     0.632,
+     4.0
+    ],
+    "bbox_center_roblox_studs": [
+     -0.0,
+     -0.184,
+     0.0
+    ],
+    "pivot_offset_roblox_studs": [
+     0.0,
+     0.184,
+     -0.0
+    ]
+   },
+   "mobile": {
+    "size_studs": [
+     3.953,
+     0.632,
+     3.953
+    ],
+    "bbox_center_roblox_studs": [
+     -0.0,
+     -0.184,
+     0.0
+    ],
+    "pivot_offset_roblox_studs": [
+     0.0,
+     0.184,
+     -0.0
+    ]
+   }
+  },
+  {
+   "name": "BB_FLOOR_04_DirtCracked",
+   "category": "floor",
+   "weight": 1,
+   "desc": "Terre brune fissurée",
+   "destructible": false,
+   "blocks_explosion": false,
+   "blocks_movement": false,
+   "collision": {
+    "CanCollide": true,
+    "CanQuery": true,
+    "CanTouch": true,
+    "CollisionFidelity": "Box"
+   },
+   "tris_pc": 240,
+   "tris_mobile": 140,
+   "fbx_pc": "MODELS_FBX/MODULAR_MAP/PC/BB_FLOOR_04_DirtCracked.fbx",
+   "fbx_mobile": "MODELS_FBX/MODULAR_MAP/MOBILE/BB_FLOOR_04_DirtCracked.fbx",
+   "texture_pc": "TEXTURES_PNG/MODULAR_MAP/BB_FLOOR_04_DirtCracked_albedo.png",
+   "texture_mobile": "TEXTURES_PNG/MODULAR_MAP/MOBILE_256/BB_FLOOR_04_DirtCracked_albedo_256.png",
+   "pc": {
+    "size_studs": [
+     4.0,
+     0.627,
+     4.0
+    ],
+    "bbox_center_roblox_studs": [
+     -0.0,
+     -0.187,
+     0.0
+    ],
+    "pivot_offset_roblox_studs": [
+     0.0,
+     0.187,
+     -0.0
+    ]
+   },
+   "mobile": {
+    "size_studs": [
+     3.953,
+     0.627,
+     3.953
+    ],
+    "bbox_center_roblox_studs": [
+     -0.0,
+     -0.187,
+     0.0
+    ],
+    "pivot_offset_roblox_studs": [
+     0.0,
+     0.187,
+     -0.0
+    ]
+   }
+  },
+  {
+   "name": "BB_FLOOR_05_SandRocks",
+   "category": "floor",
+   "weight": 1,
+   "desc": "Terre orange + rochers",
+   "destructible": false,
+   "blocks_explosion": false,
+   "blocks_movement": false,
+   "collision": {
+    "CanCollide": true,
+    "CanQuery": true,
+    "CanTouch": true,
+    "CollisionFidelity": "Box"
+   },
+   "tris_pc": 216,
+   "tris_mobile": 140,
+   "fbx_pc": "MODELS_FBX/MODULAR_MAP/PC/BB_FLOOR_05_SandRocks.fbx",
+   "fbx_mobile": "MODELS_FBX/MODULAR_MAP/MOBILE/BB_FLOOR_05_SandRocks.fbx",
+   "texture_pc": "TEXTURES_PNG/MODULAR_MAP/BB_FLOOR_05_SandRocks_albedo.png",
+   "texture_mobile": "TEXTURES_PNG/MODULAR_MAP/MOBILE_256/BB_FLOOR_05_SandRocks_albedo_256.png",
+   "pc": {
+    "size_studs": [
+     4.0,
+     1.319,
+     4.0
+    ],
+    "bbox_center_roblox_studs": [
+     -0.0,
+     0.16,
+     0.0
+    ],
+    "pivot_offset_roblox_studs": [
+     0.0,
+     -0.16,
+     -0.0
+    ]
+   },
+   "mobile": {
+    "size_studs": [
+     3.953,
+     1.319,
+     3.953
+    ],
+    "bbox_center_roblox_studs": [
+     -0.0,
+     0.16,
+     0.0
+    ],
+    "pivot_offset_roblox_studs": [
+     0.0,
+     -0.16,
+     -0.0
+    ]
+   }
+  },
+  {
+   "name": "BB_FLOOR_06_Cobble",
+   "category": "floor",
+   "weight": 1,
+   "desc": "Pavés de pierre 3x3",
+   "destructible": false,
+   "blocks_explosion": false,
+   "blocks_movement": false,
+   "collision": {
+    "CanCollide": true,
+    "CanQuery": true,
+    "CanTouch": true,
+    "CollisionFidelity": "Box"
+   },
+   "tris_pc": 400,
+   "tris_mobile": 140,
+   "fbx_pc": "MODELS_FBX/MODULAR_MAP/PC/BB_FLOOR_06_Cobble.fbx",
+   "fbx_mobile": "MODELS_FBX/MODULAR_MAP/MOBILE/BB_FLOOR_06_Cobble.fbx",
+   "texture_pc": "TEXTURES_PNG/MODULAR_MAP/BB_FLOOR_06_Cobble_albedo.png",
+   "texture_mobile": "TEXTURES_PNG/MODULAR_MAP/MOBILE_256/BB_FLOOR_06_Cobble_albedo_256.png",
+   "pc": {
+    "size_studs": [
+     4.0,
+     0.64,
+     4.0
+    ],
+    "bbox_center_roblox_studs": [
+     -0.0,
+     -0.18,
+     0.0
+    ],
+    "pivot_offset_roblox_studs": [
+     0.0,
+     0.18,
+     -0.0
+    ]
+   },
+   "mobile": {
+    "size_studs": [
+     3.953,
+     0.64,
+     3.953
+    ],
+    "bbox_center_roblox_studs": [
+     -0.0,
+     -0.18,
+     0.0
+    ],
+    "pivot_offset_roblox_studs": [
+     0.0,
+     0.18,
+     -0.0
+    ]
+   }
+  },
+  {
+   "name": "BB_FLOOR_07_GrassDirtMix",
+   "category": "floor",
+   "weight": 2,
+   "desc": "Herbe + plaques de terre",
+   "destructible": false,
+   "blocks_explosion": false,
+   "blocks_movement": false,
+   "collision": {
+    "CanCollide": true,
+    "CanQuery": true,
+    "CanTouch": true,
+    "CollisionFidelity": "Box"
+   },
+   "tris_pc": 208,
+   "tris_mobile": 140,
+   "fbx_pc": "MODELS_FBX/MODULAR_MAP/PC/BB_FLOOR_07_GrassDirtMix.fbx",
+   "fbx_mobile": "MODELS_FBX/MODULAR_MAP/MOBILE/BB_FLOOR_07_GrassDirtMix.fbx",
+   "texture_pc": "TEXTURES_PNG/MODULAR_MAP/BB_FLOOR_07_GrassDirtMix_albedo.png",
+   "texture_mobile": "TEXTURES_PNG/MODULAR_MAP/MOBILE_256/BB_FLOOR_07_GrassDirtMix_albedo_256.png",
+   "pc": {
+    "size_studs": [
+     4.0,
+     0.952,
+     4.0
+    ],
+    "bbox_center_roblox_studs": [
+     -0.0,
+     -0.024,
+     0.0
+    ],
+    "pivot_offset_roblox_studs": [
+     0.0,
+     0.024,
+     -0.0
+    ]
+   },
+   "mobile": {
+    "size_studs": [
+     3.953,
+     0.952,
+     4.0
+    ],
+    "bbox_center_roblox_studs": [
+     -0.0,
+     -0.024,
+     0.0
+    ],
+    "pivot_offset_roblox_studs": [
+     0.0,
+     0.024,
+     -0.0
+    ]
+   }
+  },
+  {
+   "name": "BB_FLOOR_08_GrassDark",
+   "category": "floor",
+   "weight": 6,
+   "desc": "Herbe foncée (alternance damier)",
+   "destructible": false,
+   "blocks_explosion": false,
+   "blocks_movement": false,
+   "collision": {
+    "CanCollide": true,
+    "CanQuery": true,
+    "CanTouch": true,
+    "CollisionFidelity": "Box"
+   },
+   "tris_pc": 188,
+   "tris_mobile": 140,
+   "fbx_pc": "MODELS_FBX/MODULAR_MAP/PC/BB_FLOOR_08_GrassDark.fbx",
+   "fbx_mobile": "MODELS_FBX/MODULAR_MAP/MOBILE/BB_FLOOR_08_GrassDark.fbx",
+   "texture_pc": "TEXTURES_PNG/MODULAR_MAP/BB_FLOOR_08_GrassDark_albedo.png",
+   "texture_mobile": "TEXTURES_PNG/MODULAR_MAP/MOBILE_256/BB_FLOOR_08_GrassDark_albedo_256.png",
+   "pc": {
+    "size_studs": [
+     4.0,
+     0.949,
+     4.0
+    ],
+    "bbox_center_roblox_studs": [
+     -0.0,
+     -0.026,
+     0.0
+    ],
+    "pivot_offset_roblox_studs": [
+     0.0,
+     0.026,
+     -0.0
+    ]
+   },
+   "mobile": {
+    "size_studs": [
+     3.953,
+     0.949,
+     3.953
+    ],
+    "bbox_center_roblox_studs": [
+     -0.0,
+     -0.026,
+     0.0
+    ],
+    "pivot_offset_roblox_studs": [
+     0.0,
+     0.026,
+     -0.0
+    ]
+   }
+  },
+  {
+   "name": "BB_WALL_01_StoneLight",
+   "category": "wall_indestructible",
+   "weight": 5,
+   "desc": "Pierre claire lisse, dessus lavande",
+   "destructible": false,
+   "blocks_explosion": true,
+   "blocks_movement": true,
+   "collision": {
+    "CanCollide": true,
+    "CanQuery": true,
+    "CanTouch": true,
+    "CollisionFidelity": "Box"
+   },
+   "tris_pc": 484,
+   "tris_mobile": 300,
+   "fbx_pc": "MODELS_FBX/MODULAR_MAP/PC/BB_WALL_01_StoneLight.fbx",
+   "fbx_mobile": "MODELS_FBX/MODULAR_MAP/MOBILE/BB_WALL_01_StoneLight.fbx",
+   "texture_pc": "TEXTURES_PNG/MODULAR_MAP/BB_WALL_01_StoneLight_albedo.png",
+   "texture_mobile": "TEXTURES_PNG/MODULAR_MAP/MOBILE_256/BB_WALL_01_StoneLight_albedo_256.png",
+   "pc": {
+    "size_studs": [
+     3.84,
+     4.0,
+     3.84
+    ],
+    "bbox_center_roblox_studs": [
+     -0.0,
+     2.0,
+     0.0
+    ],
+    "pivot_offset_roblox_studs": [
+     0.0,
+     -2.0,
+     -0.0
+    ]
+   },
+   "mobile": {
+    "size_studs": [
+     3.84,
+     4.0,
+     3.84
+    ],
+    "bbox_center_roblox_studs": [
+     -0.0,
+     2.0,
+     0.0
+    ],
+    "pivot_offset_roblox_studs": [
+     0.0,
+     -2.0,
+     -0.0
+    ]
+   }
+  },
+  {
+   "name": "BB_WALL_02_StoneDark",
+   "category": "wall_indestructible",
+   "weight": 3,
+   "desc": "Pierre sombre ardoise",
+   "destructible": false,
+   "blocks_explosion": true,
+   "blocks_movement": true,
+   "collision": {
+    "CanCollide": true,
+    "CanQuery": true,
+    "CanTouch": true,
+    "CollisionFidelity": "Box"
+   },
+   "tris_pc": 484,
+   "tris_mobile": 300,
+   "fbx_pc": "MODELS_FBX/MODULAR_MAP/PC/BB_WALL_02_StoneDark.fbx",
+   "fbx_mobile": "MODELS_FBX/MODULAR_MAP/MOBILE/BB_WALL_02_StoneDark.fbx",
+   "texture_pc": "TEXTURES_PNG/MODULAR_MAP/BB_WALL_02_StoneDark_albedo.png",
+   "texture_mobile": "TEXTURES_PNG/MODULAR_MAP/MOBILE_256/BB_WALL_02_StoneDark_albedo_256.png",
+   "pc": {
+    "size_studs": [
+     3.84,
+     4.0,
+     3.84
+    ],
+    "bbox_center_roblox_studs": [
+     -0.0,
+     2.0,
+     0.0
+    ],
+    "pivot_offset_roblox_studs": [
+     0.0,
+     -2.0,
+     -0.0
+    ]
+   },
+   "mobile": {
+    "size_studs": [
+     3.84,
+     4.0,
+     3.84
+    ],
+    "bbox_center_roblox_studs": [
+     -0.0,
+     2.0,
+     0.0
+    ],
+    "pivot_offset_roblox_studs": [
+     0.0,
+     -2.0,
+     -0.0
+    ]
+   }
+  },
+  {
+   "name": "BB_WALL_03_StoneCracked",
+   "category": "wall_indestructible",
+   "weight": 2,
+   "desc": "Mur de pierre fissuré: rainures creusées, coins cassés, éclats",
+   "destructible": false,
+   "blocks_explosion": true,
+   "blocks_movement": true,
+   "collision": {
+    "CanCollide": true,
+    "CanQuery": true,
+    "CanTouch": true,
+    "CollisionFidelity": "Box"
+   },
+   "tris_pc": 3628,
+   "tris_mobile": 900,
+   "fbx_pc": "MODELS_FBX/MODULAR_MAP/PC/BB_WALL_03_StoneCracked.fbx",
+   "fbx_mobile": "MODELS_FBX/MODULAR_MAP/MOBILE/BB_WALL_03_StoneCracked.fbx",
+   "texture_pc": "TEXTURES_PNG/MODULAR_MAP/BB_WALL_03_StoneCracked_albedo.png",
+   "texture_mobile": "TEXTURES_PNG/MODULAR_MAP/MOBILE_256/BB_WALL_03_StoneCracked_albedo_256.png",
+   "pc": {
+    "size_studs": [
+     3.91,
+     4.0,
+     3.98
+    ],
+    "bbox_center_roblox_studs": [
+     0.035,
+     2.0,
+     0.0
+    ],
+    "pivot_offset_roblox_studs": [
+     -0.035,
+     -2.0,
+     -0.0
+    ]
+   },
+   "mobile": {
+    "size_studs": [
+     3.915,
+     4.018,
+     4.004
+    ],
+    "bbox_center_roblox_studs": [
+     0.036,
+     1.994,
+     0.012
+    ],
+    "pivot_offset_roblox_studs": [
+     -0.036,
+     -1.994,
+     -0.012
+    ]
+   }
+  },
+  {
+   "name": "BB_WALL_04_StoneMossy",
+   "category": "wall_indestructible",
+   "weight": 2,
+   "desc": "Mur de pierre moussu: coussins de mousse en volume, retombées, touffes",
+   "destructible": false,
+   "blocks_explosion": true,
+   "blocks_movement": true,
+   "collision": {
+    "CanCollide": true,
+    "CanQuery": true,
+    "CanTouch": true,
+    "CollisionFidelity": "Box"
+   },
+   "tris_pc": 4528,
+   "tris_mobile": 900,
+   "fbx_pc": "MODELS_FBX/MODULAR_MAP/PC/BB_WALL_04_StoneMossy.fbx",
+   "fbx_mobile": "MODELS_FBX/MODULAR_MAP/MOBILE/BB_WALL_04_StoneMossy.fbx",
+   "texture_pc": "TEXTURES_PNG/MODULAR_MAP/BB_WALL_04_StoneMossy_albedo.png",
+   "texture_mobile": "TEXTURES_PNG/MODULAR_MAP/MOBILE_256/BB_WALL_04_StoneMossy_albedo_256.png",
+   "pc": {
+    "size_studs": [
+     3.98,
+     4.738,
+     3.98
+    ],
+    "bbox_center_roblox_studs": [
+     -0.0,
+     2.369,
+     0.0
+    ],
+    "pivot_offset_roblox_studs": [
+     0.0,
+     -2.369,
+     -0.0
+    ]
+   },
+   "mobile": {
+    "size_studs": [
+     4.039,
+     4.795,
+     4.024
+    ],
+    "bbox_center_roblox_studs": [
+     0.022,
+     2.34,
+     0.022
+    ],
+    "pivot_offset_roblox_studs": [
+     -0.022,
+     -2.34,
+     -0.022
+    ]
+   }
+  },
+  {
+   "name": "BB_DESTR_01_CrateWood",
+   "category": "obstacle_destructible",
+   "weight": 4,
+   "desc": "Caisse en bois clair, croix de renfort",
+   "destructible": true,
+   "blocks_explosion": true,
+   "blocks_movement": true,
+   "collision": {
+    "CanCollide": true,
+    "CanQuery": true,
+    "CanTouch": true,
+    "CollisionFidelity": "Box"
+   },
+   "tris_pc": 836,
+   "tris_mobile": 450,
+   "fbx_pc": "MODELS_FBX/MODULAR_MAP/PC/BB_DESTR_01_CrateWood.fbx",
+   "fbx_mobile": "MODELS_FBX/MODULAR_MAP/MOBILE/BB_DESTR_01_CrateWood.fbx",
+   "texture_pc": "TEXTURES_PNG/MODULAR_MAP/BB_DESTR_01_CrateWood_albedo.png",
+   "texture_mobile": "TEXTURES_PNG/MODULAR_MAP/MOBILE_256/BB_DESTR_01_CrateWood_albedo_256.png",
+   "pc": {
+    "size_studs": [
+     3.6,
+     3.6,
+     3.6
+    ],
+    "bbox_center_roblox_studs": [
+     -0.0,
+     1.8,
+     0.0
+    ],
+    "pivot_offset_roblox_studs": [
+     0.0,
+     -1.8,
+     -0.0
+    ]
+   },
+   "mobile": {
+    "size_studs": [
+     3.6,
+     3.6,
+     3.6
+    ],
+    "bbox_center_roblox_studs": [
+     -0.0,
+     1.8,
+     0.0
+    ],
+    "pivot_offset_roblox_studs": [
+     0.0,
+     -1.8,
+     -0.0
+    ]
+   }
+  },
+  {
+   "name": "BB_DESTR_02_CrateDark",
+   "category": "obstacle_destructible",
+   "weight": 3,
+   "desc": "Caisse en bois sombre",
+   "destructible": true,
+   "blocks_explosion": true,
+   "blocks_movement": true,
+   "collision": {
+    "CanCollide": true,
+    "CanQuery": true,
+    "CanTouch": true,
+    "CollisionFidelity": "Box"
+   },
+   "tris_pc": 836,
+   "tris_mobile": 450,
+   "fbx_pc": "MODELS_FBX/MODULAR_MAP/PC/BB_DESTR_02_CrateDark.fbx",
+   "fbx_mobile": "MODELS_FBX/MODULAR_MAP/MOBILE/BB_DESTR_02_CrateDark.fbx",
+   "texture_pc": "TEXTURES_PNG/MODULAR_MAP/BB_DESTR_02_CrateDark_albedo.png",
+   "texture_mobile": "TEXTURES_PNG/MODULAR_MAP/MOBILE_256/BB_DESTR_02_CrateDark_albedo_256.png",
+   "pc": {
+    "size_studs": [
+     3.6,
+     3.6,
+     3.6
+    ],
+    "bbox_center_roblox_studs": [
+     -0.0,
+     1.8,
+     0.0
+    ],
+    "pivot_offset_roblox_studs": [
+     0.0,
+     -1.8,
+     -0.0
+    ]
+   },
+   "mobile": {
+    "size_studs": [
+     3.6,
+     3.6,
+     3.6
+    ],
+    "bbox_center_roblox_studs": [
+     -0.0,
+     1.8,
+     0.0
+    ],
+    "pivot_offset_roblox_studs": [
+     0.0,
+     -1.8,
+     -0.0
+    ]
+   }
+  },
+  {
+   "name": "BB_DESTR_03_BushFlowers",
+   "category": "obstacle_destructible",
+   "weight": 3,
+   "desc": "Buisson cube fleuri",
+   "destructible": true,
+   "blocks_explosion": true,
+   "blocks_movement": true,
+   "collision": {
+    "CanCollide": true,
+    "CanQuery": true,
+    "CanTouch": true,
+    "CollisionFidelity": "Box"
+   },
+   "tris_pc": 944,
+   "tris_mobile": 450,
+   "fbx_pc": "MODELS_FBX/MODULAR_MAP/PC/BB_DESTR_03_BushFlowers.fbx",
+   "fbx_mobile": "MODELS_FBX/MODULAR_MAP/MOBILE/BB_DESTR_03_BushFlowers.fbx",
+   "texture_pc": "TEXTURES_PNG/MODULAR_MAP/BB_DESTR_03_BushFlowers_albedo.png",
+   "texture_mobile": "TEXTURES_PNG/MODULAR_MAP/MOBILE_256/BB_DESTR_03_BushFlowers_albedo_256.png",
+   "pc": {
+    "size_studs": [
+     3.72,
+     3.67,
+     3.72
+    ],
+    "bbox_center_roblox_studs": [
+     -0.0,
+     1.835,
+     0.0
+    ],
+    "pivot_offset_roblox_studs": [
+     0.0,
+     -1.835,
+     -0.0
+    ]
+   },
+   "mobile": {
+    "size_studs": [
+     3.713,
+     3.551,
+     3.753
+    ],
+    "bbox_center_roblox_studs": [
+     -0.01,
+     1.81,
+     -0.03
+    ],
+    "pivot_offset_roblox_studs": [
+     0.01,
+     -1.81,
+     0.03
+    ]
+   }
+  },
+  {
+   "name": "BB_DESTR_04_HayBale",
+   "category": "obstacle_destructible",
+   "weight": 2,
+   "desc": "Botte de paille fournie, couches, cordes, brins",
+   "destructible": true,
+   "blocks_explosion": true,
+   "blocks_movement": true,
+   "collision": {
+    "CanCollide": true,
+    "CanQuery": true,
+    "CanTouch": true,
+    "CollisionFidelity": "Box"
+   },
+   "tris_pc": 1405,
+   "tris_mobile": 600,
+   "fbx_pc": "MODELS_FBX/MODULAR_MAP/PC/BB_DESTR_04_HayBale.fbx",
+   "fbx_mobile": "MODELS_FBX/MODULAR_MAP/MOBILE/BB_DESTR_04_HayBale.fbx",
+   "texture_pc": "TEXTURES_PNG/MODULAR_MAP/BB_DESTR_04_HayBale_albedo.png",
+   "texture_mobile": "TEXTURES_PNG/MODULAR_MAP/MOBILE_256/BB_DESTR_04_HayBale_albedo_256.png",
+   "pc": {
+    "size_studs": [
+     3.72,
+     4.445,
+     3.72
+    ],
+    "bbox_center_roblox_studs": [
+     -0.0,
+     2.223,
+     0.0
+    ],
+    "pivot_offset_roblox_studs": [
+     0.0,
+     -2.223,
+     -0.0
+    ]
+   },
+   "mobile": {
+    "size_studs": [
+     3.69,
+     4.445,
+     3.72
+    ],
+    "bbox_center_roblox_studs": [
+     0.015,
+     2.223,
+     0.0
+    ],
+    "pivot_offset_roblox_studs": [
+     -0.015,
+     -2.223,
+     -0.0
+    ]
+   }
+  },
+  {
+   "name": "BB_DESTR_05_RockBrown",
+   "category": "obstacle_destructible",
+   "weight": 2,
+   "desc": "Bloc de roche brune: plaques, fissures, éboulis",
+   "destructible": true,
+   "blocks_explosion": true,
+   "blocks_movement": true,
+   "collision": {
+    "CanCollide": true,
+    "CanQuery": true,
+    "CanTouch": true,
+    "CollisionFidelity": "Box"
+   },
+   "tris_pc": 1072,
+   "tris_mobile": 550,
+   "fbx_pc": "MODELS_FBX/MODULAR_MAP/PC/BB_DESTR_05_RockBrown.fbx",
+   "fbx_mobile": "MODELS_FBX/MODULAR_MAP/MOBILE/BB_DESTR_05_RockBrown.fbx",
+   "texture_pc": "TEXTURES_PNG/MODULAR_MAP/BB_DESTR_05_RockBrown_albedo.png",
+   "texture_mobile": "TEXTURES_PNG/MODULAR_MAP/MOBILE_256/BB_DESTR_05_RockBrown_albedo_256.png",
+   "pc": {
+    "size_studs": [
+     3.72,
+     3.55,
+     3.72
+    ],
+    "bbox_center_roblox_studs": [
+     -0.0,
+     1.775,
+     0.0
+    ],
+    "pivot_offset_roblox_studs": [
+     0.0,
+     -1.775,
+     -0.0
+    ]
+   },
+   "mobile": {
+    "size_studs": [
+     3.723,
+     3.551,
+     3.72
+    ],
+    "bbox_center_roblox_studs": [
+     -0.002,
+     1.774,
+     0.0
+    ],
+    "pivot_offset_roblox_studs": [
+     0.002,
+     -1.774,
+     -0.0
+    ]
+   }
+  },
+  {
+   "name": "BB_DESTR_06_RockGrey",
+   "category": "obstacle_destructible",
+   "weight": 2,
+   "desc": "Bloc de roche grise en dalles étagées, fissures, mousse",
+   "destructible": true,
+   "blocks_explosion": true,
+   "blocks_movement": true,
+   "collision": {
+    "CanCollide": true,
+    "CanQuery": true,
+    "CanTouch": true,
+    "CollisionFidelity": "Box"
+   },
+   "tris_pc": 1447,
+   "tris_mobile": 549,
+   "fbx_pc": "MODELS_FBX/MODULAR_MAP/PC/BB_DESTR_06_RockGrey.fbx",
+   "fbx_mobile": "MODELS_FBX/MODULAR_MAP/MOBILE/BB_DESTR_06_RockGrey.fbx",
+   "texture_pc": "TEXTURES_PNG/MODULAR_MAP/BB_DESTR_06_RockGrey_albedo.png",
+   "texture_mobile": "TEXTURES_PNG/MODULAR_MAP/MOBILE_256/BB_DESTR_06_RockGrey_albedo_256.png",
+   "pc": {
+    "size_studs": [
+     3.72,
+     3.79,
+     3.72
+    ],
+    "bbox_center_roblox_studs": [
+     -0.0,
+     1.895,
+     0.0
+    ],
+    "pivot_offset_roblox_studs": [
+     0.0,
+     -1.895,
+     -0.0
+    ]
+   },
+   "mobile": {
+    "size_studs": [
+     3.723,
+     3.758,
+     3.719
+    ],
+    "bbox_center_roblox_studs": [
+     -0.001,
+     1.866,
+     -0.004
+    ],
+    "pivot_offset_roblox_studs": [
+     0.001,
+     -1.866,
+     0.004
+    ]
+   }
+  },
+  {
+   "name": "BB_DECOR_01_GrassBush",
+   "category": "decor_ground",
+   "weight": 6,
+   "desc": "Touffe d'herbe ronde",
+   "destructible": false,
+   "blocks_explosion": false,
+   "blocks_movement": false,
+   "collision": {
+    "CanCollide": false,
+    "CanQuery": false,
+    "CanTouch": false,
+    "CollisionFidelity": "Box"
+   },
+   "tris_pc": 80,
+   "tris_mobile": 80,
+   "fbx_pc": "MODELS_FBX/MODULAR_MAP/PC/BB_DECOR_01_GrassBush.fbx",
+   "fbx_mobile": "MODELS_FBX/MODULAR_MAP/MOBILE/BB_DECOR_01_GrassBush.fbx",
+   "texture_pc": "TEXTURES_PNG/MODULAR_MAP/BB_DECOR_01_GrassBush_albedo.png",
+   "texture_mobile": "TEXTURES_PNG/MODULAR_MAP/MOBILE_256/BB_DECOR_01_GrassBush_albedo_256.png",
+   "pc": {
+    "size_studs": [
+     1.189,
+     0.716,
+     1.026
+    ],
+    "bbox_center_roblox_studs": [
+     -0.01,
+     0.358,
+     -0.074
+    ],
+    "pivot_offset_roblox_studs": [
+     0.01,
+     -0.358,
+     0.074
+    ]
+   },
+   "mobile": {
+    "size_studs": [
+     1.189,
+     0.716,
+     1.026
+    ],
+    "bbox_center_roblox_studs": [
+     -0.01,
+     0.358,
+     -0.074
+    ],
+    "pivot_offset_roblox_studs": [
+     0.01,
+     -0.358,
+     0.074
+    ]
+   }
+  },
+  {
+   "name": "BB_DECOR_02_GrassBladesA",
+   "category": "decor_ground",
+   "weight": 4,
+   "desc": "Herbes en éventail",
+   "destructible": false,
+   "blocks_explosion": false,
+   "blocks_movement": false,
+   "collision": {
+    "CanCollide": false,
+    "CanQuery": false,
+    "CanTouch": false,
+    "CollisionFidelity": "Box"
+   },
+   "tris_pc": 24,
+   "tris_mobile": 24,
+   "fbx_pc": "MODELS_FBX/MODULAR_MAP/PC/BB_DECOR_02_GrassBladesA.fbx",
+   "fbx_mobile": "MODELS_FBX/MODULAR_MAP/MOBILE/BB_DECOR_02_GrassBladesA.fbx",
+   "texture_pc": "TEXTURES_PNG/MODULAR_MAP/BB_DECOR_02_GrassBladesA_albedo.png",
+   "texture_mobile": "TEXTURES_PNG/MODULAR_MAP/MOBILE_256/BB_DECOR_02_GrassBladesA_albedo_256.png",
+   "pc": {
+    "size_studs": [
+     0.397,
+     0.982,
+     0.428
+    ],
+    "bbox_center_roblox_studs": [
+     0.05,
+     0.491,
+     -0.045
+    ],
+    "pivot_offset_roblox_studs": [
+     -0.05,
+     -0.491,
+     0.045
+    ]
+   },
+   "mobile": {
+    "size_studs": [
+     0.397,
+     0.982,
+     0.428
+    ],
+    "bbox_center_roblox_studs": [
+     0.05,
+     0.491,
+     -0.045
+    ],
+    "pivot_offset_roblox_studs": [
+     -0.05,
+     -0.491,
+     0.045
+    ]
+   }
+  },
+  {
+   "name": "BB_DECOR_03_GrassBladesB",
+   "category": "decor_ground",
+   "weight": 3,
+   "desc": "Herbes hautes",
+   "destructible": false,
+   "blocks_explosion": false,
+   "blocks_movement": false,
+   "collision": {
+    "CanCollide": false,
+    "CanQuery": false,
+    "CanTouch": false,
+    "CollisionFidelity": "Box"
+   },
+   "tris_pc": 32,
+   "tris_mobile": 32,
+   "fbx_pc": "MODELS_FBX/MODULAR_MAP/PC/BB_DECOR_03_GrassBladesB.fbx",
+   "fbx_mobile": "MODELS_FBX/MODULAR_MAP/MOBILE/BB_DECOR_03_GrassBladesB.fbx",
+   "texture_pc": "TEXTURES_PNG/MODULAR_MAP/BB_DECOR_03_GrassBladesB_albedo.png",
+   "texture_mobile": "TEXTURES_PNG/MODULAR_MAP/MOBILE_256/BB_DECOR_03_GrassBladesB_albedo_256.png",
+   "pc": {
+    "size_studs": [
+     0.584,
+     1.239,
+     0.691
+    ],
+    "bbox_center_roblox_studs": [
+     0.005,
+     0.619,
+     0.013
+    ],
+    "pivot_offset_roblox_studs": [
+     -0.005,
+     -0.619,
+     -0.013
+    ]
+   },
+   "mobile": {
+    "size_studs": [
+     0.584,
+     1.239,
+     0.691
+    ],
+    "bbox_center_roblox_studs": [
+     0.005,
+     0.619,
+     0.013
+    ],
+    "pivot_offset_roblox_studs": [
+     -0.005,
+     -0.619,
+     -0.013
+    ]
+   }
+  },
+  {
+   "name": "BB_DECOR_04_FlowerWhite",
+   "category": "decor_ground",
+   "weight": 2,
+   "desc": "Fleur blanche",
+   "destructible": false,
+   "blocks_explosion": false,
+   "blocks_movement": false,
+   "collision": {
+    "CanCollide": false,
+    "CanQuery": false,
+    "CanTouch": false,
+    "CollisionFidelity": "Box"
+   },
+   "tris_pc": 212,
+   "tris_mobile": 118,
+   "fbx_pc": "MODELS_FBX/MODULAR_MAP/PC/BB_DECOR_04_FlowerWhite.fbx",
+   "fbx_mobile": "MODELS_FBX/MODULAR_MAP/MOBILE/BB_DECOR_04_FlowerWhite.fbx",
+   "texture_pc": "TEXTURES_PNG/MODULAR_MAP/BB_DECOR_04_FlowerWhite_albedo.png",
+   "texture_mobile": "TEXTURES_PNG/MODULAR_MAP/MOBILE_256/BB_DECOR_04_FlowerWhite_albedo_256.png",
+   "pc": {
+    "size_studs": [
+     0.954,
+     0.909,
+     0.834
+    ],
+    "bbox_center_roblox_studs": [
+     -0.003,
+     0.455,
+     -0.0
+    ],
+    "pivot_offset_roblox_studs": [
+     0.003,
+     -0.455,
+     0.0
+    ]
+   },
+   "mobile": {
+    "size_studs": [
+     0.936,
+     0.909,
+     0.86
+    ],
+    "bbox_center_roblox_studs": [
+     -0.0,
+     0.455,
+     -0.0
+    ],
+    "pivot_offset_roblox_studs": [
+     0.0,
+     -0.455,
+     0.0
+    ]
+   }
+  },
+  {
+   "name": "BB_DECOR_05_FlowerCluster",
+   "category": "decor_ground",
+   "weight": 2,
+   "desc": "Petites fleurs groupées",
+   "destructible": false,
+   "blocks_explosion": false,
+   "blocks_movement": false,
+   "collision": {
+    "CanCollide": false,
+    "CanQuery": false,
+    "CanTouch": false,
+    "CollisionFidelity": "Box"
+   },
+   "tris_pc": 412,
+   "tris_mobile": 120,
+   "fbx_pc": "MODELS_FBX/MODULAR_MAP/PC/BB_DECOR_05_FlowerCluster.fbx",
+   "fbx_mobile": "MODELS_FBX/MODULAR_MAP/MOBILE/BB_DECOR_05_FlowerCluster.fbx",
+   "texture_pc": "TEXTURES_PNG/MODULAR_MAP/BB_DECOR_05_FlowerCluster_albedo.png",
+   "texture_mobile": "TEXTURES_PNG/MODULAR_MAP/MOBILE_256/BB_DECOR_05_FlowerCluster_albedo_256.png",
+   "pc": {
+    "size_studs": [
+     1.133,
+     0.693,
+     1.094
+    ],
+    "bbox_center_roblox_studs": [
+     0.004,
+     0.346,
+     -0.091
+    ],
+    "pivot_offset_roblox_studs": [
+     -0.004,
+     -0.346,
+     0.091
+    ]
+   },
+   "mobile": {
+    "size_studs": [
+     1.123,
+     0.679,
+     1.101
+    ],
+    "bbox_center_roblox_studs": [
+     -0.001,
+     0.34,
+     -0.094
+    ],
+    "pivot_offset_roblox_studs": [
+     0.001,
+     -0.34,
+     0.094
+    ]
+   }
+  },
+  {
+   "name": "BB_DECOR_06_Pebble",
+   "category": "decor_ground",
+   "weight": 3,
+   "desc": "Caillou",
+   "destructible": false,
+   "blocks_explosion": false,
+   "blocks_movement": false,
+   "collision": {
+    "CanCollide": false,
+    "CanQuery": false,
+    "CanTouch": false,
+    "CollisionFidelity": "Box"
+   },
+   "tris_pc": 40,
+   "tris_mobile": 40,
+   "fbx_pc": "MODELS_FBX/MODULAR_MAP/PC/BB_DECOR_06_Pebble.fbx",
+   "fbx_mobile": "MODELS_FBX/MODULAR_MAP/MOBILE/BB_DECOR_06_Pebble.fbx",
+   "texture_pc": "TEXTURES_PNG/MODULAR_MAP/BB_DECOR_06_Pebble_albedo.png",
+   "texture_mobile": "TEXTURES_PNG/MODULAR_MAP/MOBILE_256/BB_DECOR_06_Pebble_albedo_256.png",
+   "pc": {
+    "size_studs": [
+     1.067,
+     0.537,
+     0.889
+    ],
+    "bbox_center_roblox_studs": [
+     -0.119,
+     0.268,
+     0.021
+    ],
+    "pivot_offset_roblox_studs": [
+     0.119,
+     -0.268,
+     -0.021
+    ]
+   },
+   "mobile": {
+    "size_studs": [
+     1.067,
+     0.537,
+     0.889
+    ],
+    "bbox_center_roblox_studs": [
+     -0.119,
+     0.268,
+     0.021
+    ],
+    "pivot_offset_roblox_studs": [
+     0.119,
+     -0.268,
+     -0.021
+    ]
+   }
+  },
+  {
+   "name": "BB_DECOR_07_PebbleGroup",
+   "category": "decor_ground",
+   "weight": 2,
+   "desc": "Groupe de cailloux",
+   "destructible": false,
+   "blocks_explosion": false,
+   "blocks_movement": false,
+   "collision": {
+    "CanCollide": false,
+    "CanQuery": false,
+    "CanTouch": false,
+    "CollisionFidelity": "Box"
+   },
+   "tris_pc": 80,
+   "tris_mobile": 80,
+   "fbx_pc": "MODELS_FBX/MODULAR_MAP/PC/BB_DECOR_07_PebbleGroup.fbx",
+   "fbx_mobile": "MODELS_FBX/MODULAR_MAP/MOBILE/BB_DECOR_07_PebbleGroup.fbx",
+   "texture_pc": "TEXTURES_PNG/MODULAR_MAP/BB_DECOR_07_PebbleGroup_albedo.png",
+   "texture_mobile": "TEXTURES_PNG/MODULAR_MAP/MOBILE_256/BB_DECOR_07_PebbleGroup_albedo_256.png",
+   "pc": {
+    "size_studs": [
+     1.344,
+     0.46,
+     0.971
+    ],
+    "bbox_center_roblox_studs": [
+     -0.033,
+     0.23,
+     -0.066
+    ],
+    "pivot_offset_roblox_studs": [
+     0.033,
+     -0.23,
+     0.066
+    ]
+   },
+   "mobile": {
+    "size_studs": [
+     1.344,
+     0.46,
+     0.971
+    ],
+    "bbox_center_roblox_studs": [
+     -0.033,
+     0.23,
+     -0.066
+    ],
+    "pivot_offset_roblox_studs": [
+     0.033,
+     -0.23,
+     0.066
+    ]
+   }
+  },
+  {
+   "name": "BB_DECOR_08_LeafPlant",
+   "category": "decor_ground",
+   "weight": 2,
+   "desc": "Plante à larges feuilles",
+   "destructible": false,
+   "blocks_explosion": false,
+   "blocks_movement": false,
+   "collision": {
+    "CanCollide": false,
+    "CanQuery": false,
+    "CanTouch": false,
+    "CollisionFidelity": "Box"
+   },
+   "tris_pc": 216,
+   "tris_mobile": 120,
+   "fbx_pc": "MODELS_FBX/MODULAR_MAP/PC/BB_DECOR_08_LeafPlant.fbx",
+   "fbx_mobile": "MODELS_FBX/MODULAR_MAP/MOBILE/BB_DECOR_08_LeafPlant.fbx",
+   "texture_pc": "TEXTURES_PNG/MODULAR_MAP/BB_DECOR_08_LeafPlant_albedo.png",
+   "texture_mobile": "TEXTURES_PNG/MODULAR_MAP/MOBILE_256/BB_DECOR_08_LeafPlant_albedo_256.png",
+   "pc": {
+    "size_studs": [
+     1.324,
+     0.555,
+     1.243
+    ],
+    "bbox_center_roblox_studs": [
+     -0.008,
+     0.278,
+     0.014
+    ],
+    "pivot_offset_roblox_studs": [
+     0.008,
+     -0.278,
+     -0.014
+    ]
+   },
+   "mobile": {
+    "size_studs": [
+     1.292,
+     0.578,
+     1.243
+    ],
+    "bbox_center_roblox_studs": [
+     -0.023,
+     0.286,
+     0.014
+    ],
+    "pivot_offset_roblox_studs": [
+     0.023,
+     -0.286,
+     -0.014
+    ]
+   }
+  }
+ ]
+}
