@@ -300,6 +300,14 @@ function UIController.start(remotes: Folder)
 			placeBomb:FireServer()
 		end,
 		openOverlay = showOverlay,
+		-- Raccourcis clavier : ouvre la fenêtre si aucune n'est ouverte, la referme si c'est elle qui est ouverte.
+		toggleOverlay = function(name: string)
+			if openOverlay == name then
+				closeOverlay()
+			elseif openOverlay == nil then
+				showOverlay(name)
+			end
+		end,
 		openOverlayFromPause = function(name: string)
 			showOverlay(name, "Pause")
 		end,

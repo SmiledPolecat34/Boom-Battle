@@ -2,6 +2,8 @@
 -- HUD de manche : chronomètre, survivants, statistiques, bouton bombe, compte à rebours, mode spectateur.
 -- Il reste en périphérie : rien ne couvre le centre de l'arène (cases de départ, trajectoires d'explosion).
 
+local UserInputService = game:GetService("UserInputService")
+
 local Components = require(script.Parent.Parent.Components)
 local InputController = require(script.Parent.Parent.Parent.Controllers.InputController)
 local SettingsStore = require(script.Parent.Parent.Parent.Controllers.SettingsStore)
@@ -145,6 +147,23 @@ function GameHUD.new(parent: Instance, ctx: any)
 	leave.Position = UDim2.new(0.5, 0, 1, -24)
 	leave.Activated:Connect(function()
 		ctx.setQueued(false)
+	end)
+
+	-- Raccourcis clavier (PC) : M = menu, E = émotes, C = chat rapide. Ignorés pendant une saisie de texte,
+	-- hors du HUD, ou quand le bouton correspondant n'est pas affiché (ex. émotes pour un spectateur sans personnage).
+	local SHORTCUTS: { [Enum.KeyCode]: { overlay: string, button: GuiButton } } = {
+		[Enum.KeyCode.M] = { overlay = "Pause", button = menu },
+		[Enum.KeyCode.E] = { overlay = "Emotes", button = emotes },
+		[Enum.KeyCode.C] = { overlay = "QuickChat", button = chat },
+	}
+	UserInputService.InputBegan:Connect(function(input: InputObject, _gameProcessed: boolean)
+		local shortcut = SHORTCUTS[input.KeyCode]
+		if not shortcut or UserInputService:GetFocusedTextBox() then
+			return
+		end
+		if frame.Visible and shortcut.button.Visible then
+			ctx.toggleOverlay(shortcut.overlay)
+		end
 	end)
 
 	local canBomb = false

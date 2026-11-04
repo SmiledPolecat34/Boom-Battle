@@ -13,6 +13,7 @@ local TEXT = table.concat({
 	"COMMANDES",
 	"• Se déplacer : clique ou touche une case de l'arène.",
 	"• Poser une bombe : bouton BOMBE à l'écran (ou barre d'espace sur PC).",
+	"• Raccourcis PC : M = menu, E = émotes, C = chat rapide.",
 	"",
 	"BOMBES",
 	"• Elles explosent après 2 secondes, en croix.",
