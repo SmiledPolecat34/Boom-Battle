@@ -11,28 +11,28 @@ function Lobby.new(parent: Instance, ctx: any)
 	local frame = Components.screen(parent, "Lobby", false)
 
 	local back = Components.button(frame, "BackButton", "← MENU", Theme.violet, UDim2.fromOffset(150, 52))
-	back.Position = UDim2.fromOffset(24, 24)
+	back.Position = UDim2.fromOffset(24, 84)
 	back.Activated:Connect(function()
 		ctx.setQueued(false)
 	end)
 	local help = Components.button(frame, "HelpButton", "AIDE", Theme.violet, UDim2.fromOffset(150, 52))
-	help.Position = UDim2.fromOffset(24, 88)
+	help.Position = UDim2.fromOffset(24, 148)
 	help.Activated:Connect(function()
 		ctx.openOverlay("Help")
 	end)
 	local settings = Components.button(frame, "SettingsButton", "RÉGLAGES", Theme.violet, UDim2.fromOffset(150, 52))
-	settings.Position = UDim2.fromOffset(24, 152)
+	settings.Position = UDim2.fromOffset(24, 212)
 	settings.Activated:Connect(function()
 		ctx.openOverlay("Settings")
 	end)
 
 	local emotes = Components.button(frame, "EmotesButton", "ÉMOTES", Theme.violet, UDim2.fromOffset(150, 52))
-	emotes.Position = UDim2.fromOffset(24, 216)
+	emotes.Position = UDim2.fromOffset(24, 276)
 	emotes.Activated:Connect(function()
 		ctx.openOverlay("Emotes")
 	end)
 	local chat = Components.bubbleButton(frame, "ChatButton", "CHAT", UDim2.fromOffset(150, 52))
-	chat.Position = UDim2.fromOffset(24, 280)
+	chat.Position = UDim2.fromOffset(24, 340)
 	chat.Activated:Connect(function()
 		ctx.openOverlay("QuickChat")
 	end)
@@ -84,14 +84,16 @@ function Lobby.new(parent: Instance, ctx: any)
 			end
 
 			if state == "WAITING" then
-				status.Text = ("En attente de joueurs (%d/%d)"):format(queuedCount, snapshot.minPlayers)
+				status.Text = ("Recherche de joueurs (%d/%d)"):format(queuedCount, snapshot.minPlayers)
 			elseif state == "READY" then
 				status.Text = ("Prêts : %d/%d\nAppuie sur PRÊT quand tu es prêt"):format(readyCount, queuedCount)
 			else
 				status.Text = "Nouvelle arène en préparation..."
 			end
 
-			local canReady = state == "WAITING" or state == "READY"
+			-- Partie rapide : plus de bouton PRÊT (le serveur lance la manche dès qu'il y a assez de joueurs).
+			-- Le bouton reste construit pour les futurs serveurs privés.
+			local canReady = false
 			ready.Visible = canReady
 			ready.Text = if iAmReady then "ANNULER" else "PRÊT"
 			ready.BackgroundColor3 = if iAmReady then Theme.red else Theme.green

@@ -58,6 +58,9 @@ local lastReadyRequest: { [Player]: number } = {}
 -- Mode solo : manche d'entraînement contre des bots. Aucune récompense ni statistique (pas d'exploitation possible).
 local soloRound = false
 local pendingSolo: { player: Player, botCount: number }? = nil
+local lastBotCount = 0 -- bots de la dernière manche : relancés tels quels par REJOUER en solo
+local fastStart = false -- vrai après une revanche unanime : compte à rebours court
+local countdownSeconds = ROUND.QuickCountdown
 
 local roundStateRemote: RemoteEvent
 local roundEndedRemote: RemoteEvent
@@ -88,7 +91,8 @@ local function buildSnapshot()
 			userId = player.UserId,
 			name = player.DisplayName,
 			queued = queued[player] == true,
-			ready = ready[player] == true or rematch[player] == true,
+			-- Écran de résultats : « prêt » = a cliqué REJOUER (le prêt de la manche terminée ne compte plus).
+			ready = if state == "FINISHED" then rematch[player] == true else (ready[player] == true or rematch[player] == true),
 			participant = participants[player] == true,
 			alive = alive[player] == true,
 		})
@@ -236,6 +240,9 @@ end
 -- botCount : nombre de bots (mode solo) ; 0 pour une manche normale.
 local function startCountdown(group: { Player }, botCount: number?)
 	BotService.clear()
+	countdownSeconds = if fastStart then ROUND.RematchCountdown else ROUND.QuickCountdown
+	fastStart = false
+	lastBotCount = botCount or 0
 	table.clear(participants)
 	table.clear(participantOrder)
 	table.clear(alive)
@@ -279,7 +286,7 @@ local function startCountdown(group: { Player }, botCount: number?)
 		info.layout.seed
 	))
 	announceMap(nil)
-	setState("COUNTDOWN", ROUND.ReadyCountdown)
+	setState("COUNTDOWN", countdownSeconds)
 
 	for _, player in Players:GetPlayers() do
 		if participants[player] then
@@ -389,6 +396,36 @@ local function humanParticipants(): number
 	return n
 end
 
+-- Écran de résultats : sans attendre la fin du délai, referme la manche dès que plus personne ne doit y rester.
+-- - plus aucun humain dans la file (tous ont cliqué MENU ou sont partis) : retour immédiat au lobby ;
+-- - tous les humains restants ont cliqué REJOUER : retour immédiat et nouvelle manche (même nombre de bots en solo).
+local function checkRematch()
+	if state ~= "FINISHED" then
+		return
+	end
+	local humans: { Player } = {}
+	for _, actor in participantOrder do
+		if not ActorRegistry.isBot(actor) and (actor :: Player).Parent == Players and queued[actor :: Player] then
+			table.insert(humans, actor :: Player)
+		end
+	end
+	if #humans == 0 then
+		resetRound()
+		return
+	end
+	for _, player in humans do
+		if not rematch[player] then
+			return
+		end
+	end
+	local wasSolo, bots = soloRound, lastBotCount
+	fastStart = true
+	resetRound() -- rematch[player] => prêts dès le retour au lobby
+	if wasSolo then
+		pendingSolo = { player = humans[1], botCount = bots }
+	end
+end
+
 local function tick()
 	-- Demande de mode solo (validée par la remote) : exécutée ici, dans le fil de la machine d'états.
 	if pendingSolo and (state == "WAITING" or state == "READY") then
@@ -402,8 +439,17 @@ local function tick()
 	end
 
 	if state == "WAITING" then
-		if #queuedPlayers() >= minPlayers() then
-			setState("READY")
+		-- Partie rapide : pas de lobby ni de « prêt ». Dès qu'il y a assez de joueurs dans la file, le compte à rebours part.
+		-- (L'état READY et l'écran Lobby restent en place pour les futurs serveurs privés.)
+		local group = queuedPlayers()
+		if #group >= minPlayers() then
+			while #group > ROUND.MaximumPlayers do
+				table.remove(group)
+			end
+			for _, player in group do
+				ready[player] = true
+			end
+			startCountdown(group)
 		end
 	elseif state == "READY" then
 		local all = queuedPlayers()
@@ -434,8 +480,8 @@ local function tick()
 		if soloAbandoned or stillReady < #participantOrder or (not soloRound and #participantOrder < minPlayers()) then
 			print("[RoundService] Compte à rebours interrompu")
 			returnToLobby(true)
-			setState("READY")
-		elseif os.clock() - stateEnteredAt >= ROUND.ReadyCountdown then
+			setState("WAITING")
+		elseif os.clock() - stateEnteredAt >= countdownSeconds then
 			beginPlaying()
 		end
 	elseif state == "PLAYING" then
@@ -539,6 +585,7 @@ function RoundService.start(remotes: Folder)
 		elseif state == "FINISHED" then
 			rematch[player] = if value then true else nil -- « Rejouer » : prêt dès le retour au lobby
 			broadcast()
+			checkRematch()
 		end
 	end)
 
@@ -565,6 +612,7 @@ function RoundService.start(remotes: Folder)
 			rematch[player] = nil
 		end
 		broadcast()
+		checkRematch()
 	end)
 
 	-- Mode solo : manche d'entraînement contre 1 à 3 bots. Le client n'envoie que le nombre de bots.

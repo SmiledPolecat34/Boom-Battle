@@ -26,19 +26,22 @@ function Results.new(parent: Instance, ctx: any)
 
 	local footer = Components.label(panel, "Footer", "", 16, Theme.muted, Theme.fontBody)
 	footer.AnchorPoint = Vector2.new(0.5, 1)
-	footer.Position = UDim2.new(0.5, 0, 1, -84)
+	footer.Position = UDim2.new(0.5, 0, 1, -78)
 	footer.Size = UDim2.new(1, -32, 0, 24)
 
 	local replay = Components.button(panel, "ReplayButton", "REJOUER", Theme.green, UDim2.fromOffset(190, 60))
 	replay.AnchorPoint = Vector2.new(0, 1)
-	replay.Position = UDim2.new(0, 24, 1, -16)
+	replay.Position = UDim2.new(0, 24, 1, -10)
 	local menu = Components.button(panel, "MenuButton", "MENU", Theme.violet, UDim2.fromOffset(190, 60))
 	menu.AnchorPoint = Vector2.new(1, 1)
-	menu.Position = UDim2.new(1, -24, 1, -16)
+	menu.Position = UDim2.new(1, -24, 1, -10)
 
 	local iAmReady = false
 	replay.Activated:Connect(function()
-		ctx.setReady(not iAmReady)
+		-- Pas d'annulation : un clic lance la revanche (immédiate quand tous les joueurs de la manche ont cliqué).
+		if not iAmReady then
+			ctx.setReady(true)
+		end
 	end)
 	menu.Activated:Connect(function()
 		ctx.setQueued(false)
@@ -84,8 +87,9 @@ function Results.new(parent: Instance, ctx: any)
 		end,
 		update = function(_snapshot: any, me: any)
 			iAmReady = me ~= nil and me.ready == true
-			replay.Text = if iAmReady then "ANNULER" else "REJOUER"
-			replay.BackgroundColor3 = if iAmReady then Theme.red else Theme.green
+			replay.Text = if iAmReady then "EN ATTENTE…" else "REJOUER"
+			replay.BackgroundColor3 = Theme.green
+			replay.BackgroundTransparency = if iAmReady then 0.35 else 0
 			-- Un joueur non inscrit dans la file (spectateur) n'a pas de revanche.
 			replay.Visible = me ~= nil and me.queued == true
 		end,

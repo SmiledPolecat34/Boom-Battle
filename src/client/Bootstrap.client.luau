@@ -29,7 +29,7 @@ task.spawn(function()
 		controls:Disable()
 	end)
 	if not ok then
-		warn("[BOM BATTLE] Impossible de désactiver les contrôles par défaut : " .. tostring(err))
+		warn("[BOOM BATTLE] Impossible de désactiver les contrôles par défaut : " .. tostring(err))
 	end
 end)
 
@@ -41,7 +41,7 @@ ChatController.start() -- chat Roblox aux couleurs du jeu
 -- MapReady arrive à chaque nouvelle arène (lobby, manche) : caméra, clics et effets sont réinitialisés.
 mapReady.OnClientEvent:Connect(function(info: CameraController.MapInfo)
 	if typeof(info) ~= "table" or typeof(info.size) ~= "number" or typeof(info.cellSize) ~= "number" then
-		warn("[BOM BATTLE] MapReady invalide")
+		warn("[BOOM BATTLE] MapReady invalide")
 		return
 	end
 	CameraController.apply(info)

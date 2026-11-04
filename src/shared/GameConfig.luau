@@ -16,11 +16,13 @@ GameConfig.States = table.freeze({
 })
 
 GameConfig.Round = table.freeze({
-	MinimumPlayers = 2,
+	MinimumPlayers = 1, -- PROVISOIRE : partie rapide dès 1 joueur (à remonter à 2 plus tard)
+	QuickCountdown = 6, -- secondes : compte à rebours de la partie rapide (aucun lobby, aucun « prêt »)
 	MaximumPlayers = 8,
 	ReadyCountdown = 10, -- secondes
 	RoundDuration = 150, -- secondes
 	ResultDuration = 8, -- secondes
+	RematchCountdown = 3, -- secondes : compte à rebours court quand tous les joueurs cliquent REJOUER
 	-- PROPOSITION : délai après lequel la manche démarre avec les seuls joueurs prêts (si assez nombreux),
 	-- pour qu'un joueur inactif ne bloque pas le groupe.
 	ReadyTimeout = 45, -- secondes
