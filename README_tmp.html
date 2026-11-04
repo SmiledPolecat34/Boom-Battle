@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>README.md</title>
+    <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+    
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+html,footer,header{
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Custom MD PDF CSS
+ */
+html,footer,header{
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+
+ }
+body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+<link rel="stylesheet" href="file:///r%3A/2.Travail/1.Enseignement/Cours/_1.Outils/2.Developpement/1.SCSS/main.css" type="text/css"><link rel="stylesheet" href="file:///d%3A/rdaros/Cours/_1.Outils/2.Developpement/1.SCSS/main.css" type="text/css">
+</head>
+
+<body>
+    <div align="center">
+</div><h1 id="%F0%9F%92%A3-boom-battle">💣 BOOM BATTLE</h1>
+<h3 id="place-your-bomb-escape-the-blast-be-the-last-survivor">Place your bomb. Escape the blast. Be the last survivor.</h3>
+<p><strong>Un jeu multijoueur Roblox de stratégie, de réflexes et d'explosions en chaîne.</strong></p>
+<p><img src="https://img.shields.io/badge/Statut-En%20d%C3%A9veloppement-orange" alt="Statut"><br>
+<img src="https://img.shields.io/badge/Plateforme-Roblox-00A2FF" alt="Plateforme"><br>
+<img src="https://img.shields.io/badge/Acc%C3%A8s-Gratuit-brightgreen" alt="Accès"><br>
+<img src="https://img.shields.io/badge/Licence-Tous%20droits%20r%C3%A9serv%C3%A9s-red" alt="Licence"></p>
+<p><em>Inspiré par le plaisir des jeux de bombes sur grille, avec une identité et des créations originales.</em></p>
+
+<hr>
+<h2 id="%F0%9F%93%96-pr%C3%A9sentation">📖 Présentation</h2>
+<p><strong>BOM BATTLE</strong> est un projet de jeu multijoueur sur <strong>Roblox</strong>. Les joueurs évoluent dans une arène en vue de dessus, placent des bombes, détruisent des obstacles, récupèrent des bonus et tentent d'être les derniers survivants.</p>
+<p>Le principe est simple : <strong>facile à apprendre, difficile à maîtriser</strong>. Les parties sont courtes et dynamiques, avec des rebondissements et des explosions en chaîne.</p>
+<blockquote>
+<p><strong>Note :</strong> ce dépôt documente un projet en cours de conception et de développement. Les fonctionnalités ci-dessous sont des <strong>objectifs de développement</strong>, et non la liste de fonctionnalités déjà disponibles.</p>
+</blockquote>
+<h2 id="%F0%9F%8E%AF-vision-du-projet">🎯 Vision du projet</h2>
+<ul>
+<li><strong>Accessible :</strong> une prise en main rapide, sans tutoriel interminable.</li>
+<li><strong>Multijoueur :</strong> des confrontations courtes et compétitives entre amis ou avec d'autres joueurs.</li>
+<li><strong>Multi-support :</strong> une interface pensée pour les ordinateurs, smartphones et tablettes compatibles avec Roblox.</li>
+<li><strong>Commandes simples :</strong> objectif de contrôle à la souris sur PC et au tactile sur mobile, sans clavier obligatoire.</li>
+<li><strong>100 % gratuit :</strong> aucun achat intégré prévu pour le lancement.</li>
+<li><strong>Équitable :</strong> le résultat dépend avant tout du placement, de l'anticipation et des réflexes.</li>
+<li><strong>Évolutif :</strong> nouveaux modes, cartes, défis et événements après validation du gameplay principal.</li>
+</ul>
+<h2 id="%F0%9F%95%B9%EF%B8%8F-comment-jouer">🕹️ Comment jouer ?</h2>
+<ol>
+<li>Rejoindre une partie et apparaître dans l'arène.</li>
+<li>Se déplacer pour éviter les adversaires et les explosions.</li>
+<li>Poser des bombes pour détruire des blocs et piéger les adversaires.</li>
+<li>Ramasser des bonus pour améliorer ses capacités pendant la manche.</li>
+<li>Survivre jusqu'à la fin pour remporter la victoire.</li>
+</ol>
+<h3 id="contr%C3%B4les-vis%C3%A9s">Contrôles visés</h3>
+<table>
+<thead>
+<tr>
+<th>Support</th>
+<th>Déplacement</th>
+<th>Action principale</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>🖥️ PC</td>
+<td>Clic sur une case accessible</td>
+<td>Bouton de pose de bombe à la souris</td>
+</tr>
+<tr>
+<td>📱 Mobile / tablette</td>
+<td>Toucher une case accessible</td>
+<td>Bouton tactile de pose de bombe</td>
+</tr>
+</tbody>
+</table>
+<p><em>Le système exact de contrôle et de pathfinding sera validé pendant le prototype. Aucune touche du clavier ne doit être indispensable à la boucle de jeu principale.</em></p>
+<h2 id="%F0%9F%92%A5-m%C3%A9caniques-principales-pr%C3%A9vues">💥 Mécaniques principales (prévues)</h2>
+<h3 id="bombes-et-explosions">Bombes et explosions</h3>
+<ul>
+<li>Pose de bombes avec un délai avant détonation.</li>
+<li>Explosions en <strong>croix</strong> sur une grille.</li>
+<li>Blocage de l'explosion par certains obstacles.</li>
+<li>Destruction de blocs et révélation de bonus.</li>
+<li><strong>Réactions en chaîne</strong> lorsque les explosions touchent d'autres bombes.</li>
+<li>Élimination des joueurs pris dans une explosion sans protection.</li>
+</ul>
+<h3 id="bonus">Bonus</h3>
+<table>
+<thead>
+<tr>
+<th>Bonus</th>
+<th>Effet envisagé</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>🔥 Portée +</td>
+<td>Augmente la portée de l'explosion.</td>
+</tr>
+<tr>
+<td>💣 Bombe +</td>
+<td>Permet de poser davantage de bombes simultanément.</td>
+</tr>
+<tr>
+<td>👟 Vitesse +</td>
+<td>Accélère les déplacements.</td>
+</tr>
+<tr>
+<td>🛡️ Bouclier</td>
+<td>Protège d'une explosion.</td>
+</tr>
+</tbody>
+</table>
+<p>D'autres bonus pourront être ajoutés après les tests d'équilibrage.</p>
+<h3 id="d%C3%A9roulement-dune-partie">Déroulement d'une partie</h3>
+<ul>
+<li>Objectif initial : <strong>4 à 8 joueurs</strong> par manche.</li>
+<li>Durée cible : <strong>2 à 3 minutes</strong> par partie.</li>
+<li>Une arène de départ équilibrée, avec des zones destructibles.</li>
+<li>Une zone dangereuse qui se rapproche en fin de manche pour éviter les parties trop longues.</li>
+<li>Un écran de résultat puis la possibilité de rejouer rapidement.</li>
+</ul>
+<p><em>Ces valeurs sont des objectifs et pourront évoluer avec les tests.</em></p>
+<h2 id="%F0%9F%8F%86-modes-de-jeu">🏆 Modes de jeu</h2>
+<table>
+<thead>
+<tr>
+<th>Mode</th>
+<th>Description</th>
+<th>Priorité</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Classic Survival</strong></td>
+<td>Chacun pour soi : le dernier survivant gagne.</td>
+<td>MVP</td>
+</tr>
+<tr>
+<td><strong>Bomb Royale</strong></td>
+<td>L'arène rétrécit progressivement.</td>
+<td>Après MVP</td>
+</tr>
+<tr>
+<td><strong>Chaos Mode</strong></td>
+<td>Des règles temporaires bouleversent les manches.</td>
+<td>Après MVP</td>
+</tr>
+<tr>
+<td><strong>Team Battle</strong></td>
+<td>Affrontements en équipes.</td>
+<td>Ultérieure</td>
+</tr>
+<tr>
+<td><strong>Duel 1v1</strong></td>
+<td>Partie rapide entre deux joueurs.</td>
+<td>Ultérieure</td>
+</tr>
+</tbody>
+</table>
+<h2 id="%F0%9F%97%BA%EF%B8%8F-cartes-et-%C3%A9v%C3%A9nements">🗺️ Cartes et événements</h2>
+<p><strong>Cartes envisagées :</strong> arène classique, laboratoire, volcan, arène glacée et jardin coloré.</p>
+<p><strong>Événements potentiels :</strong> pluie de bombes, vitesse doublée, bombes géantes, blocs mystères et sol glissant. Ils seront introduits progressivement pour conserver une bonne lisibilité du jeu.</p>
+<h2 id="%F0%9F%8E%A8-direction-artistique">🎨 Direction artistique</h2>
+<ul>
+<li>Univers <strong>coloré, lisible et dynamique</strong>.</li>
+<li>Vue de dessus adaptée au gameplay sur grille.</li>
+<li>Cases, murs, bonus et zones d'explosion faciles à identifier.</li>
+<li>Personnages stylisés et animations courtes.</li>
+<li>Interface claire sur petit écran.</li>
+<li>Identité graphique, modèles, sons et visuels <strong>originaux</strong>.</li>
+</ul>
+<p>Les noms, personnages, ressources graphiques et musiques d'autres jeux ne doivent pas être copiés sans autorisation.</p>
+<h2 id="%F0%9F%93%88-progression-pr%C3%A9vue">📈 Progression (prévue)</h2>
+<p>Après la validation du cœur du gameplay :</p>
+<ul>
+<li>Niveaux et expérience.</li>
+<li>Statistiques de victoires et d'éliminations.</li>
+<li>Classements.</li>
+<li>Défis quotidiens.</li>
+<li>Skins, titres et effets visuels <strong>déblocables gratuitement</strong>.</li>
+<li>Événements temporaires.</li>
+</ul>
+<p>La progression devra rester compatible avec l'objectif d'un jeu <strong>sans achats intégrés</strong>.</p>
+<h2 id="%F0%9F%A7%B0-technologies">🧰 Technologies</h2>
+<table>
+<thead>
+<tr>
+<th>Composant</th>
+<th>Choix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Plateforme</td>
+<td>Roblox</td>
+</tr>
+<tr>
+<td>Moteur / éditeur</td>
+<td>Roblox Studio</td>
+</tr>
+<tr>
+<td>Langage de script</td>
+<td>Luau</td>
+</tr>
+<tr>
+<td>Multijoueur</td>
+<td>Architecture client / serveur Roblox</td>
+</tr>
+<tr>
+<td>Versionnement</td>
+<td>Git et GitHub</td>
+</tr>
+</tbody>
+</table>
+<h3 id="principes-techniques">Principes techniques</h3>
+<ul>
+<li>La <strong>logique sensible</strong> (pose valide, explosions, dégâts, victoire) doit être vérifiée côté <strong>serveur</strong>.</li>
+<li>Le client gère notamment les entrées et les effets visuels, sans être considéré comme une source de vérité.</li>
+<li>Les interactions doivent être adaptées aux écrans tactiles.</li>
+<li>Les effets et objets doivent être optimisés pour limiter la charge sur mobile.</li>
+<li>Le code doit rester modulaire pour faciliter les futurs modes et bonus.</li>
+</ul>
+<h2 id="%F0%9F%9B%A0%EF%B8%8F-installation-et-d%C3%A9veloppement">🛠️ Installation et développement</h2>
+<p>Le dépôt est synchronisé avec Roblox Studio par <strong><a href="https://rojo.space">Rojo</a></strong> (<code>default.project.json</code>) : les scripts vivent dans <code>src/</code>, la scène (Workspace, éclairage) dans le fichier de place.</p>
+<ol>
+<li>
+<p>Installer <strong>Roblox Studio</strong> et <strong>Rojo 7.x</strong> (CLI et plugin Studio).</p>
+</li>
+<li>
+<p>Cloner le dépôt :</p>
+<pre class="hljs"><code><div>git <span class="hljs-built_in">clone</span> https://github.com/SmiledPolecat34/Boom-Battle.git
+<span class="hljs-built_in">cd</span> Boom-Battle
+</div></code></pre>
+</li>
+<li>
+<p>Sauvegarder le fichier de place, puis supprimer <code>Workspace.Baseplate</code> et <code>Workspace.SpawnLocation</code> (l'arène génère son propre sol).</p>
+</li>
+<li>
+<p>Lancer la synchronisation et se connecter depuis le plugin Rojo dans Studio :</p>
+<pre class="hljs"><code><div>rojo serve
+</div></code></pre>
+</li>
+<li>
+<p>Tester avec <strong>Play</strong>, ou <strong>Test &gt; Clients and Servers</strong> pour plusieurs joueurs. Un joueur seul peut jouer dans Studio (mode solo de test) ; hors Studio, 2 joueurs minimum sont requis.</p>
+</li>
+<li>
+<p>Pour tester la sauvegarde, activer <em>Enable Studio Access to API Services</em> dans les paramètres du jeu.</p>
+</li>
+</ol>
+<p>Détails : <code>docs/SETUP.md</code> (installation), <code>docs/SYNC.md</code> (synchronisation automatique à deux), <code>docs/DEPLOYMENT.md</code> (mise en ligne), <code>docs/TEST_PLAN.md</code> (état réel des tests).</p>
+<h2 id="%F0%9F%93%8D-%C3%A9tat-actuel-du-d%C3%A9veloppement">📍 État actuel du développement</h2>
+<p>Le MVP est <strong>écrit et partiellement testé</strong> (un seul joueur à la fois dans Studio) ; il n'est <strong>pas encore validé</strong> en multijoueur ni sur mobile.</p>
+<table>
+<thead>
+<tr>
+<th>Domaine</th>
+<th>État</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Arène 10 / 16 / 24 générée au hasard, 5 thèmes</td>
+<td>Implémenté, testé en logique et en solo</td>
+</tr>
+<tr>
+<td>Déplacement au clic / toucher, bombes, explosions en chaîne, 4 bonus</td>
+<td>Implémenté, testé en solo</td>
+</tr>
+<tr>
+<td>Manches (Ready, compte à rebours, résultats, rejouer)</td>
+<td>Implémenté, testé en solo</td>
+</tr>
+<tr>
+<td>Interface (menu, lobby, HUD, résultats, aide, réglages)</td>
+<td>Implémenté, testé par messages réseau (pas de clics réels, pas de mobile)</td>
+</tr>
+<tr>
+<td>Bomb Coins, boutique, inventaire, quêtes, sauvegarde</td>
+<td>Implémenté ; sauvegarde réelle non encore vérifiée</td>
+</tr>
+<tr>
+<td>Multijoueur (2 à 8), déconnexions, mobile</td>
+<td><strong>Non testé</strong></td>
+</tr>
+</tbody>
+</table>
+<h2 id="%F0%9F%A7%AA-tests">🧪 Tests</h2>
+<p>Les scripts de <code>tests/</code> se collent dans la barre de commande de Studio (voir <code>tests/README.md</code>). Ils vérifient la logique pure (génération, chemins, explosions, résultats, données, boutique). Ils ne remplacent pas les tests multijoueur et mobile.</p>
+<h2 id="%F0%9F%97%93%EF%B8%8F-feuille-de-route">🗓️ Feuille de route</h2>
+<h3 id="phase-1--prototype-jouable">Phase 1 — Prototype jouable</h3>
+<ul>
+<li><input type="checkbox" id="checkbox0"><label for="checkbox0">Définir la grille et la première arène.</label></li>
+<li><input type="checkbox" id="checkbox1"><label for="checkbox1">Implémenter les déplacements au clic / tactile.</label></li>
+<li><input type="checkbox" id="checkbox2"><label for="checkbox2">Implémenter la pose des bombes.</label></li>
+<li><input type="checkbox" id="checkbox3"><label for="checkbox3">Implémenter les explosions en croix.</label></li>
+<li><input type="checkbox" id="checkbox4"><label for="checkbox4">Gérer les blocs destructibles.</label></li>
+<li><input type="checkbox" id="checkbox5"><label for="checkbox5">Gérer les réactions en chaîne.</label></li>
+<li><input type="checkbox" id="checkbox6"><label for="checkbox6">Gérer les éliminations et la victoire.</label></li>
+</ul>
+<h3 id="phase-2--premi%C3%A8re-version-multijoueur-mvp">Phase 2 — Première version multijoueur (MVP)</h3>
+<ul>
+<li><input type="checkbox" id="checkbox7"><label for="checkbox7">Ajouter un lobby simple.</label></li>
+<li><input type="checkbox" id="checkbox8"><label for="checkbox8">Gérer 4 à 8 joueurs par manche.</label></li>
+<li><input type="checkbox" id="checkbox9"><label for="checkbox9">Ajouter quatre bonus de base.</label></li>
+<li><input type="checkbox" id="checkbox10"><label for="checkbox10">Ajouter un chronomètre et une fin de partie.</label></li>
+<li><input type="checkbox" id="checkbox11"><label for="checkbox11">Ajouter une interface PC et mobile.</label></li>
+<li><input type="checkbox" id="checkbox12"><label for="checkbox12">Tester la synchronisation serveur / clients.</label></li>
+<li><input type="checkbox" id="checkbox13"><label for="checkbox13">Ajouter la possibilité de rejouer rapidement.</label></li>
+</ul>
+<h3 id="phase-3--qualit%C3%A9-et-fid%C3%A9lisation">Phase 3 — Qualité et fidélisation</h3>
+<ul>
+<li><input type="checkbox" id="checkbox14"><label for="checkbox14">Ajouter d'autres cartes.</label></li>
+<li><input type="checkbox" id="checkbox15"><label for="checkbox15">Équilibrer les bonus et les durées.</label></li>
+<li><input type="checkbox" id="checkbox16"><label for="checkbox16">Ajouter les statistiques et la progression gratuite.</label></li>
+<li><input type="checkbox" id="checkbox17"><label for="checkbox17">Optimiser les performances mobiles.</label></li>
+<li><input type="checkbox" id="checkbox18"><label for="checkbox18">Corriger les bugs repérés par les testeurs.</label></li>
+</ul>
+<h3 id="phase-4--contenus-suppl%C3%A9mentaires">Phase 4 — Contenus supplémentaires</h3>
+<ul>
+<li><input type="checkbox" id="checkbox19"><label for="checkbox19">Ajouter Bomb Royale.</label></li>
+<li><input type="checkbox" id="checkbox20"><label for="checkbox20">Ajouter Chaos Mode et ses événements.</label></li>
+<li><input type="checkbox" id="checkbox21"><label for="checkbox21">Ajouter Team Battle.</label></li>
+<li><input type="checkbox" id="checkbox22"><label for="checkbox22">Ajouter des éléments cosmétiques gratuits.</label></li>
+<li><input type="checkbox" id="checkbox23"><label for="checkbox23">Ajouter des événements saisonniers.</label></li>
+</ul>
+<h2 id="%E2%9C%85-priorit%C3%A9s-de-qualit%C3%A9">✅ Priorités de qualité</h2>
+<ul>
+<li>Parties fluides et explosions compréhensibles.</li>
+<li>Déplacements précis à la souris et au tactile.</li>
+<li>Absence de désynchronisation sur les dégâts et les victoires.</li>
+<li>Temps d'attente limité entre les manches.</li>
+<li>Bon fonctionnement sur appareils mobiles compatibles.</li>
+<li>Expérience agréable même sans communication entre joueurs.</li>
+</ul>
+<h2 id="%F0%9F%94%90-s%C3%A9curit%C3%A9-et-%C3%A9quit%C3%A9">🔐 Sécurité et équité</h2>
+<ul>
+<li>Validation serveur de toutes les actions importantes.</li>
+<li>Limitation des requêtes distantes abusives.</li>
+<li>Contrôle des collisions et positions autorisées.</li>
+<li>Aucun avantage payant prévu.</li>
+<li>Respect des règles et standards de sécurité de Roblox.</li>
+</ul>
+<h2 id="%F0%9F%A4%9D-contributions">🤝 Contributions</h2>
+<p>Les propositions d'idées et signalements de bugs peuvent être discutés via les <strong>Issues</strong>, si elles sont activées.</p>
+<p><strong>Ce dépôt n'est pas open source.</strong> Le fait qu'il soit public n'autorise pas la réutilisation, la modification ou la redistribution de son contenu. <strong>Aucune contribution de code ni pull request ne doit être considérée comme acceptée sans accord préalable du titulaire des droits.</strong></p>
+<h2 id="%F0%9F%93%9C-licence-et-droits-dauteur">📜 Licence et droits d'auteur</h2>
+<p><strong>Copyright © 2026 — Titulaire des droits : à renseigner. Tous droits réservés.</strong></p>
+<p>Le code source, les éléments graphiques, les modèles, les sons, les textes et les autres contenus originaux du projet sont protégés par le droit d'auteur applicable.</p>
+<p><strong>Aucune licence open source n'est accordée.</strong> Sauf autorisation expresse du titulaire des droits ou exception légale applicable, leur reproduction, modification, distribution ou exploitation n'est pas autorisée.</p>
+<p>Les marques, noms et créations de tiers demeurent la propriété de leurs titulaires respectifs. <strong>BOM BATTLE</strong> n'est ni affilié ni officiellement associé aux jeux qui ont inspiré son genre de gameplay.</p>
+<blockquote>
+<p><strong>GitHub :</strong> garder le champ « License » vide (<code>None</code>) ou ajouter un fichier <code>LICENSE</code> propriétaire cohérent. Une mention « All Rights Reserved » n'est pas une licence open source standard.</p>
+</blockquote>
+<hr>
+<div align="center">
+</div><p><strong>💣 BOM BATTLE — One bomb can change everything.</strong></p>
+<p><em>Projet Roblox indépendant — En développement</em></p>
+
+
+</body>
+
+</html>
