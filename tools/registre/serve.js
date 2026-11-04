@@ -512,7 +512,7 @@ async function main() {
   const defaultPort = 4173;
   const initialPort = explicitPort || defaultPort;
   const allowFallback = !explicitPort && !production;
-  const host = env.HOST || "127.0.0.1";
+  const host = env.HOST || (production ? "0.0.0.0" : "127.0.0.1");
   const { createAuth } = require("./auth/service");
   let authStore;
   if (env.DATABASE_URL) {
@@ -537,9 +537,11 @@ async function main() {
   }
   console.log("Collecte des données (tests et export du jeu)…");
   const initialData = await collectData({ skipTests: env.REGISTRE_SKIP_STARTUP_TESTS === "1", useSnapshot: true, writeSnapshot: !production });
+  const publicHosts = (env.PUBLIC_HOSTS || "").split(",").map((x) => x.trim().toLowerCase()).filter(Boolean);
+  if (env.RENDER_EXTERNAL_HOSTNAME) publicHosts.push(env.RENDER_EXTERNAL_HOSTNAME.trim().toLowerCase());
   const server = createServer({
     initialData, auth, secureCookies: production || env.COOKIE_SECURE === "true", trustProxy: env.TRUST_PROXY === "1" || production,
-    allowedHosts: (env.PUBLIC_HOSTS || "").split(",").map((x) => x.trim().toLowerCase()).filter(Boolean),
+    allowedHosts: publicHosts,
   });
 
   const actualPort = await new Promise((resolve, reject) => {
