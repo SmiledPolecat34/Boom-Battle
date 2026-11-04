@@ -57,8 +57,6 @@ local lastReadyRequest: { [Player]: number } = {}
 
 -- Mode solo : manche d'entraînement contre des bots. Aucune récompense ni statistique (pas d'exploitation possible).
 local soloRound = false
-local pendingSolo: { player: Player, botCount: number }? = nil
-local lastBotCount = 0 -- bots de la dernière manche : relancés tels quels par REJOUER en solo
 local fastStart = false -- vrai après une revanche unanime : compte à rebours court
 local countdownSeconds = ROUND.QuickCountdown
 
@@ -282,7 +280,6 @@ local function startCountdown(group: { Player }, botCount: number?, botDifficult
 	BotService.clear()
 	countdownSeconds = if fastStart then ROUND.RematchCountdown else ROUND.QuickCountdown
 	fastStart = false
-	lastBotCount = botCount or 0
 	table.clear(participants)
 	table.clear(participantOrder)
 	table.clear(alive)
@@ -458,29 +455,15 @@ local function checkRematch()
 			return
 		end
 	end
-	local wasSolo, bots = soloRound, lastBotCount
 	local wasParty = isPartyMember(humans[1])
 	fastStart = true
 	resetRound() -- rematch[player] => prêts dès le retour au lobby
 	if wasParty then
 		pendingParty = true -- revanche unanime d'une partie privée (bots compris) : relance directe
-	elseif wasSolo then
-		pendingSolo = { player = humans[1], botCount = bots }
 	end
 end
 
 local function tick()
-	-- Demande de mode solo (validée par la remote) : exécutée ici, dans le fil de la machine d'états.
-	if pendingSolo and (state == "WAITING" or state == "READY") then
-		local request = pendingSolo
-		pendingSolo = nil
-		if request.player.Parent == Players and queued[request.player] then
-			ready[request.player] = true
-			startCountdown({ request.player }, request.botCount)
-			return
-		end
-	end
-
 	-- Lancement de la partie privée demandé par l'hôte (validé par la remote).
 	if pendingParty and (state == "WAITING" or state == "READY") then
 		pendingParty = false
@@ -655,10 +638,11 @@ function RoundService.start(remotes: Folder)
 		end
 	end)
 
-	-- PLAY / retour au menu. Un participant encore en jeu ne peut pas quitter la file.
+	-- PLAY / retour au menu. Un participant encore en jeu ne peut quitter la file qu'en abandonnant explicitement
+	-- (menu de pause, 2e argument `true`) : il est alors éliminé, puis retiré de la file.
 	local setQueued = remotes:WaitForChild("SetQueued") :: RemoteEvent
-	setQueued.OnServerEvent:Connect(function(player: Player, value: any)
-		if typeof(value) ~= "boolean" then
+	setQueued.OnServerEvent:Connect(function(player: Player, value: any, forfeit: any)
+		if typeof(value) ~= "boolean" or (forfeit ~= nil and typeof(forfeit) ~= "boolean") then
 			return
 		end
 		local now = os.clock()
@@ -670,7 +654,13 @@ function RoundService.start(remotes: Folder)
 		local lockedIn = participants[player]
 			and (state == "COUNTDOWN" or (state == "PLAYING" and alive[player] == true))
 		if not value and lockedIn then
-			return
+			if forfeit ~= true then
+				return
+			end
+			if state == "PLAYING" and alive[player] == true then
+				DamageService.eliminate(player) -- déclenche onEliminated : mise à jour de la manche et diffusion
+			end
+			-- Pendant le compte à rebours : la file est quittée ci-dessous, ce qui interrompt le départ.
 		end
 		queued[player] = if value then true else nil
 		if not value then
@@ -680,37 +670,6 @@ function RoundService.start(remotes: Folder)
 		end
 		broadcast()
 		checkRematch()
-	end)
-
-	-- Mode solo : manche d'entraînement contre 1 à 3 bots. Le client n'envoie que le nombre de bots.
-	local startSolo = remotes:WaitForChild("StartSolo") :: RemoteEvent
-	startSolo.OnServerEvent:Connect(function(player: Player, botCount: any)
-		if typeof(botCount) ~= "number" or botCount ~= math.floor(botCount) then
-			return
-		end
-		if botCount < 1 or botCount > ROUND.MaxSoloBots then
-			return
-		end
-		local now = os.clock()
-		if now - (lastReadyRequest[player] or 0) < GameConfig.RemoteLimits.ReadyToggleMinInterval then
-			return
-		end
-		lastReadyRequest[player] = now
-
-		if state ~= "WAITING" and state ~= "READY" then
-			noticeRemote:FireClient(player, "Une manche est en cours : attends la fin pour lancer le mode solo.")
-			return
-		end
-		for other in queued do
-			if other ~= player then
-				noticeRemote:FireClient(player, "Mode solo impossible : d'autres joueurs attendent une manche.")
-				return
-			end
-		end
-		queued[player] = true
-		ready[player] = nil
-		pendingSolo = { player = player, botCount = botCount }
-		broadcast()
 	end)
 
 	-- Partie privée : créer, rejoindre, lancer. Le client n'envoie qu'un mot ; tout est revalidé ici.

@@ -42,7 +42,6 @@ for _, name in {
 	"ShopResult",
 	"RequestEmote",
 	"RequestQuickChat",
-	"StartSolo",
 	"PartyAction",
 	"Notice",
 	"RoundState",

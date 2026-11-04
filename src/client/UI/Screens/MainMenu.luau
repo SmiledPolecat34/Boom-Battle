@@ -292,19 +292,10 @@ function MainMenu.new(parent: Instance, ctx: any)
 		text.TextStrokeColor3 = Color3.fromRGB(40, 110, 30)
 		play = text
 	end
-	-- SOLO : entraînement contre des bots, juste au-dessus de PLAY.
-	local solo = Components.button(frame, "SoloButton", "SOLO (BOTS)", Color3.fromRGB(48, 120, 230), UDim2.fromOffset(250, 58))
-	solo.AnchorPoint = Vector2.new(1, 1)
-	solo.Position = UDim2.new(1, -24, 1, -190)
-	solo.TextSize = 24
-	solo.Activated:Connect(function()
-		ctx.openOverlay("Solo")
-	end)
-
 	-- PARTIE PRIVÉE : crée un groupe (on en devient l'hôte) ou rejoint celui qui existe déjà sur le serveur.
 	local privateButton = Components.button(frame, "PrivateButton", "PARTIE PRIVÉE", Theme.violet, UDim2.fromOffset(250, 58))
 	privateButton.AnchorPoint = Vector2.new(1, 1)
-	privateButton.Position = UDim2.new(1, -24, 1, -256)
+	privateButton.Position = UDim2.new(1, -24, 1, -190)
 	privateButton.TextSize = 24
 	local partyExists = false
 	privateButton.Activated:Connect(function()
