@@ -84,14 +84,16 @@ function Lobby.new(parent: Instance, ctx: any)
 			end
 
 			if state == "WAITING" then
-				status.Text = ("En attente de joueurs (%d/%d)"):format(queuedCount, snapshot.minPlayers)
+				status.Text = ("Recherche de joueurs (%d/%d)"):format(queuedCount, snapshot.minPlayers)
 			elseif state == "READY" then
 				status.Text = ("Prêts : %d/%d\nAppuie sur PRÊT quand tu es prêt"):format(readyCount, queuedCount)
 			else
 				status.Text = "Nouvelle arène en préparation..."
 			end
 
-			local canReady = state == "WAITING" or state == "READY"
+			-- Partie rapide : plus de bouton PRÊT (le serveur lance la manche dès qu'il y a assez de joueurs).
+			-- Le bouton reste construit pour les futurs serveurs privés.
+			local canReady = false
 			ready.Visible = canReady
 			ready.Text = if iAmReady then "ANNULER" else "PRÊT"
 			ready.BackgroundColor3 = if iAmReady then Theme.red else Theme.green

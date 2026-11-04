@@ -60,7 +60,7 @@ local soloRound = false
 local pendingSolo: { player: Player, botCount: number }? = nil
 local lastBotCount = 0 -- bots de la dernière manche : relancés tels quels par REJOUER en solo
 local fastStart = false -- vrai après une revanche unanime : compte à rebours court
-local countdownSeconds = ROUND.ReadyCountdown
+local countdownSeconds = ROUND.QuickCountdown
 
 local roundStateRemote: RemoteEvent
 local roundEndedRemote: RemoteEvent
@@ -240,7 +240,7 @@ end
 -- botCount : nombre de bots (mode solo) ; 0 pour une manche normale.
 local function startCountdown(group: { Player }, botCount: number?)
 	BotService.clear()
-	countdownSeconds = if fastStart then ROUND.RematchCountdown else ROUND.ReadyCountdown
+	countdownSeconds = if fastStart then ROUND.RematchCountdown else ROUND.QuickCountdown
 	fastStart = false
 	lastBotCount = botCount or 0
 	table.clear(participants)
@@ -439,8 +439,17 @@ local function tick()
 	end
 
 	if state == "WAITING" then
-		if #queuedPlayers() >= minPlayers() then
-			setState("READY")
+		-- Partie rapide : pas de lobby ni de « prêt ». Dès qu'il y a assez de joueurs dans la file, le compte à rebours part.
+		-- (L'état READY et l'écran Lobby restent en place pour les futurs serveurs privés.)
+		local group = queuedPlayers()
+		if #group >= minPlayers() then
+			while #group > ROUND.MaximumPlayers do
+				table.remove(group)
+			end
+			for _, player in group do
+				ready[player] = true
+			end
+			startCountdown(group)
 		end
 	elseif state == "READY" then
 		local all = queuedPlayers()
@@ -471,7 +480,7 @@ local function tick()
 		if soloAbandoned or stillReady < #participantOrder or (not soloRound and #participantOrder < minPlayers()) then
 			print("[RoundService] Compte à rebours interrompu")
 			returnToLobby(true)
-			setState("READY")
+			setState("WAITING")
 		elseif os.clock() - stateEnteredAt >= countdownSeconds then
 			beginPlaying()
 		end

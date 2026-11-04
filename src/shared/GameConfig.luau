@@ -16,7 +16,8 @@ GameConfig.States = table.freeze({
 })
 
 GameConfig.Round = table.freeze({
-	MinimumPlayers = 2,
+	MinimumPlayers = 1, -- PROVISOIRE : partie rapide dès 1 joueur (à remonter à 2 plus tard)
+	QuickCountdown = 6, -- secondes : compte à rebours de la partie rapide (aucun lobby, aucun « prêt »)
 	MaximumPlayers = 8,
 	ReadyCountdown = 10, -- secondes
 	RoundDuration = 150, -- secondes
