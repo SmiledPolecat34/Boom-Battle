@@ -14,7 +14,8 @@
     },
     "StarterPlayer": {
       "$properties": {
-        "DevTouchMovementMode": "Scriptable"
+        "DevTouchMovementMode": "Scriptable",
+        "EnableMouseLockOption": false
       },
       "StarterPlayerScripts": {
         "Client": {
