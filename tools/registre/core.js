@@ -688,7 +688,7 @@
     $("msgs").addEventListener("click", function (e) {
       var b = e.target.closest("[data-draft]"); if (!b) return;
       var parts = b.getAttribute("data-draft").split(":"), list = chat.draftStore[parts[0]] || [], d = list[Number(parts[1])];
-      if (d && fillForm(d.type, d.fields, d.note)) location.hash = "contribuer";
+      if (d && fillForm(d.type, d.fields, d.note)) navigate("contribuer");
     });
   }
 
@@ -713,7 +713,6 @@
       ["tab", "gameTab", "runFilter", "model"].forEach(function (k) { if (typeof s[k] === "string") settingsCache[k] = s[k]; });
       if (settingsCache.gameTab && gamePanels[settingsCache.gameTab] && settingsCache.gameTab !== currentGame) { currentGame = settingsCache.gameTab; renderGame(); }
       if (settingsCache.runFilter && !runFilterValue && /^[A-Za-z0-9 ._\/-]{1,60}$/.test(settingsCache.runFilter)) { runFilterValue = settingsCache.runFilter; renderTests(); }
-      if (settingsCache.tab && !location.hash && views.indexOf(settingsCache.tab) >= 0) location.hash = settingsCache.tab;
     }, function () { /* serveur injoignable */ });
   }
   function fmtBytes(n) { return n < 1024 ? n + " o" : n < 1048576 ? (n / 1024).toFixed(1) + " Ko" : (n / 1048576).toFixed(1) + " Mo"; }

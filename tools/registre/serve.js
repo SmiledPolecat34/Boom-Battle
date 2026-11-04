@@ -16,6 +16,10 @@ const os = require("node:os");
 const path = require("node:path");
 const { spawn, spawnSync } = require("node:child_process");
 const { validate } = require("./validate");
+const { createProjects, ProjectError } = require("./projects");
+const { createActivity } = require("./activity");
+const { createBoard, BoardError, STATUSES, PRIORITIES, TYPES } = require("./board");
+const { createJournal, JournalError, SCHEMAS } = require("./journal");
 const { createStore, StoreError, SOUND_EVENTS, SOUND_CATEGORIES, MAX_SOUND_BYTES, MAX_SOUNDS, MAX_CHATS } = require("./store");
 
 const ROOT = path.resolve(__dirname, "..", "..");
@@ -163,7 +167,7 @@ function emptyGame() {
 function buildHtml(data) {
   const template = fs.readFileSync(path.join(__dirname, "template.html"), "utf8");
   const backend = fs.readFileSync(path.join(__dirname, "adapter-local.js"), "utf8");
-  const core = fs.readFileSync(path.join(__dirname, "core.js"), "utf8");
+  const core = ["core.js", "journal-suggestions.js", "board-ui.js", "projects-ui.js"].map(name => fs.readFileSync(path.join(__dirname, name), "utf8")).join("\n");
   const json = JSON.stringify(data).replace(/</g, "\\u003c");
   return template
     .replace("/*__BACKEND__*/", () => backend)
@@ -221,7 +225,12 @@ function createServer(options) {
   const dir = options.dir || DEFAULT_DIR;
   const runsDir = options.runsDir || DEFAULT_RUNS_DIR;
   const runTests = options.runTests || runLune;
-  const store = createStore({ dir: options.dataDir || DEFAULT_DATA_DIR, contributionsDir: dir, runsDir });
+  const dataDir = options.dataDir || DEFAULT_DATA_DIR;
+  const projects = createProjects({ dir: dataDir, ...(options.projectOptions || {}) });
+  const activity = createActivity(path.join(dataDir, "activity.json"));
+  const board = createBoard({ dir: dataDir, activity });
+  const journal = createJournal({ dir: dataDir, activity });
+  const store = createStore({ dir: dataDir, contributionsDir: dir, runsDir, extras: [board.extra, journal.extra, activity.extra] });
 
   async function jsonBody(req, limit) {
     let raw;
@@ -242,6 +251,19 @@ function createServer(options) {
     const method = req.method;
     const p = url.pathname;
     try {
+      if (p === "/api/projects") {
+        if (method === "GET") return send(res, 200, projects.list()), true;
+        if (method === "POST") return send(res, 201, await projects.add(await jsonBody(req, 8000))), true;
+      }
+      if (method === "POST" && p === "/api/projects/pick-folder") return send(res, 200, await projects.pick()), true;
+      const projectRefresh = /^\/api\/projects\/(p[a-f0-9]{16})\/refresh$/.exec(p);
+      if (method === "POST" && projectRefresh) return send(res, 200, projects.refresh(projectRefresh[1])), true;
+      const profile = /^\/api\/projects\/(boom|luma|p[a-f0-9]{16})$/.exec(p);
+      if (profile) {
+        if (method === "GET") return send(res, 200, projects.get(profile[1])), true;
+        if (method === "PATCH") return send(res, 200, projects.update(profile[1], await jsonBody(req, 12000))), true;
+        if (method === "DELETE") return send(res, 200, projects.remove(profile[1])), true;
+      }
       if (method === "GET" && p === "/api/storage") return send(res, 200, Object.assign(store.stats(), { limits: { soundEvents: SOUND_EVENTS, soundCategories: SOUND_CATEGORIES, maxSoundBytes: MAX_SOUND_BYTES, maxSounds: MAX_SOUNDS, maxChats: MAX_CHATS } })), true;
 
       if (p === "/api/settings") {
@@ -282,12 +304,43 @@ function createServer(options) {
         if (method === "DELETE") return store.removeSound(id), send(res, 200, { ok: true }), true;
       }
 
+      if (method === "GET" && p === "/api/schema") return send(res, 200, { journal: SCHEMAS, board: { statuses: STATUSES, priorities: PRIORITIES, types: TYPES } }), true;
+      if (method === "GET" && p === "/api/activity") return send(res, 200, activity.list(Number(url.searchParams.get("limit")) || 200)), true;
+
+      if (p === "/api/tickets") {
+        if (method === "GET") return send(res, 200, board.list()), true;
+        if (method === "POST") return send(res, 201, board.create(await jsonBody(req, 20000))), true;
+      }
+      const ticket = new RegExp("^/api/tickets/([^/]+)(?:/(move|comments)(?:/([^/]+))?)?$").exec(p);
+      if (ticket) {
+        const id = decodeURIComponent(ticket[1]), sub = ticket[2], extraId = ticket[3] && decodeURIComponent(ticket[3]);
+        if (!sub) {
+          if (method === "GET") return send(res, 200, board.get(id)), true;
+          if (method === "PATCH") return send(res, 200, board.update(id, await jsonBody(req, 20000))), true;
+          if (method === "DELETE") return board.remove(id), send(res, 200, { ok: true }), true;
+        } else if (sub === "move" && !extraId && method === "POST") {
+          return send(res, 200, board.move(id, await jsonBody(req, 2000))), true;
+        } else if (sub === "comments") {
+          if (!extraId && method === "POST") return send(res, 201, board.addComment(id, await jsonBody(req, 8000))), true;
+          if (extraId && method === "DELETE") return send(res, 200, board.removeComment(id, extraId)), true;
+        }
+      }
+
+      const entries = new RegExp("^/api/journal/([a-z]+)(?:/([^/]+))?$").exec(p);
+      if (entries) {
+        const coll = entries[1], id = entries[2] && decodeURIComponent(entries[2]);
+        if (!id && method === "GET") return send(res, 200, journal.list(coll)), true;
+        if (!id && method === "POST") return send(res, 201, journal.put(coll, await jsonBody(req, 20000))), true;
+        if (id && method === "PUT") return send(res, 200, journal.put(coll, await jsonBody(req, 20000), id)), true;
+        if (id && method === "DELETE") return journal.remove(coll, id), send(res, 200, { ok: true }), true;
+      }
+
       if (p === "/api/backup") {
         if (method === "GET") return send(res, 200, store.backup()), true;
         if (method === "POST") return send(res, 200, store.restore(await jsonBody(req, BACKUP_MAX_BODY))), true;
       }
     } catch (error) {
-      if (error instanceof StoreError) return send(res, error.status, { error: error.message }), true;
+      if (error instanceof StoreError || error instanceof BoardError || error instanceof JournalError || error instanceof ProjectError) return send(res, error.status, { error: error.message }), true;
       throw error;
     }
     return false;
@@ -301,7 +354,7 @@ function createServer(options) {
     if (hostName !== "127.0.0.1" && hostName !== "localhost") return send(res, 403, { error: "hôte refusé" });
 
     // L'historique des exécutions est relu à chaque chargement : un rechargement montre aussi les lancements faits entre-temps.
-    if (req.method === "GET" && url.pathname === "/") return send(res, 200, buildHtml(Object.assign({}, data, { runs: listRuns(runsDir) })), "text/html; charset=utf-8");
+    if (req.method === "GET" && url.pathname === "/") return send(res, 200, buildHtml(Object.assign({}, data, { runs: listRuns(runsDir), projects: projects.list(), projectProfiles: projects.builtins() })), "text/html; charset=utf-8");
 
     const image = /^\/img\/([a-z0-9_]+\.png)$/.exec(url.pathname);
     if (req.method === "GET" && image) {

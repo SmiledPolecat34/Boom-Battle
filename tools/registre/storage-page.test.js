@@ -115,12 +115,13 @@ test("historique : une réponse inattendue du serveur (pas une liste) est ignor�
 });
 
 // ----- réglages ----------------------------------------------------------------------------------------------------------------
-test("réglages : l'onglet, la catégorie de données et le filtre de tests mémorisés sont restaurés au chargement", async () => {
+test("réglages : les préférences du jeu sont restaurées sans quitter l'accueil des projets", async () => {
   const server = fakeServer();
   server.state.settings = { tab: "sons", gameTab: "quetes", runFilter: "GridService" };
   const env = boot({ fetchImpl: server.fetchImpl });
   await wait(40);
-  assert.equal(env.sandbox.location.hash, "sons");
+  assert.equal(env.sandbox.location.hash, "");
+  assert.equal(env.els["view-accueil"].hidden, false);
   assert.match(env.els["view-tests"].innerHTML, /value="GridService"/);
   assert.match(env.els["view-donnees"].innerHTML, /aria-pressed="true"[^>]*>Quêtes|data-g="quetes" aria-pressed="true"/);
 });

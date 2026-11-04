@@ -197,6 +197,14 @@
       return fetch(url, init).then(check).then(function (res) { return res.json(); });
     }
     var storage = {
+      projects: {
+        update: function (id, fields) { return api("PATCH", "/api/projects/" + encodeURIComponent(id), fields); },
+        remove: function (id) { return api("DELETE", "/api/projects/" + encodeURIComponent(id)); },
+        list: function () { return api("GET", "/api/projects"); },
+        add: function (body) { return api("POST", "/api/projects", body); },
+        pick: function () { return api("POST", "/api/projects/pick-folder", {}); },
+        refresh: function (id) { return api("POST", "/api/projects/" + encodeURIComponent(id) + "/refresh", {}); }
+      },
       chats: {
         list: function () { return api("GET", "/api/chats"); },
         put: function (conv) { return api("PUT", "/api/chats/" + encodeURIComponent(conv.id), conv); },
@@ -217,6 +225,23 @@
         remove: function (id) { return api("DELETE", "/api/sounds/" + encodeURIComponent(id)); },
         url: function (source) { return "sounds/" + encodeURIComponent(source.file); }
       },
+      board: {
+        schema: function () { return api("GET", "/api/schema"); },
+        list: function () { return api("GET", "/api/tickets"); },
+        create: function (raw) { return api("POST", "/api/tickets", raw); },
+        update: function (id, patch) { return api("PATCH", "/api/tickets/" + encodeURIComponent(id), patch); },
+        move: function (id, target) { return api("POST", "/api/tickets/" + encodeURIComponent(id) + "/move", target); },
+        comment: function (id, text) { return api("POST", "/api/tickets/" + encodeURIComponent(id) + "/comments", { text: text }); },
+        uncomment: function (id, commentId) { return api("DELETE", "/api/tickets/" + encodeURIComponent(id) + "/comments/" + encodeURIComponent(commentId)); },
+        remove: function (id) { return api("DELETE", "/api/tickets/" + encodeURIComponent(id)); }
+      },
+      journal: {
+        list: function (coll) { return api("GET", "/api/journal/" + encodeURIComponent(coll)); },
+        save: function (coll, raw, id) { return api(id ? "PUT" : "POST", "/api/journal/" + encodeURIComponent(coll) + (id ? "/" + encodeURIComponent(id) : ""), raw); },
+        remove: function (coll, id) { return api("DELETE", "/api/journal/" + encodeURIComponent(coll) + "/" + encodeURIComponent(id)); }
+      },
+      activity: function (limit) { return api("GET", "/api/activity?limit=" + (limit || 200)); },
+      runs: function () { return api("GET", "/api/tests/latest"); },
       stats: function () { return api("GET", "/api/storage"); },
       backup: function () { return api("GET", "/api/backup"); },
       restore: function (bundle) { return api("POST", "/api/backup", bundle); }

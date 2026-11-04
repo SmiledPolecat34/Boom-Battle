@@ -6,8 +6,60 @@ const test = require("node:test");
 const assert = require("node:assert/strict");
 const { FAKE_KEY, boot, wait, ok, fakeServer, fillQuestForm, sampleData } = require("./page-helpers");
 
+function clickAnchor(env, href, options = {}) {
+  let prevented = false;
+  const { target: linkTarget, ...eventOptions } = options;
+  const link = { getAttribute: (key) => key === "href" ? href : options[key] || null, hasAttribute: () => false };
+  env.sandbox.document.handlers.click({ button: 0, target: { closest: () => link },
+    preventDefault() { prevented = true; }, ...eventOptions });
+  return prevented;
+}
+
+test("ancrages : navigation sans saut natif, historique sans doublon et retour au défilement précédent", async () => {
+  const env = boot({ fetchImpl: fakeServer().fetchImpl, hash: "#tests" });
+  await wait();
+  env.sandbox.window.scrollY = 640;
+  assert.ok(clickAnchor(env, "#luma"));
+  assert.equal(env.els["view-luma"].hidden, false);
+  assert.equal(env.sandbox.window.scrollY, 0);
+  assert.ok(env.els["page-title"].focused);
+  assert.equal(env.sandbox.window.history.length, 2);
+  clickAnchor(env, "#luma");
+  assert.equal(env.sandbox.window.history.length, 2, "le lien actif ne rajoute pas une entrée");
+  env.sandbox.window.history.back();
+  assert.equal(env.els["view-tests"].hidden, false);
+  assert.equal(env.sandbox.window.scrollY, 640);
+  env.sandbox.window.history.forward();
+  assert.equal(env.els["view-luma"].hidden, false);
+  assert.equal(env.sandbox.window.scrollY, 0);
+});
+
+test("ancrages : aller au contenu conserve le projet et l'URL ; clics modifiés laissés au navigateur", async () => {
+  const env = boot({ fetchImpl: fakeServer().fetchImpl, hash: "#luma" });
+  await wait();
+  assert.ok(clickAnchor(env, "#main"));
+  assert.equal(env.sandbox.location.hash, "#luma");
+  assert.ok(env.els.main.focused);
+  assert.equal(env.els["view-luma"].hidden, false);
+  assert.equal(env.sandbox.window.history.length, 1);
+  for (const modifier of [{ ctrlKey: true }, { metaKey: true }, { shiftKey: true }, { button: 1 }, { target: "_blank" }]) {
+    assert.equal(clickAnchor(env, "#tests", modifier), false);
+    assert.equal(env.els["view-luma"].hidden, false);
+  }
+});
+
+test("ancrages : liens inconnus et anciennes ancres isolées corrigés vers l'accueil", async () => {
+  for (const hash of ["#introuvable", "#main", "#%malforme"]) {
+    const env = boot({ fetchImpl: fakeServer().fetchImpl, hash });
+    await wait();
+    assert.equal(env.els["view-accueil"].hidden, false);
+    assert.equal(env.sandbox.location.hash, "accueil");
+    assert.equal(env.sandbox.window.history.length, 1);
+  }
+});
+
 test("navigation accessible : flèches, bouclage, début et fin activent le panneau et déplacent le focus", async () => {
-  const { els, sandbox } = boot({ fetchImpl: fakeServer().fetchImpl });
+  const { els, sandbox } = boot({ fetchImpl: fakeServer().fetchImpl, hash: "#tests" });
   await wait();
   const navigate = (id, key) => {
     let prevented = false;
@@ -33,6 +85,32 @@ test("navigation accessible : flèches, bouclage, début et fin activent le pann
   assert.equal(sandbox.location.hash, "stockage");
   navigate("stockage", "Home");
   assert.equal(sandbox.location.hash, "tests");
+});
+
+test("espace projets : accueil neutre et Luma isolé du registre du jeu", async () => {
+  const server = fakeServer();
+  server.state.settings = { tab: "sons" };
+  const home = boot({ fetchImpl: server.fetchImpl });
+  await wait();
+  assert.equal(home.els["view-accueil"].hidden, false);
+  assert.equal(home.els["view-tests"].hidden, true);
+  assert.equal(home.els["boom-navigation"].hidden, true);
+  assert.equal(home.els["project-brand-logo"].hidden, true);
+  assert.equal(home.sandbox.document.title, "Espace projets — Accueil");
+  const luma = boot({ fetchImpl: fakeServer().fetchImpl, hash: "#luma" });
+  await wait();
+  assert.equal(luma.els["view-luma"].hidden, false);
+  assert.equal(luma.els["view-tests"].hidden, true);
+  assert.equal(luma.els["boom-navigation"].hidden, true);
+  assert.equal(luma.els["foot"].hidden, true);
+  assert.equal(luma.els["project-luma"].attrs["aria-current"], "page");
+  assert.equal(luma.sandbox.document.title, "Espace projets — Luma");
+  const boom = boot({ fetchImpl: fakeServer().fetchImpl, hash: "#tests" });
+  await wait();
+  assert.equal(boom.els["view-tests"].hidden, false);
+  assert.equal(boom.els["boom-navigation"].hidden, false);
+  assert.equal(boom.els["project-brand-logo"].hidden, false);
+  assert.equal(boom.els["workspace-brand"].hidden, true);
 });
 
 test("bilan indisponible : aucune annonce de succès lorsque la collecte échoue ou ne contient aucun test", async () => {

@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>BOOM BATTLE — Registre du projet</title>
-<meta name="description" content="Le registre BOOM BATTLE : suivre les tests, explorer les données du jeu et gérer les contenus du projet.">
+<title>Espace projets</title>
+<meta name="description" content="Un espace commun pour retrouver et suivre les projets BOOM BATTLE et Luma.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -53,9 +53,9 @@ header { background: #151b31; color: #eceffb; }
 .brand h1 { font-size: 1.6rem; letter-spacing: .02em; }
 .brand small { color: #9aa2c9; }
 nav { display: flex; gap: 4px; flex-wrap: wrap; margin-left: auto; }
-nav button { font: inherit; font-weight: 500; color: #b4bbdc; background: none; border: 0; padding: 10px 16px; border-radius: 10px 10px 0 0; cursor: pointer; }
-nav button[aria-selected="true"] { background: var(--bg); color: var(--ink); }
-nav button:hover:not([aria-selected="true"]) { color: #fff; }
+nav [data-view] { font: inherit; font-weight: 500; color: #b4bbdc; background: none; border: 0; padding: 10px 16px; border-radius: 10px 10px 0 0; cursor: pointer; }
+nav [data-view][aria-selected="true"] { background: var(--bg); color: var(--ink); }
+nav [data-view]:hover:not([aria-selected="true"]) { color: #fff; }
 button:focus-visible, input:focus-visible, summary:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
 
 main { max-width: 1240px; margin: 0 auto; padding: 24px 16px 56px; display: flex; flex-direction: column; gap: 24px; }
@@ -88,6 +88,21 @@ section[hidden] { display: none; }
 .tools { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
 input[type="search"] { font: inherit; padding: 9px 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); min-width: min(100%, 280px); }
 .pills { display: flex; flex-wrap: wrap; gap: 6px; }
+.kanban { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; align-items: start; }
+@media (max-width: 800px) { .kanban { grid-template-columns: 1fr; } }
+.kcol { background: var(--soft); border: 1px solid var(--line); border-radius: 12px; padding: 12px; display: flex; flex-direction: column; gap: 10px; }
+.kdrop { display: flex; flex-direction: column; gap: 10px; min-height: 80px; }
+.kcard { background: var(--surface); border: 1px solid var(--line); border-left: 5px solid var(--muted); border-radius: 10px; padding: 10px 12px; display: flex; flex-direction: column; gap: 8px; cursor: grab; }
+.kcard.selected { outline: 2px solid var(--accent); }
+.kcard.prio-P0 { border-left-color: var(--bad); }
+.kcard.prio-P1 { border-left-color: var(--coin); }
+.kcard.prio-P2 { border-left-color: var(--accent); }
+.kcard.prio-P3 { border-left-color: var(--good); }
+.ktitle { font: inherit; font-weight: 600; text-align: left; background: none; border: 0; color: var(--ink); padding: 0; cursor: pointer; }
+.ktitle:hover { text-decoration: underline; }
+.kmove { display: flex; gap: 4px; }
+.kcomment { border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; display: flex; flex-direction: column; gap: 4px; }
+.khistory { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 6px; }
 .pill { font: inherit; font-size: .92rem; font-weight: 500; padding: 7px 14px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer; }
 .pill[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
 
@@ -208,19 +223,75 @@ button, input, textarea, select, a, summary { -webkit-tap-highlight-color: trans
 [hidden] { display: none !important; }
 .skip-link { position: fixed; top: 12px; left: 12px; z-index: 100; transform: translateY(-180%); padding: 12px 20px; background: var(--surface); border: 2px solid var(--accent); border-radius: 8px; }
 .skip-link:focus { transform: translateY(0); }
-.app-sidebar { position: fixed; inset: 0 auto 0 0; width: 236px; z-index: 20; background: var(--surface); color: var(--ink); border-right: 1px solid var(--line); }
-.bar { height: 100%; padding: 32px 18px 20px; display: flex; flex-direction: column; align-items: stretch; flex-wrap: nowrap; gap: 28px; }
+.app-sidebar { position: fixed; inset: 0 auto 0 0; width: 236px; z-index: 20; background: var(--surface); color: var(--ink); border-right: 1px solid var(--line); overflow-y: auto; }
+.bar { min-height: 100%; padding: 32px 18px 20px; display: flex; flex-direction: column; align-items: stretch; flex-wrap: nowrap; gap: 28px; }
 .brand { padding: 0 8px; flex-direction: row; align-items: center; gap: 10px; }
-.brand-mark { display: grid; place-items: center; width: 38px; height: 38px; flex: none; border-radius: 12px; background: var(--accent-solid); color: white; }
+.brand-mark { display: block; width: 160px; height: auto; max-height: 90px; flex: none; object-fit: contain; }
+.project-links { display: flex; flex-direction: column; gap: 6px; }
+.project-links a { color: var(--muted); padding: 10px 14px; border-radius: 8px; text-decoration: none; min-height: 44px; }
+.project-links a:hover { background: var(--bg); color: var(--ink); }
+.project-links a[aria-current="page"] { background: var(--soft); color: var(--accent); font-weight: 600; }
+.project-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 20px; }
+.project-card { display: flex; flex-direction: column; gap: 18px; padding: 28px; }
+.project-card p { color: var(--muted); margin: 0; }
+.project-card .btn { align-self: flex-start; margin-top: auto; text-decoration: none; }
+.project-logo { width: 170px; height: 100px; object-fit: contain; align-self: flex-start; }
+.luma-mark { width: 64px; height: 64px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 16px; color: var(--accent); background: var(--soft); font-size: 2rem; font-weight: 600; }
+.empty-project { max-width: 680px; padding: 32px; }
+.empty-project p { color: var(--muted); }
+.workspace-heading { font-size: 1rem; font-weight: 600; }
+.project-picker { display: flex; flex-direction: column; gap: 10px; }
+.project-picker label { font-size: .76rem; color: var(--muted); }
+.project-picker select { min-height: 44px; width: 100%; min-width: 0; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); color: var(--ink); }
+.project-picker .btn { font-size: .8rem; }
+.project-picker a[aria-current="page"] { background: var(--soft); border-color: var(--accent); }
+.project-import { max-width: 760px; }
+.project-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.project-path { overflow-wrap: anywhere; margin: 0; }
+.project-files { max-height: 420px; overflow: auto; padding-left: 22px; overflow-wrap: anywhere; }
+.project-files li { padding: 5px 0; }
+.project-info { display: grid; grid-template-columns: minmax(120px, 1fr) minmax(0, 2fr); gap: 10px 20px; margin: 0; }
+.project-info dt { color: var(--muted); }
+.project-info dd { margin: 0; overflow-wrap: anywhere; }
+.project-danger { border-color: color-mix(in srgb, var(--bad) 40%, var(--line)); }
+.project-danger .btn { background: var(--bad); border-color: var(--bad); color: var(--surface); }
+.project-danger .btn.ghost { background: var(--surface); color: var(--bad); }
+.journal-fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 18px; }
+.journal-wide { grid-column: 1 / -1; }
+.journal-custom { display: flex; flex-direction: column; gap: 6px; border-left: 2px solid var(--accent); padding-left: 12px; margin-top: 4px; }
+.journal-fields select { width: 100%; min-width: 0; }
+.project-cards:empty { display: none; }
+.project-links a { overflow-wrap: anywhere; }
+html { scrollbar-gutter: stable; scroll-padding-top: 24px; }
+* { scrollbar-width: thin; scrollbar-color: var(--line) transparent; }
+input, select, textarea { accent-color: var(--accent-solid); }
+:where(main, section, h2, h3, [id]) { scroll-margin-top: 24px; }
+a { text-decoration-thickness: 1px; text-underline-offset: 4px; }
+a:not(.btn):hover { text-decoration-color: currentColor; }
+.breadcrumb a { color: var(--muted); text-decoration: none; border-radius: 4px; }
+.breadcrumb a:hover { color: var(--accent); text-decoration: underline; }
+nav [data-view] { text-decoration: none; }
+.project-links a, nav [data-view], .btn, .copy, .pill { touch-action: manipulation; }
+.project-links a:active, nav [data-view]:active { background: var(--soft); color: var(--accent); }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; }
+a.btn, a.btn:visited { color: #fff; }
+a.btn.ghost, a.btn.ghost:visited { color: var(--accent); }
+.btn:active:not(:disabled), .copy:active { transform: translateY(1px); }
+.empty-project h3 { margin-top: 20px; }
+.empty-project a { display: inline-flex; align-items: center; min-height: 44px; font-weight: 500; }
+@media (prefers-reduced-motion: no-preference) {
+  .project-links a, nav [data-view], .btn, .copy, .pill { transition: background-color .16s ease, color .16s ease, border-color .16s ease, box-shadow .16s ease; }
+  .btn:hover:not(:disabled) { box-shadow: 0 4px 14px #6043cb26; }
+}
 .brand h1 { font-size: 1rem; font-weight: 700; letter-spacing: .035em; }
 .brand small { display: block; color: var(--muted); font-size: .75rem; }
 .nav-caption { padding: 0 14px; color: var(--muted); font-size: .66rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; }
 nav { display: flex; flex-direction: column; flex-wrap: nowrap; gap: 6px; margin: 8px 0 0; }
-nav button { display: flex; align-items: center; gap: 12px; text-align: left; border: 1px solid transparent; border-radius: 8px; color: var(--muted); font-size: .88rem; padding: 11px 14px; min-height: 46px; }
-nav button svg { width: 19px; height: 19px; flex: none; }
-nav button[aria-selected="true"] { background: var(--soft); color: var(--accent); font-weight: 600; }
-nav button[aria-selected="true"]::after { content: ""; margin-left: auto; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
-nav button:hover:not([aria-selected="true"]) { background: var(--bg); color: var(--ink); }
+nav [data-view] { display: flex; align-items: center; gap: 12px; text-align: left; border: 1px solid transparent; border-radius: 8px; color: var(--muted); font-size: .88rem; padding: 11px 14px; min-height: 46px; }
+nav [data-view] svg { width: 19px; height: 19px; flex: none; }
+nav [data-view][aria-selected="true"] { background: var(--soft); color: var(--accent); font-weight: 600; }
+nav [data-view][aria-selected="true"]::after { content: ""; margin-left: auto; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+nav [data-view]:hover:not([aria-selected="true"]) { background: var(--bg); color: var(--ink); }
 .sidebar-bottom { margin-top: auto; border-top: 1px solid var(--line); padding: 18px 10px 0; }
 .local-label { display: flex; align-items: center; gap: 8px; font-size: .8rem; font-weight: 500; }
 .local-label::before { content: ""; width: 7px; height: 7px; background: var(--muted); border-radius: 50%; }
@@ -303,17 +374,24 @@ pre.json { max-width: 100%; }
 .runbar input[type="text"] { min-width: 0; flex-basis: 220px; }
 footer { border-top: 1px solid var(--line); padding-top: 20px; font-size: .74rem; overflow-wrap: anywhere; }
 footer .copy { margin-top: 12px; }
+.creator-credit { margin: 0 0 12px; color: var(--muted); }
+.creator-credit strong { color: var(--ink); font-weight: 500; }
 @media (min-width: 1500px) { main { padding-top: 44px; } }
 @media (max-width: 1200px) { .tiles { grid-template-columns: repeat(3, minmax(0, 1fr)); } main { padding: 28px; } .topbar { padding: 0 28px; } }
 @media (max-width: 800px) {
   .app-sidebar { position: static; width: 100%; border-right: 0; border-bottom: 1px solid var(--line); }
   .bar { padding: 18px 20px 0; gap: 16px; }
   .brand { padding: 0; }
-  .brand-mark { width: 34px; height: 34px; }
+  .brand-mark { width: 120px; height: auto; max-height: 68px; }
+  .project-links { flex-direction: row; flex-wrap: wrap; gap: 4px; }
+  .project-links a { padding: 8px 12px; }
+  .project-picker { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 6px 10px; }
+  .project-picker label { grid-column: 1 / -1; }
+  .project-picker .btn { padding: 8px 10px; white-space: nowrap; }
   .nav-caption, .sidebar-bottom { display: none; }
   nav { flex-direction: row; overflow-x: auto; margin: 0 -20px; padding: 0 16px 12px; }
-  nav button { flex: none; padding: 10px 12px; white-space: nowrap; }
-  nav button[aria-selected="true"]::after { display: none; }
+  nav [data-view] { flex: none; padding: 10px 12px; white-space: nowrap; }
+  nav [data-view][aria-selected="true"]::after { display: none; }
   .workspace { margin: 0; }
   .topbar { height: 52px; padding: 0 20px; }
   main { padding: 28px 20px; gap: 24px; }
@@ -334,7 +412,7 @@ footer .copy { margin-top: 12px; }
   .runbar .btn { width: 100%; }
 }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; scroll-behavior: auto !important; } }
-@media (forced-colors: active) { nav button[aria-selected="true"], .pill[aria-pressed="true"] { border: 2px solid Highlight; } .status, .tile::before { border: 2px solid CanvasText; } }
+@media (forced-colors: active) { nav [data-view][aria-selected="true"], .pill[aria-pressed="true"] { border: 2px solid Highlight; } .status, .tile::before { border: 2px solid CanvasText; } }
 </style>
 </head>
 <body>
@@ -342,34 +420,80 @@ footer .copy { margin-top: 12px; }
 <header class="app-sidebar">
   <div class="bar">
     <div class="brand">
-      <span class="brand-mark" aria-hidden="true"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="14" r="7"/><path d="m15 9 2-2-2-2 2-2m2 5h3m-2-5 2-2"/></svg></span>
-      <div><h1>BOOM BATTLE</h1><small>Registre du projet</small></div>
+      <img id="project-brand-logo" class="brand-mark" src="/img/logo.png" alt="BOOM BATTLE" width="160" height="89" hidden>
+      <h1 id="workspace-brand" class="workspace-heading">Espace projets</h1>
     </div>
-    <div><div class="nav-caption">Espace de travail</div>
+    <div class="project-picker"><label for="project-select">Sélectionner un projet</label><select id="project-select"><option value="accueil">Tous les projets</option><option value="tests">BOOM BATTLE</option><option value="luma">Luma</option></select><a id="project-add-link" href="#ajouter-projet" class="btn ghost">+ Ajouter un projet</a></div>
+    <a id="project-profile-link" href="#profil/boom" class="copy" hidden>Profil du projet</a>
+    <div class="project-links" aria-label="Projets">
+      <a id="project-home" href="#accueil">Tous les projets</a>
+      <a id="project-boom" href="#tests">BOOM BATTLE</a>
+      <a id="project-luma" href="#luma">Luma</a>
+      <div id="extra-project-links" class="project-links"></div>
+    </div>
+    <div id="boom-navigation" hidden><div class="nav-caption">Dans ce projet</div>
     <nav role="tablist" aria-label="Vues" aria-orientation="vertical">
-      <button role="tab" id="tab-tests" data-view="tests" aria-selected="true">Tests</button>
-      <button role="tab" id="tab-donnees" data-view="donnees" aria-selected="false">Données du jeu</button>
-      <button role="tab" id="tab-assets" data-view="assets" aria-selected="false">Assets</button>
-      <button role="tab" id="tab-contribuer" data-view="contribuer" aria-selected="false">Contribuer</button>
-      <button role="tab" id="tab-assistant" data-view="assistant" aria-selected="false">Assistant</button>
-      <button role="tab" id="tab-sons" data-view="sons" aria-selected="false">Sons</button>
-      <button role="tab" id="tab-stockage" data-view="stockage" aria-selected="false">Stockage</button>
+      <a href="#tests" role="tab" id="tab-tests" data-view="tests" aria-selected="true">Tests</a>
+      <a href="#donnees" role="tab" id="tab-donnees" data-view="donnees" aria-selected="false">Données du jeu</a>
+      <a href="#assets" role="tab" id="tab-assets" data-view="assets" aria-selected="false">Assets</a>
+      <a href="#contribuer" role="tab" id="tab-contribuer" data-view="contribuer" aria-selected="false">Contribuer</a>
+      <a href="#assistant" role="tab" id="tab-assistant" data-view="assistant" aria-selected="false">Assistant</a>
+      <a href="#tableau" role="tab" id="tab-tableau" data-view="tableau" aria-selected="false">Tableau</a>
+      <a href="#journal" role="tab" id="tab-journal" data-view="journal" aria-selected="false">Journal</a>
+      <a href="#sons" role="tab" id="tab-sons" data-view="sons" aria-selected="false">Sons</a>
+      <a href="#stockage" role="tab" id="tab-stockage" data-view="stockage" aria-selected="false">Stockage</a>
     </nav></div>
-    <div class="sidebar-bottom"><div class="local-label">Environnement local</div><p>Les données de votre projet,<br>réunies au même endroit.</p></div>
+    <div class="sidebar-bottom"><div class="local-label">Environnement local</div><p>Vos projets,<br>réunis au même endroit.</p></div>
   </div>
 </header>
 <div class="workspace">
-<div class="topbar"><div class="breadcrumb"><span>Registre</span><span aria-hidden="true">/</span><b id="breadcrumb-current">Tests</b></div><span class="project-badge">BOOM BATTLE · Projet Roblox</span></div>
+<div class="topbar"><div class="breadcrumb"><a id="breadcrumb-project" href="#accueil">Espace projets</a><span aria-hidden="true">/</span><b id="breadcrumb-current" aria-current="page">Accueil</b></div><span id="project-context" class="project-badge">2 projets</span></div>
 <main id="main" tabindex="-1">
-  <div class="page-intro"><span class="eyebrow">Qualité du projet</span><h2 id="page-title">Tests &amp; validation</h2><p id="page-description">Suivez la qualité du jeu, lancez vos tests et retrouvez chaque résultat.</p></div>
-  <section id="view-tests" role="tabpanel" tabindex="0" aria-labelledby="tab-tests"></section>
+  <div class="page-intro"><span class="eyebrow">Espace projets</span><h2 id="page-title" tabindex="-1">Vos projets, au même endroit</h2><p id="page-description">Choisissez un projet pour retrouver son espace de travail.</p></div>
+  <section id="view-accueil" aria-labelledby="page-title">
+    <div class="project-cards">
+      <article id="card-boom" class="card project-card">
+        <img class="project-logo" src="/img/logo.png" alt="BOOM BATTLE" width="170" height="100">
+        <p id="card-boom-description">Le registre du jeu : tests, configurations, ressources et suivi du développement.</p>
+        <a id="card-boom-open" class="btn" href="#tests" aria-label="Ouvrir le projet BOOM BATTLE">Ouvrir le projet <span aria-hidden="true">→</span></a>
+        <a href="#profil/boom">Voir le profil</a>
+      </article>
+      <article id="card-luma" class="card project-card">
+        <span class="luma-mark" aria-hidden="true">L</span>
+        <h3 id="card-luma-name">Luma</h3><p id="card-luma-description">Un espace dédié, prêt à accueillir les informations et les données du projet.</p>
+        <a id="card-luma-open" class="btn" href="#luma" aria-label="Ouvrir le projet Luma">Ouvrir le projet <span aria-hidden="true">→</span></a>
+        <a href="#profil/luma">Voir le profil</a>
+      </article>
+    </div>
+    <div id="extra-project-cards" class="project-cards"></div>
+  </section>
+  <section id="view-add-project" aria-labelledby="page-title" hidden>
+    <form id="project-import-form" class="card stack project-import" novalidate>
+      <div class="field"><label for="project-name">Nom du projet <span class="hint">(facultatif)</span></label><input id="project-name" maxlength="80" placeholder="Le nom du dossier ou du dépôt sera utilisé"></div>
+      <div class="field"><label for="project-source">Importer depuis</label><select id="project-source"><option value="github">Un dépôt GitHub</option><option value="folder">Un dossier de cet ordinateur</option></select></div>
+      <div id="project-github-fields" class="field"><label for="project-github-url">Adresse du dépôt GitHub</label><input id="project-github-url" type="url" placeholder="https://github.com/proprietaire/depot" maxlength="240" aria-describedby="project-github-hint"><span id="project-github-hint" class="hint">Une copie locale sera créée. Pour un dépôt privé, les accès Git doivent déjà être configurés sur cet ordinateur.</span></div>
+      <div id="project-folder-fields" class="stack" hidden><div class="stack" style="gap:8px;align-items:flex-start"><button type="button" id="project-pick-folder" class="btn ghost" aria-describedby="project-picker-msg">Parcourir les dossiers…</button><span id="project-picker-msg" class="hint" role="status" aria-live="polite"></span></div><div class="field"><label for="project-folder">Chemin du dossier</label><input id="project-folder" placeholder="C:\Users\votre-nom\Documents\Mon projet" maxlength="2000"><span class="hint">Le dossier est lié à son emplacement actuel, sans déplacer ses fichiers.</span></div></div>
+      <div class="row"><button type="submit" id="project-import-submit" class="btn">Ajouter et ouvrir le projet</button><a href="#accueil" class="btn ghost">Annuler</a></div>
+      <p id="project-import-msg" role="status" aria-live="polite" class="hint"></p>
+    </form>
+  </section>
+  <section id="view-project" aria-labelledby="page-title" hidden></section>
+  <section id="view-luma" aria-labelledby="page-title" hidden>
+    <div class="card empty-project"><span class="luma-mark" aria-hidden="true">L</span><h3 id="luma-space-title">Un espace pour Luma</h3><p>Le contenu et les sources de données seront ajoutés plus tard. Aucune donnée n’est encore connectée à ce projet.</p><a href="#accueil">Revenir aux projets</a></div>
+  </section>
+  <section id="view-tests" role="tabpanel" tabindex="0" aria-labelledby="tab-tests" hidden></section>
   <section id="view-donnees" aria-labelledby="tab-donnees" hidden></section>
   <section id="view-assets" aria-labelledby="tab-assets" hidden></section>
   <section id="view-contribuer" aria-labelledby="tab-contribuer" hidden></section>
   <section id="view-assistant" aria-labelledby="tab-assistant" hidden></section>
+  <section id="view-tableau" aria-labelledby="tab-tableau" hidden></section>
+  <section id="view-journal" aria-labelledby="tab-journal" hidden></section>
   <section id="view-sons" aria-labelledby="tab-sons" hidden></section>
   <section id="view-stockage" aria-labelledby="tab-stockage" hidden></section>
-  <footer id="foot"></footer>
+  <footer>
+    <p class="creator-credit">Créateurs : <strong>SmiledPolecat34</strong> <span aria-hidden="true">·</span> <strong>steph-mss</strong></p>
+    <div id="foot"></div>
+  </footer>
 </main>
 </div>
 
@@ -623,13 +747,26 @@ footer .copy { margin-top: 12px; }
 /*__BACKEND__*/
 /*__EXTRA__*/
   /* ---------- Navigation par hash ---------- */
-  var views = ["tests", "donnees", "assets", "contribuer", "assistant", "sons", "stockage"];
+  var views = ["tests", "donnees", "assets", "contribuer", "assistant", "tableau", "journal", "sons", "stockage"];
+  var activeView = null, viewScroll = {};
+  function isProjectRoute(view) { return (views.indexOf(view) >= 0 && !builtinProfile("boom").deleted) || ["accueil", "ajouter-projet"].indexOf(view) >= 0 || (view === "luma" && !builtinProfile("luma").deleted) || !!profileByView(view); }
+  if (window.history) window.history.scrollRestoration = "manual";
+  function navigate(view, keyboard) {
+    if (!isProjectRoute(view)) return;
+    if (activeView === view) return;
+    if (activeView) viewScroll[activeView] = window.scrollY || 0;
+    if (window.history) window.history.pushState(null, "", "#" + view);
+    else location.hash = view;
+    route({ fresh: true, keyboard: !!keyboard });
+  }
   var viewInfo = {
     tests: ["Tests", "Tests & validation", "Suivez la qualité du jeu, lancez vos tests et retrouvez chaque résultat.", "Qualité du projet"],
     donnees: ["Données du jeu", "Explorez les données du jeu", "Retrouvez les configurations, les contenus et les réglages qui donnent vie au jeu.", "Configuration"],
     assets: ["Assets", "Bibliothèque d’assets", "Consultez les visuels du projet et retrouvez leurs identifiants Roblox.", "Ressources du jeu"],
     contribuer: ["Contribuer", "Faites évoluer le jeu", "Préparez un nouveau contenu, vérifiez les champs et suivez vos contributions.", "Création de contenu"],
     assistant: ["Assistant", "Votre assistant de projet", "Explorez les données et préparez vos prochaines idées dans une conversation.", "Espace de réflexion"],
+    tableau: ["Tableau", "Suivi du projet", "Organisez ce qu'il reste à faire en colonnes, avec priorités, retours et historique.", "Avancement"],
+    journal: ["Journal", "Journaux du projet", "Tests réels, équilibrage, retours de testeurs, décisions, performances et historique de tout ce qui a été fait.", "Mémoire du projet"],
     sons: ["Sons", "Bibliothèque sonore", "Organisez vos sons, leurs usages et leurs réglages pour préparer leur intégration.", "Ressources du jeu"],
     stockage: ["Stockage", "Vos données, en un endroit", "Consultez le stockage du registre, exportez une sauvegarde ou restaurez vos données.", "Gestion du registre"]
   };
@@ -639,6 +776,8 @@ footer .copy { margin-top: 12px; }
     '<rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8" cy="8" r="1"/><path d="m3 17 6-6 4 4 3-3 5 5"/>',
     '<path d="M12 5v14M5 12h14"/><rect x="3" y="3" width="18" height="18" rx="5"/>',
     '<path d="M8 3h8a5 5 0 0 1 5 5v7a4 4 0 0 1-4 4H9l-6 3V8a5 5 0 0 1 5-5Z"/><path d="M8 10h8M8 14h5"/>',
+    '<rect x="3" y="4" width="5" height="16" rx="1.5"/><rect x="10" y="4" width="5" height="10" rx="1.5"/><rect x="17" y="4" width="4" height="13" rx="1.5"/>',
+    '<path d="M6 3h10l4 4v14H6z"/><path d="M16 3v4h4M9 12h8M9 16h6"/>',
     '<path d="M9 18V5l11-2v13M9 8l11-2"/><ellipse cx="6" cy="18" rx="3" ry="3"/><ellipse cx="17" cy="16" rx="3" ry="3"/>',
     '<path d="m3 7 9-4 9 4-9 4-9-4Zm0 5 9 4 9-4M3 17l9 4 9-4"/>'
   ];
@@ -654,40 +793,89 @@ footer .copy { margin-top: 12px; }
       else if (e.key === "Home") next = 0;
       else if (e.key === "End") next = views.length - 1;
       else return;
-      e.preventDefault(); location.hash = views[next]; route(); $("tab-" + views[next]).focus();
+      e.preventDefault(); navigate(views[next], true); $("tab-" + views[next]).focus({ preventScroll: true });
+      if ($("tab-" + views[next]).scrollIntoView) $("tab-" + views[next]).scrollIntoView({ block: "nearest", inline: "nearest" });
     });
   });
-  function route() {
+  function route(options) {
+    options = options || {};
     var v = location.hash.replace("#", "");
-    if (views.indexOf(v) < 0) v = "tests";
-    if (location.hash === "#main") return;
+    if (!isProjectRoute(v)) {
+      v = "accueil";
+      if (location.hash && window.history) window.history.replaceState(null, "", "#accueil");
+    }
+    if (activeView === v) return;
+    var previousView = activeView;
+    if (previousView && !options.fresh) viewScroll[previousView] = window.scrollY || 0;
+    activeView = v;
+    var isBoom = views.indexOf(v) >= 0 || v === "profil/boom";
+    var importedProject = profileByView(v);
+    $("view-add-project").hidden = v !== "ajouter-projet";
+    $("view-project").hidden = !importedProject;
+    if (importedProject) renderImportedProject(importedProject);
+    $("project-select").value = isBoom ? "tests" : importedProject ? (importedProject.id === "luma" ? "luma" : v) : v === "luma" ? "luma" : v === "ajouter-projet" ? v : "accueil";
+    $("project-profile-link").hidden = !isBoom && v !== "luma" && !importedProject;
+    $("project-profile-link").setAttribute("href", isBoom ? "#profil/boom" : importedProject ? (importedProject.source === "builtin" ? "#profil/" + importedProject.id : "#projet/" + importedProject.id) : "#profil/luma");
+    $("project-add-link").setAttribute("aria-current", v === "ajouter-projet" ? "page" : "false");
+    document.querySelectorAll("[data-project]").forEach(function (link) { link.setAttribute("aria-current", importedProject && link.getAttribute("data-project") === importedProject.id ? "page" : "false"); });
+    $("view-accueil").hidden = v !== "accueil";
+    $("view-luma").hidden = v !== "luma";
+    $("boom-navigation").hidden = !isBoom;
+    $("project-brand-logo").hidden = !isBoom;
+    $("workspace-brand").hidden = isBoom;
+    $("breadcrumb-project").textContent = isBoom ? builtinProfile("boom").name : "Espace projets";
+    $("breadcrumb-project").setAttribute("href", isBoom ? "#tests" : "#accueil");
+    $("project-context").textContent = isBoom ? "Projet Roblox" : importedProject ? (importedProject.source === "github" ? "GitHub" : importedProject.source === "builtin" ? "Profil du projet" : "Dossier local") : v === "luma" ? builtinProfile("luma").name : ([builtinProfile("boom"), builtinProfile("luma")].filter(function (p) { return !p.deleted; }).length + customProjects().length) + " projets";
+    [["project-home", v === "accueil"], ["project-boom", isBoom], ["project-luma", v === "luma"]].forEach(function (item) {
+      $(item[0]).setAttribute("aria-current", item[1] ? "page" : "false");
+    });
     views.forEach(function (n) {
       $("view-" + n).hidden = n !== v;
       $("tab-" + n).setAttribute("aria-selected", String(n === v));
-      $("tab-" + n).setAttribute("tabindex", n === v ? "0" : "-1");
+      $("tab-" + n).setAttribute("tabindex", n === v || (v === "profil/boom" && n === "tests") ? "0" : "-1");
     });
-    $("breadcrumb-current").textContent = viewInfo[v][0];
-    $("page-title").textContent = viewInfo[v][1];
-    $("page-description").textContent = viewInfo[v][2];
-    document.querySelectorAll(".eyebrow").forEach(function (el) { el.textContent = viewInfo[v][3]; });
-    document.title = "BOOM BATTLE — " + viewInfo[v][0];
+    var info = isBoom ? viewInfo[v] : v === "luma" ? ["Luma", "Luma", "Retrouvez ici le futur espace du projet Luma.", "Votre projet"] : ["Accueil", "Vos projets, au même endroit", "Choisissez un projet pour retrouver son espace de travail.", "Espace projets"];
+    if (v === "luma") info = [builtinProfile("luma").name, builtinProfile("luma").name, builtinProfile("luma").description || "Retrouvez ici le futur espace du projet Luma.", "Votre projet"];
+    if (importedProject) info = [importedProject.name, importedProject.name, "Retrouvez la source et les fichiers de ce projet.", "Votre projet"];
+    if (v === "ajouter-projet") info = ["Ajouter un projet", "Un nouveau projet, un nouvel espace", "Importez un dépôt GitHub ou choisissez un dossier sur votre ordinateur.", "Espace projets"];
+    $("breadcrumb-current").textContent = info[0];
+    $("page-title").textContent = info[1];
+    $("page-description").textContent = info[2];
+    document.querySelectorAll(".eyebrow").forEach(function (el) { el.textContent = info[3]; });
+    document.title = (isBoom ? builtinProfile("boom").name : "Espace projets") + " — " + info[0];
+    $("foot").hidden = !isBoom;
     document.querySelectorAll(".tablewrap").forEach(function (el) { el.setAttribute("tabindex", "0"); el.setAttribute("role", "region"); el.setAttribute("aria-label", "Tableau défilant"); });
     document.querySelectorAll('[role="tablist"]').forEach(function (el) { el.setAttribute("aria-orientation", window.matchMedia && window.matchMedia("(max-width: 800px)").matches ? "horizontal" : "vertical"); });
-    saveSetting({ tab: v });
+    if (isBoom) saveSetting({ tab: v });
     if (v === "stockage") loadStock();
+    if (v === "journal" && kb.ready) loadJournal();
+    if (previousView) {
+      if (!options.keyboard) $("page-title").focus({ preventScroll: true });
+      if (window.scrollTo) window.scrollTo({ top: options.fresh ? 0 : viewScroll[v] || 0, left: 0, behavior: "instant" });
+    }
   }
-  Array.prototype.forEach.call(document.querySelectorAll("nav button"), function (b) {
-    b.addEventListener("click", function () { location.hash = b.getAttribute("data-view"); route(); });
+  document.addEventListener("click", function (e) {
+    if (e.defaultPrevented || e.button > 0 || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return;
+    var link = e.target.closest('a[href^="#"]');
+    if (!link || link.hasAttribute("download") || link.getAttribute("target") === "_blank") return;
+    var destination = link.getAttribute("href").slice(1);
+    if (destination === "main") {
+      e.preventDefault(); $("main").focus({ preventScroll: true });
+      $("main").scrollIntoView({ block: "start", behavior: "auto" }); return;
+    }
+    if (!isProjectRoute(destination)) return;
+    e.preventDefault(); navigate(destination, link.getAttribute("role") === "tab");
   });
   window.addEventListener("hashchange", route);
+  window.addEventListener("popstate", route);
   window.addEventListener("resize", function () {
     document.querySelectorAll('[role="tablist"]').forEach(function (el) {
       el.setAttribute("aria-orientation", window.matchMedia && window.matchMedia("(max-width: 800px)").matches ? "horizontal" : "vertical");
     });
   });
 
-  renderTests(); renderGame(); renderAssets(); renderContribuer(); renderAssistant(); route();
-  startContribDb(); startSample(); startStorage();
+  renderTests(); renderGame(); renderAssets(); renderContribuer(); renderAssistant(); startProjects(); route();
+  startContribDb(); startSample(); startStorage(); startBoard();
   $("foot").textContent = "Données générées le " + D.generatedAt + " à partir de lune run tests/run -- --json, tools/export_game_data.luau, tests/untested.json et assets/manifest.json.";
   mountExtras();
 })();

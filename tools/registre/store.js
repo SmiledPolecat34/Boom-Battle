@@ -21,7 +21,7 @@ const MAX_MESSAGES = 200;
 const MAX_MESSAGE_CHARS = 20000;
 const MAX_SOUNDS = 40;
 const MAX_SOUND_BYTES = 1500000;
-const TABS = ["tests", "donnees", "assets", "contribuer", "assistant", "sons", "stockage"];
+const TABS = ["tests", "donnees", "assets", "contribuer", "assistant", "tableau", "journal", "sons", "stockage"];
 const GAME_TABS = ["cosmetiques", "quetes", "cartes", "themes", "bonus", "emotes", "chat", "reglages"];
 const SOUND_EVENTS = [
   "bomb_place", "bomb_fuse", "explosion", "powerup_pickup", "shield_break", "elimination", "victory", "defeat", "draw",
@@ -148,6 +148,7 @@ function createStore(options) {
   const dir = options.dir;
   const contributionsDir = options.contributionsDir;
   const runsDir = options.runsDir;
+  const extras = options.extras || []; // modules supplémentaires { key, stats(), backup(), restore(items, skip) }
   const chatsDir = path.join(dir, "chats");
   const soundsDir = path.join(dir, "sounds");
   const settingsFile = path.join(dir, "settings.json");
@@ -284,7 +285,7 @@ function createStore(options) {
   }
   function stats() {
     const sounds = readSounds();
-    return {
+    const out = {
       dir: path.relative(path.resolve(__dirname, "..", ".."), dir).split(path.sep).join("/"),
       chats: dirStats(chatsDir, /^c[a-z0-9]{6,24}\.json$/),
       contributions: dirStats(contributionsDir, /^[0-9]{10,16}-[a-z0-9]{6}\.json$/),
@@ -292,6 +293,8 @@ function createStore(options) {
       sounds: { count: sounds.length, bytes: dirStats(soundsDir, /^s[a-z0-9]{6,24}\.(mp3|ogg|wav)$/).bytes },
       settings: { exists: fs.existsSync(settingsFile) },
     };
+    for (const x of extras) out[x.key] = x.stats();
+    return out;
   }
 
   function backup() {
@@ -320,7 +323,9 @@ function createStore(options) {
       }
       return out;
     });
-    return { format: "registre-backup", version: 1, exportedAt: Date.now(), chats: listChats(), contributions, runs, settings: getSettings(), sounds };
+    const bundle = { format: "registre-backup", version: 1, exportedAt: Date.now(), chats: listChats(), contributions, runs, settings: getSettings(), sounds };
+    for (const x of extras) bundle[x.key] = x.backup();
+    return bundle;
   }
 
   // Restaure une sauvegarde par FUSION : rien n'est supprimé ; une conversation plus récente sur disque est conservée.
@@ -396,6 +401,14 @@ function createStore(options) {
         report.sounds++;
       } catch (e) {
         skip("son", e);
+      }
+    }
+    for (const x of extras) {
+      if (bundle[x.key] === undefined) continue;
+      try {
+        report[x.key] = x.restore(bundle[x.key], skip);
+      } catch (e) {
+        skip(x.key, e);
       }
     }
     return report;

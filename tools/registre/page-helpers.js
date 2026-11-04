@@ -1,6 +1,7 @@
 "use strict";
 // Outils communs aux tests de la page générée : faux navigateur (éléments, stockage, fetch) et jeu de données minimal.
 const vm = require("node:vm");
+const { createBoardFake } = require("./page-board-fake");
 const { buildHtml } = require("./serve");
 
 const FAKE_KEY = "gsk_" + "B".repeat(40);
@@ -54,7 +55,7 @@ function storage(initial) {
 }
 
 // Lance le vrai script de la page dans un faux navigateur. `local` / `session` : contenu initial des stockages.
-function boot({ session, local, fetchImpl, error, data }) {
+function boot({ session, local, fetchImpl, error, data, hash }) {
   const els = {};
   const asideHandlers = {};
   const mk = (id) => ({
@@ -62,6 +63,7 @@ function boot({ session, local, fetchImpl, error, data }) {
     setAttribute(k, v) { this.attrs[k] = v; }, getAttribute(k) { return this.attrs[k]; },
     addEventListener(t, f) { this.handlers[t] = f; }, appendChild() {}, closest() { return null; },
     focus() { this.focused = true; },
+    scrollIntoView(options) { this.scrollOptions = options; },
     querySelectorAll() { return []; },
     querySelector(sel) {
       if (sel === "aside") return { addEventListener: (t, f) => { asideHandlers[t] = f; } };
@@ -73,17 +75,30 @@ function boot({ session, local, fetchImpl, error, data }) {
   const dataText = scripts[0][2];
   const sandbox = {
     document: {
+      handlers: {}, addEventListener(t, f) { this.handlers[t] = f; },
       getElementById: (id) => { const e = els[id] || (els[id] = mk(id)); if (id === "data") e.textContent = dataText; return e; },
       querySelectorAll: () => [], createElement: () => mk("created"), createTextNode: () => ({}), visibilityState: "visible",
       body: { appendChild() {} },
     },
-    location: { hash: "", reload() {} },
+    location: { hash: hash || "", reload() {} },
     navigator: {},
     btoa: (x) => Buffer.from(x, "binary").toString("base64"), Uint8Array, Blob, URL: { createObjectURL: () => "blob:test" },
     AbortController, setTimeout, clearTimeout, setInterval: () => 0, console, JSON, Promise, Date,
     fetch: fetchImpl,
   };
-  sandbox.window = { addEventListener() {}, localStorage: storage(local), sessionStorage: storage(session) };
+  sandbox.window = {
+    handlers: {}, addEventListener(t, f) { this.handlers[t] = f; },
+    localStorage: storage(local), sessionStorage: storage(session), scrollY: 0,
+    scrollTo(options) { this.scrollY = options.top; },
+  };
+  const entries = [hash || ""], history = { index: 0,
+    pushState(state, title, url) { entries.splice(++this.index); entries.push(url); sandbox.location.hash = url.slice(1); },
+    replaceState(state, title, url) { entries[this.index] = url; sandbox.location.hash = url.slice(1); },
+    back() { if (this.index > 0) { sandbox.location.hash = entries[--this.index]; sandbox.window.handlers.popstate(); sandbox.window.handlers.hashchange(); } },
+    forward() { if (this.index < entries.length - 1) { sandbox.location.hash = entries[++this.index]; sandbox.window.handlers.popstate(); sandbox.window.handlers.hashchange(); } },
+    get length() { return entries.length; },
+  };
+  sandbox.window.history = history;
   vm.createContext(sandbox);
   vm.runInContext(scripts[1][2], sandbox);
   return { els, asideHandlers, sandbox, localStorage: sandbox.window.localStorage };
@@ -99,6 +114,7 @@ function fakeServer() {
   const calls = [];
   const state = { runs: sampleRuns(), runError: "", runBodies: [], chats: new Map(), settings: {}, sounds: [], storageDown: false, backup: null, restored: [], downloads: 0, now: T0 };
   const LIMITS = { soundEvents: ["bomb_place", "explosion", "menu_music", "custom"], soundCategories: ["sfx", "music", "ui"], maxSoundBytes: 1500000, maxSounds: 40, maxChats: 200 };
+  const boardRoute = createBoardFake(state);
   function storageRoute(url, init) {
     const method = init.method || "GET";
     const body = init.body ? JSON.parse(init.body) : undefined;
@@ -138,18 +154,19 @@ function fakeServer() {
       (body.chats || []).forEach((c) => state.chats.set(c.id, c));
       return ok({ chats: (body.chats || []).length, contributions: 0, runs: 0, sounds: 0, settings: false, ignored: body.ignored || [] });
     }
-    return null;
+    return boardRoute(url, init);
   }
   const fetchImpl = (url, init) => {
     init = init || {};
     calls.push({ url, method: init.method || "GET", headers: init.headers || {}, body: init.body });
-    if (new RegExp("^/api/(chats|settings|storage|sounds|backup)").test(url)) return state.storageDown ? Promise.reject(new TypeError("serveur arrêté")) : (storageRoute(url, init) || ok({}));
+    if (new RegExp("^/api/(chats|settings|storage|sounds|backup|schema|tickets|journal|activity)").test(url)) return state.storageDown ? Promise.reject(new TypeError("serveur arrêté")) : (storageRoute(url, init) || ok({}));
     if (url === "/api/contributions" && (init.method || "GET") === "GET") return ok(items.slice());
     if (url === "/api/contributions" && init.method === "POST") {
       const doc = JSON.parse(init.body);
       items.unshift(Object.assign({}, doc, { _id: "17000000000" + items.length + "-abcdef" }));
       return ok({ id: "x" });
     }
+    if (url === "/api/tests/latest") return ok({ runs: state.runs.slice(), running: false });
     if (url === "/api/tests/run" && init.method === "POST") {
       const body = JSON.parse(init.body);
       state.runBodies.push(body);
