@@ -564,6 +564,11 @@ local function onPlayerAdded(player: Player)
 end
 
 local function onPlayerRemoving(player: Player)
+	-- Un joueur qui quitte en pleine manche est éliminé comme s'il avait abandonné : élimination diffusée aux clients,
+	-- comptée dans le classement et fin de manche évaluée normalement.
+	if state == "PLAYING" and alive[player] then
+		DamageService.eliminate(player)
+	end
 	ready[player] = nil
 	queued[player] = nil
 	rematch[player] = nil

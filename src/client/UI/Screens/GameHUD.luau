@@ -8,6 +8,7 @@ local Components = require(script.Parent.Parent.Components)
 local InputController = require(script.Parent.Parent.Parent.Controllers.InputController)
 local SettingsStore = require(script.Parent.Parent.Parent.Controllers.SettingsStore)
 local Theme = require(script.Parent.Parent.Theme)
+local TouchControls = require(script.Parent.Parent.TouchControls)
 local CosmeticConfig = require(game:GetService("ReplicatedStorage").Shared.CosmeticConfig)
 
 local GameHUD = {}
@@ -175,14 +176,42 @@ function GameHUD.new(parent: Instance, ctx: any)
 	bomb.Activated:Connect(placeBomb)
 	InputController.onBombKey(placeBomb) -- Espace : raccourci facultatif
 
+	-- Commandes tactiles (mobile / tablette) : joystick ou croix. Sur appareil tactile, les statistiques passent en haut
+	-- à gauche pour laisser le coin bas aux commandes ; « inverser » met les commandes à droite et BOMBE à gauche.
+	local touchControls = TouchControls.new(frame)
+	local function applyStatsSide()
+		if TouchControls.isTouchDevice() then
+			stats.AnchorPoint = Vector2.new(0, 0)
+			-- Sous la barre Roblox (logo, menu, chat, micro) qui occupe le coin haut gauche sur mobile.
+			stats.Position = UDim2.fromOffset(16, 120)
+		else
+			stats.AnchorPoint = Vector2.new(0, 1)
+			stats.Position = UDim2.new(0, 16, 1, -16)
+		end
+	end
+	applyStatsSide()
+
 	local function applyBombSize()
 		local px = SettingsStore.bombButtonPixels()
 		bomb.Size = UDim2.fromOffset(px, px)
 	end
+	local function applyBombSide()
+		local flipped = TouchControls.isTouchDevice() and SettingsStore.get("flipControls") == true
+		bomb.AnchorPoint = Vector2.new(if flipped then 0 else 1, 1)
+		bomb.Position = UDim2.new(if flipped then 0 else 1, if flipped then 24 else -24, 1, -24)
+	end
 	applyBombSize()
+	applyBombSide()
+	TouchControls.onDeviceChanged(function()
+		applyStatsSide()
+		applyBombSide()
+		touchControls.setActive(canBomb)
+	end)
 	SettingsStore.Changed:Connect(function(key: string)
 		if key == "bombButtonSize" then
 			applyBombSize()
+		elseif key == "flipControls" then
+			applyBombSide()
 		end
 	end)
 
@@ -225,6 +254,7 @@ function GameHUD.new(parent: Instance, ctx: any)
 			canBomb = playing
 
 			bomb.Visible = playing
+			touchControls.setActive(playing)
 			-- Émotes et chat : tant qu'on a un personnage dans la manche (pas pour un spectateur sans personnage).
 			local hasCharacter = participant and (state == "COUNTDOWN" or alive)
 			emotes.Visible = hasCharacter

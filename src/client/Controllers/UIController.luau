@@ -354,9 +354,10 @@ function UIController.start(remotes: Folder)
 	-- Message court (ex. « Invitations indisponibles ici ») : un seul à la fois, disparaît seul.
 	local toast = Instance.new("TextLabel")
 	toast.Name = "Toast"
+	-- En bas, décalé à gauche du bouton PLAY et au-dessus du bas de l'écran : ne recouvre ni ÉMOTES/CHAT ni PLAY.
 	toast.AnchorPoint = Vector2.new(0.5, 1)
-	toast.Position = UDim2.new(0.5, 0, 1, -150)
-	toast.Size = UDim2.fromOffset(520, 44)
+	toast.Position = UDim2.new(0.42, 0, 1, -24)
+	toast.Size = UDim2.fromOffset(400, 56)
 	toast.BackgroundColor3 = Color3.fromRGB(21, 27, 49)
 	toast.BackgroundTransparency = 0.1
 	toast.TextColor3 = Color3.new(1, 1, 1)

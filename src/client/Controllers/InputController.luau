@@ -8,6 +8,12 @@ local InputController = {}
 
 local connection: RBXScriptConnection? = nil
 local keyConnection: RBXScriptConnection? = nil
+local virtualDirection: Vector2? = nil -- joystick / croix tactile (TouchControls)
+
+-- Direction tenue sur les commandes tactiles (nil = relâché). Lue par getHeldDirection comme une touche.
+function InputController.setVirtualDirection(direction: Vector2?)
+	virtualDirection = direction
+end
 
 -- callback reçoit la position écran (espace de InputObject.Position).
 function InputController.onPrimaryAction(callback: (position: Vector2) -> ())
@@ -60,7 +66,7 @@ function InputController.getHeldDirection(): Vector2?
 			return direction
 		end
 	end
-	return nil
+	return virtualDirection
 end
 
 function InputController.stop()

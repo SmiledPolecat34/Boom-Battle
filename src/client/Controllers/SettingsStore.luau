@@ -4,7 +4,17 @@
 
 local SettingsStore = {}
 
-export type Key = "bombButtonSize" | "uiScale" | "showMoveMarker" | "showTimer"
+export type Key =
+	"bombButtonSize"
+	| "uiScale"
+	| "showMoveMarker"
+	| "showTimer"
+	| "controlMode"
+	| "joystickFollows"
+	| "flipControls"
+
+-- Commandes tactiles : Joystick (recommandé) ou Croix (simple).
+SettingsStore.ControlModes = table.freeze({ Joystick = true, Croix = true })
 
 SettingsStore.BombButtonSizes = table.freeze({ Petit = 90, Moyen = 120, Grand = 150 })
 SettingsStore.UiScales = table.freeze({ Petit = 0.85, Normal = 1, Grand = 1.15 })
@@ -14,6 +24,9 @@ local values: { [string]: any } = {
 	uiScale = "Normal",
 	showMoveMarker = true,
 	showTimer = true,
+	controlMode = "Joystick",
+	joystickFollows = true,
+	flipControls = false,
 }
 
 local changedEvent = Instance.new("BindableEvent")
@@ -33,7 +46,11 @@ function SettingsStore.set(key: Key, value: any): boolean
 		if SettingsStore.UiScales[value] == nil then
 			return false
 		end
-	elseif key == "showMoveMarker" or key == "showTimer" then
+	elseif key == "controlMode" then
+		if typeof(value) ~= "string" or SettingsStore.ControlModes[value] == nil then
+			return false
+		end
+	elseif key == "showMoveMarker" or key == "showTimer" or key == "joystickFollows" or key == "flipControls" then
 		if typeof(value) ~= "boolean" then
 			return false
 		end
