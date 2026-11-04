@@ -164,7 +164,7 @@ Le dépôt est synchronisé avec Roblox Studio par **[Rojo](https://rojo.space)*
 5. Tester avec **Play**, ou **Test > Clients and Servers** pour plusieurs joueurs. Un joueur seul peut jouer dans Studio (mode solo de test) ; hors Studio, 2 joueurs minimum sont requis.
 6. Pour tester la sauvegarde, activer *Enable Studio Access to API Services* dans les paramètres du jeu.
 
-Détails : `docs/SETUP.md` (installation), `docs/DEPLOYMENT.md` (mise en ligne), `docs/TEST_PLAN.md` (état réel des tests).
+Détails : `docs/SETUP.md` (installation), `docs/SYNC.md` (synchronisation automatique à deux), `docs/DEPLOYMENT.md` (mise en ligne), `docs/TEST_PLAN.md` (état réel des tests).
 
 ## 📍 État actuel du développement
 

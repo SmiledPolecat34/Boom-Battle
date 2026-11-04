@@ -4,7 +4,10 @@ SETUP*
 TEST_PLAN*
 DEPLOYMENT*
 ROADMAP*
+
 *.md
+*.pdf
+*.ps1
 
 *hook.js
 
