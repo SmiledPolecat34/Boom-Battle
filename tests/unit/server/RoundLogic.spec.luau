@@ -1,0 +1,163 @@
+--!nocheck
+-- RoundResolver (résultat de manche) et PlayState (porte d'actions).
+local RoundResolver = world.module("RoundResolver")
+local PlayState = world.module("PlayState")
+
+local WINDOW = 0.5
+
+describe("RoundResolver.compute", function()
+	it("T11 dernier survivant => victoire, classement survivant puis éliminés du plus tardif au plus précoce", function()
+		local r = RoundResolver.compute({ 1, 2, 3 }, { [3] = true }, { { userId = 1, t = 10 }, { userId = 2, t = 20 } }, WINDOW, 30)
+		expect(r.outcome).toBe("WIN")
+		expect(r.winnerUserId).toBe(3)
+		expect(#r.tiedUserIds).toBe(0)
+		expect(r.ranking).toEqual({ 3, 2, 1 })
+		expect(r.durationSeconds).toBe(30)
+	end)
+
+	it("temps écoulé avec plusieurs survivants => égalité entre eux uniquement", function()
+		local r = RoundResolver.compute({ 1, 2, 3 }, { [2] = true, [3] = true }, { { userId = 1, t = 10 } }, WINDOW, 150)
+		expect(r.outcome).toBe("DRAW")
+		expect(r.winnerUserId).toBeNil()
+		expect(#r.tiedUserIds).toBe(2)
+		expect(r.tiedUserIds).toContain(2)
+		expect(r.tiedUserIds).toContain(3)
+		expect(r.tiedUserIds).never.toContain(1)
+	end)
+
+	it("éliminations simultanées (dans la fenêtre) => égalité entre les derniers éliminés", function()
+		local r = RoundResolver.compute({ 1, 2, 3 }, {}, { { userId = 1, t = 10 }, { userId = 2, t = 20.0 }, { userId = 3, t = 20.3 } }, WINDOW, 25)
+		expect(r.outcome).toBe("DRAW")
+		expect(r.winnerUserId).toBeNil()
+		expect(#r.tiedUserIds).toBe(2)
+		expect(r.tiedUserIds).never.toContain(1)
+	end)
+
+	it("la fenêtre est bornée : une élimination à exactement `window` avant la dernière compte", function()
+		local r = RoundResolver.compute({ 1, 2 }, {}, { { userId = 1, t = 9.5 }, { userId = 2, t = 10 } }, WINDOW, 10)
+		expect(#r.tiedUserIds).toBe(2)
+		local r2 = RoundResolver.compute({ 1, 2 }, {}, { { userId = 1, t = 9.4 }, { userId = 2, t = 10 } }, WINDOW, 10)
+		expect(#r2.tiedUserIds).toBe(1)
+	end)
+
+	it("aucun survivant, éliminés espacés : jamais de victoire, seul le dernier est à égalité", function()
+		local r = RoundResolver.compute({ 1, 2 }, {}, { { userId = 1, t = 10 }, { userId = 2, t = 12 } }, WINDOW, 12)
+		expect(r.outcome).toBe("DRAW")
+		expect(r.winnerUserId).toBeNil()
+		expect(r.tiedUserIds).toEqual({ 2 })
+	end)
+
+	it("solo : la mort du seul joueur est une égalité avec lui-même, sa survie une victoire", function()
+		local dead = RoundResolver.compute({ 7 }, {}, { { userId = 7, t = 5 } }, WINDOW, 5)
+		expect(dead.outcome).toBe("DRAW")
+		expect(dead.winnerUserId).toBeNil()
+		expect(dead.tiedUserIds).toEqual({ 7 })
+		local alive = RoundResolver.compute({ 7 }, { [7] = true }, {}, WINDOW, 150)
+		expect(alive.outcome).toBe("WIN")
+		expect(alive.winnerUserId).toBe(7)
+	end)
+
+	it("déconnexion comptée comme élimination : le restant gagne", function()
+		local r = RoundResolver.compute({ 1, 2 }, { [2] = true }, { { userId = 1, t = 4 } }, WINDOW, 4)
+		expect(r.outcome).toBe("WIN")
+		expect(r.winnerUserId).toBe(2)
+	end)
+
+	it("participants vides : pas de gagnant, pas d'erreur", function()
+		local r = RoundResolver.compute({}, {}, {}, WINDOW, 0)
+		expect(r.outcome).toBe("DRAW")
+		expect(r.winnerUserId).toBeNil()
+		expect(#r.ranking).toBe(0)
+	end)
+
+	it("un survivant absent de la liste des participants n'est pas compté", function()
+		local r = RoundResolver.compute({ 1 }, { [99] = true }, { { userId = 1, t = 3 } }, WINDOW, 3)
+		expect(r.winnerUserId).toBeNil()
+	end)
+
+	it("ne modifie pas ses entrées", function()
+		local eliminations = { { userId = 1, t = 1 }, { userId = 2, t = 2 } }
+		local participants = { 1, 2, 3 }
+		RoundResolver.compute(participants, { [3] = true }, eliminations, WINDOW, 3)
+		expect(participants).toEqual({ 1, 2, 3 })
+		expect(#eliminations).toBe(2)
+	end)
+end)
+
+describe("PlayState (porte d'actions)", function()
+	local fake
+	beforeEach(function()
+		fake = {}
+		PlayState.clearActive()
+		PlayState.setState("WAITING")
+	end)
+	afterEach(function()
+		PlayState.clearActive()
+		PlayState.setState("WAITING")
+	end)
+
+	it("lobby (WAITING, READY) : déplacement autorisé, bombe interdite", function()
+		for _, state in { "WAITING", "READY" } do
+			PlayState.setState(state)
+			expect(PlayState.canMove(fake)).toBe(true)
+			expect(PlayState.canBomb(fake)).toBe(false)
+		end
+	end)
+
+	it("compte à rebours : un participant est gelé", function()
+		PlayState.setState("COUNTDOWN")
+		PlayState.setActive(fake, true)
+		expect(PlayState.canMove(fake)).toBe(false)
+		expect(PlayState.canBomb(fake)).toBe(false)
+	end)
+
+	it("en manche : un joueur actif bouge et pose, un éliminé ne peut plus rien", function()
+		PlayState.setState("PLAYING")
+		PlayState.setActive(fake, true)
+		expect(PlayState.canMove(fake)).toBe(true)
+		expect(PlayState.canBomb(fake)).toBe(true)
+		PlayState.setActive(fake, false)
+		expect(PlayState.canMove(fake)).toBe(false)
+		expect(PlayState.canBomb(fake)).toBe(false)
+	end)
+
+	it("en manche : un joueur jamais inscrit (spectateur) ne peut rien faire", function()
+		PlayState.setState("PLAYING")
+		expect(PlayState.canMove({})).toBe(false)
+		expect(PlayState.canBomb({})).toBe(false)
+	end)
+
+	it("fin de manche : tout est bloqué même pour un joueur actif", function()
+		PlayState.setState("FINISHED")
+		PlayState.setActive(fake, true)
+		expect(PlayState.canMove(fake)).toBe(false)
+		expect(PlayState.canBomb(fake)).toBe(false)
+	end)
+
+	it("changement d'arène (RESETTING) : plus aucune action", function()
+		PlayState.setState("RESETTING")
+		PlayState.setActive(fake, true)
+		expect(PlayState.canMove(fake)).toBe(false)
+		expect(PlayState.canBomb(fake)).toBe(false)
+		expect(PlayState.canEmote(fake)).toBe(false)
+	end)
+
+	it("émotes : tous au lobby, compte à rebours et fin ; en manche seulement les vivants", function()
+		for _, state in { "WAITING", "READY", "COUNTDOWN", "FINISHED" } do
+			PlayState.setState(state)
+			expect(PlayState.canEmote(fake)).toBe(true)
+		end
+		PlayState.setState("PLAYING")
+		expect(PlayState.canEmote(fake)).toBe(false)
+		PlayState.setActive(fake, true)
+		expect(PlayState.canEmote(fake)).toBe(true)
+	end)
+
+	it("setState / getState et clearActive", function()
+		PlayState.setState("PLAYING")
+		expect(PlayState.getState()).toBe("PLAYING")
+		PlayState.setActive(fake, true)
+		PlayState.clearActive()
+		expect(PlayState.canMove(fake)).toBe(false)
+	end)
+end)
