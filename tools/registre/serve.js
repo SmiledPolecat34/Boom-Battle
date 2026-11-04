@@ -20,6 +20,8 @@ const { createProjects, ProjectError } = require("./projects");
 const { createActivity } = require("./activity");
 const { createBoard, BoardError, STATUSES, PRIORITIES, TYPES } = require("./board");
 const { createJournal, JournalError, SCHEMAS } = require("./journal");
+const authHttp = require("./auth/http");
+const P = require("./auth/permissions");
 const { createStore, StoreError, SOUND_EVENTS, SOUND_CATEGORIES, MAX_SOUND_BYTES, MAX_SOUNDS, MAX_CHATS } = require("./store");
 
 const ROOT = path.resolve(__dirname, "..", "..");
@@ -29,6 +31,7 @@ const MAX_CONTRIBUTIONS = 500;
 const ID_PATTERN = /^[0-9]{10,16}-[a-z0-9]{6}$/;
 const DEFAULT_RUNS_DIR = path.join(__dirname, "runs");
 const DEFAULT_DATA_DIR = path.join(__dirname, "data");
+const SNAPSHOT_FILE = path.join(__dirname, "snapshot.json");
 const BACKUP_MAX_BODY = 100000000;
 const RUN_TIMEOUT_MS = 180000;
 const MAX_RUNS = 100;
@@ -134,6 +137,7 @@ async function collectData(options) {
     manifest: JSON.parse(fs.readFileSync(path.join(ROOT, "assets", "manifest.json"), "utf8")),
   };
   try {
+    if (opts.skipTests) throw new Error("Tests non lancés au démarrage sur ce serveur : rapport enregistré affiché.");
     const { report, run } = await (opts.runTests || runLune)({ filter: "", trigger: opts.trigger || "demarrage" });
     data.tests = report;
     saveRun(runsDir, run);
@@ -144,11 +148,22 @@ async function collectData(options) {
       const exported = spawnSync(lune, ["run", "tools/export_game_data", "--", gameFile], { cwd: ROOT, encoding: "utf8" });
       if (exported.status !== 0 || !fs.existsSync(gameFile)) throw new Error("L'export des données du jeu a échoué.");
       data.game = JSON.parse(fs.readFileSync(gameFile, "utf8"));
+      if (opts.writeSnapshot) fs.writeFileSync(SNAPSHOT_FILE, JSON.stringify({ savedAt: Date.now(), game: data.game, tests: data.tests }) + "\n");
     } finally {
       fs.rmSync(tmp, { recursive: true, force: true });
     }
   } catch (error) {
-    data.tests.error = String(error.message || error);
+    const message = String(error.message || error);
+    data.tests.error = message;
+    if (opts.useSnapshot && fs.existsSync(SNAPSHOT_FILE)) {
+      try {
+        const snap = JSON.parse(fs.readFileSync(SNAPSHOT_FILE, "utf8"));
+        if (snap && snap.game && Array.isArray(snap.game.quests)) data.game = snap.game;
+        if (snap && snap.tests && Array.isArray(snap.tests.results)) data.tests = Object.assign({}, snap.tests, { error: message + " (rapport du " + new Date(snap.savedAt).toLocaleDateString("fr-FR") + ")" });
+      } catch {
+        /* instantané illisible : ignoré */
+      }
+    }
   }
   data.runs = listRuns(runsDir);
   if (!data.game) data.game = emptyGame();
@@ -167,7 +182,7 @@ function emptyGame() {
 function buildHtml(data) {
   const template = fs.readFileSync(path.join(__dirname, "template.html"), "utf8");
   const backend = fs.readFileSync(path.join(__dirname, "adapter-local.js"), "utf8");
-  const core = ["core.js", "journal-suggestions.js", "board-ui.js", "projects-ui.js"].map(name => fs.readFileSync(path.join(__dirname, name), "utf8")).join("\n");
+  const core = ["core.js", "journal-suggestions.js", "board-ui.js", "admin-ui.js", "projects-ui.js"].map(name => fs.readFileSync(path.join(__dirname, name), "utf8")).join("\n");
   const json = JSON.stringify(data).replace(/</g, "\\u003c");
   return template
     .replace("/*__BACKEND__*/", () => backend)
@@ -182,7 +197,8 @@ function send(res, status, body, type) {
     "Cache-Control": "no-store",
     "X-Content-Type-Options": "nosniff",
     "Referrer-Policy": "no-referrer",
-    "Content-Security-Policy": "default-src 'self'; script-src 'unsafe-inline'; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; media-src 'self'; connect-src 'self' https://api.groq.com; frame-ancestors 'none'",
+    "X-Frame-Options": "DENY",
+    "Content-Security-Policy": "default-src 'self'; script-src 'unsafe-inline'; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; media-src 'self'; connect-src 'self' https://api.groq.com; frame-ancestors 'none'; base-uri 'none'; form-action 'self'",
   });
   res.end(payload);
 }
@@ -231,6 +247,11 @@ function createServer(options) {
   const board = createBoard({ dir: dataDir, activity });
   const journal = createJournal({ dir: dataDir, activity });
   const store = createStore({ dir: dataDir, contributionsDir: dir, runsDir, extras: [board.extra, journal.extra, activity.extra] });
+  // Comptes : sans options.auth (tests uniquement) aucune connexion n'est exigée ; le lancement réel (voir plus bas) en fournit toujours un.
+  const auth = options.auth || null;
+  const secure = !!options.secureCookies;
+  const trustProxy = !!options.trustProxy;
+  const allowedHosts = new Set(["127.0.0.1", "localhost"].concat(options.allowedHosts || []));
 
   async function jsonBody(req, limit) {
     let raw;
@@ -247,7 +268,7 @@ function createServer(options) {
   }
 
   // Routes de stockage durable : conversations, réglages, sons, vue d'ensemble, sauvegarde. Retourne true si la route a répondu.
-  async function storageRoutes(req, res, url) {
+  async function storageRoutes(req, res, url, scope) {
     const method = req.method;
     const p = url.pathname;
     try {
@@ -267,13 +288,13 @@ function createServer(options) {
       if (method === "GET" && p === "/api/storage") return send(res, 200, Object.assign(store.stats(), { limits: { soundEvents: SOUND_EVENTS, soundCategories: SOUND_CATEGORIES, maxSoundBytes: MAX_SOUND_BYTES, maxSounds: MAX_SOUNDS, maxChats: MAX_CHATS } })), true;
 
       if (p === "/api/settings") {
-        if (method === "GET") return send(res, 200, store.getSettings()), true;
-        if (method === "PUT") return send(res, 200, store.putSettings(await jsonBody(req, 4000))), true;
+        if (method === "GET") return send(res, 200, store.getSettings(scope)), true;
+        if (method === "PUT") return send(res, 200, store.putSettings(await jsonBody(req, 4000), scope)), true;
       }
 
       if (p === "/api/chats") {
-        if (method === "GET") return send(res, 200, store.listChats()), true;
-        if (method === "DELETE") return send(res, 200, { removed: store.clearChats() }), true;
+        if (method === "GET") return send(res, 200, store.listChats(scope)), true;
+        if (method === "DELETE") return send(res, 200, { removed: store.clearChats(scope) }), true;
       }
       const chat = /^\/api\/chats\/([^/]+)$/.exec(p);
       if (chat) {
@@ -281,9 +302,9 @@ function createServer(options) {
         if (method === "PUT") {
           const body = await jsonBody(req, 700000);
           if (!body || body.id !== id) throw new StoreError("identifiant incohérent", 400);
-          return send(res, 200, { id: store.putChat(body).id }), true;
+          return send(res, 200, { id: store.putChat(body, scope).id }), true;
         }
-        if (method === "DELETE") return store.removeChat(id), send(res, 200, { ok: true }), true;
+        if (method === "DELETE") return store.removeChat(id, scope), send(res, 200, { ok: true }), true;
       }
 
       if (p === "/api/sounds") {
@@ -336,8 +357,8 @@ function createServer(options) {
       }
 
       if (p === "/api/backup") {
-        if (method === "GET") return send(res, 200, store.backup()), true;
-        if (method === "POST") return send(res, 200, store.restore(await jsonBody(req, BACKUP_MAX_BODY))), true;
+        if (method === "GET") return send(res, 200, store.backup(scope)), true;
+        if (method === "POST") return send(res, 200, store.restore(await jsonBody(req, BACKUP_MAX_BODY), scope)), true;
       }
     } catch (error) {
       if (error instanceof StoreError || error instanceof BoardError || error instanceof JournalError || error instanceof ProjectError) return send(res, error.status, { error: error.message }), true;
@@ -350,13 +371,23 @@ function createServer(options) {
 
   async function handle(req, res) {
     const url = new URL(req.url, "http://localhost");
-    const hostName = String(req.headers.host || "").replace(/:\d+$/, "");
-    if (hostName !== "127.0.0.1" && hostName !== "localhost") return send(res, 403, { error: "hôte refusé" });
+    const hostName = String(req.headers.host || "").replace(/:\d+$/, "").toLowerCase();
+    if (!allowedHosts.has(hostName)) return send(res, 403, { error: "hôte refusé" });
+    const ip = (trustProxy ? String(req.headers["x-forwarded-for"] || "").split(",")[0].trim() : "") || (req.socket && req.socket.remoteAddress) || "";
+    let actor = null;
+    if (auth) actor = await auth.resolve(authHttp.parseCookies(req.headers.cookie)[authHttp.COOKIE]);
+    const scope = actor ? actor.user.id : undefined;
 
     // L'historique des exécutions est relu à chaque chargement : un rechargement montre aussi les lancements faits entre-temps.
-    if (req.method === "GET" && url.pathname === "/") return send(res, 200, buildHtml(Object.assign({}, data, { runs: listRuns(runsDir), projects: projects.list(), projectProfiles: projects.builtins() })), "text/html; charset=utf-8");
+    if (req.method === "GET" && url.pathname === "/") {
+      if (auth && !actor) return send(res, 200, authHttp.loginPage({ mode: "login" }), "text/html; charset=utf-8");
+      if (auth && actor.user.mustChangePassword) return send(res, 200, authHttp.loginPage({ mode: "change" }), "text/html; charset=utf-8");
+      const extra = auth ? { me: await auth.me(actor), permissionCatalog: P.CATEGORIES.map((c) => ({ id: c.id, label: c.label, description: c.description, permissions: c.permissions.map((x) => ({ id: x.id, label: x.label, description: x.description, adminOnly: x.adminOnly })) })) } : {};
+      return send(res, 200, buildHtml(Object.assign({}, data, { runs: listRuns(runsDir), projects: projects.list(), projectProfiles: projects.builtins() }, extra)), "text/html; charset=utf-8");
+    }
 
     const image = /^\/img\/([a-z0-9_]+\.png)$/.exec(url.pathname);
+    if (req.method === "GET" && image && auth && !actor && image[1] !== "logo.png") return send(res, 401, { error: "Connexion requise.", code: "login_required" });
     if (req.method === "GET" && image) {
       const file = path.join(ROOT, "assets", "ui", image[1]);
       if (!fs.existsSync(file)) return send(res, 404, { error: "introuvable" });
@@ -365,6 +396,7 @@ function createServer(options) {
 
     const audio = /^\/sounds\/([a-z0-9.]+)$/.exec(url.pathname);
     if (req.method === "GET" && audio) {
+      if (auth && (!actor || !actor.permissions.has("sounds.view"))) return send(res, actor ? 403 : 401, { error: actor ? "Droit manquant : Voir et écouter les sons" : "Connexion requise." });
       const found = store.readSoundFile(audio[1]);
       if (!found) return send(res, 404, { error: "introuvable" });
       return send(res, 200, found.buffer, found.mime);
@@ -373,7 +405,16 @@ function createServer(options) {
     if (!url.pathname.startsWith("/api/")) return send(res, 404, { error: "introuvable" });
     if (req.headers["x-registre"] !== "1") return send(res, 403, { error: "en-tête manquant" });
 
-    if (await storageRoutes(req, res, url)) return;
+    if (auth) {
+      if (await authHttp.authRoutes(auth, req, res, url, actor, { send, jsonBody, ip, userAgent: req.headers["user-agent"], secure })) return;
+      if (!actor) return send(res, 401, { error: "Connexion requise.", code: "login_required" });
+      if (actor.user.mustChangePassword) return send(res, 403, { error: "Change d'abord ton mot de passe.", code: "must_change_password" });
+      const needed = authHttp.requiredPermission(req.method, url.pathname);
+      if (needed === undefined) return send(res, 404, { error: "introuvable" });
+      if (!authHttp.allowed(actor, needed)) return send(res, 403, { error: "Tu n'as pas le droit de faire ça.", code: "forbidden", permission: needed });
+    }
+
+    if (await storageRoutes(req, res, url, scope)) return;
 
     if (req.method === "GET" && url.pathname === "/api/contributions") return send(res, 200, listContributions(dir));
 
@@ -464,14 +505,48 @@ function createServer(options) {
 
 module.exports = { createServer, collectData, buildHtml, listContributions, listRuns, saveRun, summarize, FILTER_PATTERN, DEFAULT_DATA_DIR };
 
-if (require.main === module) {
-  const port = Number(process.argv[2]) || 4173;
+async function main() {
+  const env = process.env;
+  const production = env.NODE_ENV === "production";
+  const port = Number(process.argv[2]) || Number(env.PORT) || 4173;
+  const host = env.HOST || "127.0.0.1";
+  const { createAuth } = require("./auth/service");
+  let authStore;
+  if (env.DATABASE_URL) {
+    const { Pool } = require("pg");
+    const ssl = env.DATABASE_SSL === "false" ? false : env.DATABASE_SSL === "true" || /\.render\.com/.test(env.DATABASE_URL) ? { rejectUnauthorized: false } : false;
+    authStore = require("./auth/store-pg").createPgStore({ pool: new Pool({ connectionString: env.DATABASE_URL, ssl, max: 5 }) });
+  } else {
+    if (production) throw new Error("DATABASE_URL est obligatoire en production (adresse de la base PostgreSQL de Render).");
+    authStore = require("./auth/store-file").createFileStore({ dir: path.join(DEFAULT_DATA_DIR, "auth") });
+  }
+  const auth = createAuth({ store: authStore });
+  await auth.init();
+  // Comptes administrateurs de départ : créés une seule fois, le mot de passe ne s'affiche jamais.
+  const admins = (env.ADMIN_USERNAMES ? env.ADMIN_USERNAMES.split(",").map((x) => x.trim()).filter(Boolean) : ["steph-mss", "smiledpolecat34"]).map((u) => ({ username: u, displayName: u === "smiledpolecat34" ? "SmiledPolecat34" : u }));
+  const bootstrapPassword = env.ADMIN_BOOTSTRAP_PASSWORD || (production ? "" : "2903");
+  const missing = [];
+  for (const a of admins) if (!(await authStore.users.getByUsername(a.username.toLowerCase()))) missing.push(a);
+  if (missing.length) {
+    if (!bootstrapPassword) throw new Error("Aucun compte administrateur n'existe encore : définis ADMIN_BOOTSTRAP_PASSWORD (mot de passe de départ des administrateurs) puis relance.");
+    const created = await auth.ensureAdmins(missing, bootstrapPassword);
+    if (created.length) console.log("Comptes administrateurs créés : " + created.join(", ") + (env.ADMIN_BOOTSTRAP_PASSWORD ? " (mot de passe : variable ADMIN_BOOTSTRAP_PASSWORD)" : " (mot de passe de développement : à changer dès la première connexion)"));
+  }
   console.log("Collecte des données (tests et export du jeu)…");
-  collectData().then((initialData) => {
-    const server = createServer({ initialData });
-    server.listen(port, "127.0.0.1", () => {
-      console.log("Registre BOOM BATTLE : http://127.0.0.1:" + port);
-      console.log("Contributions enregistrées dans tools/registre/contributions/ — applique-les avec : node tools/registre/apply.js");
-    });
+  const initialData = await collectData({ skipTests: env.REGISTRE_SKIP_STARTUP_TESTS === "1", useSnapshot: true, writeSnapshot: !production });
+  const server = createServer({
+    initialData, auth, secureCookies: production || env.COOKIE_SECURE === "true", trustProxy: env.TRUST_PROXY === "1" || production,
+    allowedHosts: (env.PUBLIC_HOSTS || "").split(",").map((x) => x.trim().toLowerCase()).filter(Boolean),
+  });
+  server.listen(port, host, () => {
+    console.log("Registre BOOM BATTLE : http://" + (host === "0.0.0.0" ? "127.0.0.1" : host) + ":" + port + (env.DATABASE_URL ? " (base PostgreSQL)" : " (comptes dans tools/registre/data/auth)"));
+    console.log("Contributions enregistrées dans tools/registre/contributions/ — applique-les avec : node tools/registre/apply.js");
+  });
+}
+
+if (require.main === module) {
+  main().catch((error) => {
+    console.error("Démarrage impossible : " + (error && error.message ? error.message : error));
+    process.exit(1);
   });
 }

@@ -11,6 +11,7 @@ const path = require("node:path");
 const { validate, TYPES } = require("./validate");
 
 const CHAT_ID = /^c[a-z0-9]{6,24}$/;
+const SCOPE_ID = /^[a-z0-9]{2,40}$/;
 const SOUND_ID = /^s[a-z0-9]{6,24}$/;
 const CONTRIBUTION_ID = /^[0-9]{10,16}-[a-z0-9]{6}$/;
 const RUN_FILE = /^[0-9]{10,16}\.json$/;
@@ -21,7 +22,7 @@ const MAX_MESSAGES = 200;
 const MAX_MESSAGE_CHARS = 20000;
 const MAX_SOUNDS = 40;
 const MAX_SOUND_BYTES = 1500000;
-const TABS = ["tests", "donnees", "assets", "contribuer", "assistant", "tableau", "journal", "sons", "stockage"];
+const TABS = ["tests", "donnees", "assets", "contribuer", "assistant", "tableau", "journal", "sons", "stockage", "compte", "admin"];
 const GAME_TABS = ["cosmetiques", "quetes", "cartes", "themes", "bonus", "emotes", "chat", "reglages"];
 const SOUND_EVENTS = [
   "bomb_place", "bomb_fuse", "explosion", "powerup_pickup", "shield_break", "elimination", "victory", "defeat", "draw",
@@ -152,10 +153,22 @@ function createStore(options) {
   const chatsDir = path.join(dir, "chats");
   const soundsDir = path.join(dir, "sounds");
   const settingsFile = path.join(dir, "settings.json");
+  // Portée : identifiant d'un compte (conversations et réglages propres à chaque personne). Sans portée : emplacements historiques.
+  function scoped(scope) {
+    if (scope === undefined || scope === null || scope === "") return { chats: chatsDir, settings: settingsFile };
+    if (typeof scope !== "string" || !SCOPE_ID.test(scope)) throw new StoreError("compte invalide", 400);
+    return { chats: path.join(chatsDir, "u-" + scope), settings: path.join(dir, "settings-" + scope + ".json") };
+  }
+  function allChatDirs() {
+    const out = [chatsDir];
+    if (fs.existsSync(chatsDir)) for (const n of fs.readdirSync(chatsDir)) if (/^u-[a-z0-9]{2,40}$/.test(n)) out.push(path.join(chatsDir, n));
+    return out;
+  }
   const soundsFile = path.join(dir, "sounds.json");
 
   // --- conversations
-  function listChats() {
+  function listChats(scope) {
+    const chatsDir = scoped(scope).chats;
     if (!fs.existsSync(chatsDir)) return [];
     const list = [];
     for (const name of fs.readdirSync(chatsDir)) {
@@ -169,20 +182,23 @@ function createStore(options) {
     }
     return list.sort((a, b) => b.updatedAt - a.updatedAt).slice(0, MAX_CHATS);
   }
-  function putChat(raw) {
+  function putChat(raw, scope) {
+    const chatsDir = scoped(scope).chats;
     const chat = validateChat(raw);
     const existing = fs.existsSync(chatsDir) ? fs.readdirSync(chatsDir).filter((n) => n.endsWith(".json")) : [];
     if (!existing.includes(chat.id + ".json") && existing.length >= MAX_CHATS) throw new StoreError("trop de conversations enregistrées (" + MAX_CHATS + " au plus)", 429);
     atomicWrite(path.join(chatsDir, chat.id + ".json"), JSON.stringify(chat, null, 2) + "\n");
     return chat;
   }
-  function removeChat(id) {
+  function removeChat(id, scope) {
+    const chatsDir = scoped(scope).chats;
     if (!CHAT_ID.test(id)) throw new StoreError("identifiant invalide", 400);
     const file = path.join(chatsDir, id + ".json");
     if (!fs.existsSync(file)) throw new StoreError("introuvable", 404);
     fs.unlinkSync(file);
   }
-  function clearChats() {
+  function clearChats(scope) {
+    const chatsDir = scoped(scope).chats;
     if (!fs.existsSync(chatsDir)) return 0;
     let n = 0;
     for (const name of fs.readdirSync(chatsDir)) {
@@ -195,17 +211,17 @@ function createStore(options) {
   }
 
   // --- réglages
-  function getSettings() {
-    const raw = readJson(settingsFile, {});
+  function getSettings(scope) {
+    const raw = readJson(scoped(scope).settings, {});
     try {
       return validateSettings(raw);
     } catch {
       return {};
     }
   }
-  function putSettings(raw) {
+  function putSettings(raw, scope) {
     const clean = validateSettings(raw);
-    atomicWrite(settingsFile, JSON.stringify(clean, null, 2) + "\n");
+    atomicWrite(scoped(scope).settings, JSON.stringify(clean, null, 2) + "\n");
     return clean;
   }
 
@@ -287,7 +303,7 @@ function createStore(options) {
     const sounds = readSounds();
     const out = {
       dir: path.relative(path.resolve(__dirname, "..", ".."), dir).split(path.sep).join("/"),
-      chats: dirStats(chatsDir, /^c[a-z0-9]{6,24}\.json$/),
+      chats: allChatDirs().map((d) => dirStats(d, /^c[a-z0-9]{6,24}\.json$/)).reduce((a, b) => ({ count: a.count + b.count, bytes: a.bytes + b.bytes }), { count: 0, bytes: 0 }),
       contributions: dirStats(contributionsDir, /^[0-9]{10,16}-[a-z0-9]{6}\.json$/),
       runs: dirStats(runsDir, RUN_FILE),
       sounds: { count: sounds.length, bytes: dirStats(soundsDir, /^s[a-z0-9]{6,24}\.(mp3|ogg|wav)$/).bytes },
@@ -297,7 +313,7 @@ function createStore(options) {
     return out;
   }
 
-  function backup() {
+  function backup(scope) {
     const contributions = [];
     if (contributionsDir && fs.existsSync(contributionsDir)) {
       for (const name of fs.readdirSync(contributionsDir)) {
@@ -323,26 +339,26 @@ function createStore(options) {
       }
       return out;
     });
-    const bundle = { format: "registre-backup", version: 1, exportedAt: Date.now(), chats: listChats(), contributions, runs, settings: getSettings(), sounds };
+    const bundle = { format: "registre-backup", version: 1, exportedAt: Date.now(), chats: listChats(scope), contributions, runs, settings: getSettings(scope), sounds };
     for (const x of extras) bundle[x.key] = x.backup();
     return bundle;
   }
 
   // Restaure une sauvegarde par FUSION : rien n'est supprimé ; une conversation plus récente sur disque est conservée.
-  function restore(bundle) {
+  function restore(bundle, scope) {
     if (!isObject(bundle) || bundle.format !== "registre-backup" || bundle.version !== 1) throw new StoreError("fichier de sauvegarde non reconnu");
     const report = { chats: 0, contributions: 0, runs: 0, sounds: 0, settings: false, ignored: [] };
     const skip = (what, error) => {
       if (report.ignored.length < 20) report.ignored.push(what + " : " + (error && error.message ? error.message : error));
     };
 
-    const existingChats = new Map(listChats().map((c) => [c.id, c]));
+    const existingChats = new Map(listChats(scope).map((c) => [c.id, c]));
     for (const raw of Array.isArray(bundle.chats) ? bundle.chats : []) {
       try {
         const chat = validateChat(raw);
         const current = existingChats.get(chat.id);
         if (current && current.updatedAt >= chat.updatedAt) continue;
-        putChat(chat);
+        putChat(chat, scope);
         report.chats++;
       } catch (e) {
         skip("conversation", e);
@@ -383,7 +399,7 @@ function createStore(options) {
 
     if (bundle.settings !== undefined) {
       try {
-        putSettings(bundle.settings);
+        putSettings(bundle.settings, scope);
         report.settings = true;
       } catch (e) {
         skip("réglages", e);

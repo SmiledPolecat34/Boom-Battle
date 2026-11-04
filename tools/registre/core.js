@@ -764,7 +764,7 @@
     var root = $("view-sons");
     if (!root) return;
     if (!backend.storage) { root.innerHTML = '<h2>Sons</h2><div class="notice">' + esc(NO_SERVER) + "</div>"; return; }
-    var h = '<div class="row" style="justify-content:space-between;align-items:center"><div class="stack" style="gap:6px"><h2>Sons <span class="tag">' + sons.list.length + '</span></h2><p class="muted">Catalogue des sons du jeu. Le jeu ne joue encore aucun son : ce catalogue prépare les fichiers et les réglages (volume, boucle) avant leur branchement dans le code.</p></div><button class="btn" id="sons-new" type="button" data-new="1">Ajouter un son</button></div>';
+    var h = '<div class="row" style="justify-content:space-between;align-items:center"><div class="stack" style="gap:6px"><h2>Sons <span class="tag">' + sons.list.length + '</span></h2><p class="muted">Catalogue des sons du jeu. Le jeu ne joue encore aucun son : ce catalogue prépare les fichiers et les réglages (volume, boucle) avant leur branchement dans le code.</p></div>' + (can("sounds.create") ? '<button class="btn" id="sons-new" type="button" data-new="1">Ajouter un son</button>' : "") + '</div>';
     if (sons.error) h += '<div class="notice" role="alert">' + esc(sons.error) + "</div>";
     if (sons.msg) h += '<div class="notice" role="status">' + esc(sons.msg) + "</div>";
     if (sons.editing) h += soundFormHtml(sons.editing === "new" ? null : soundFor(sons.editing));
@@ -774,7 +774,7 @@
       h += '<div class="card stack" style="gap:8px"><h3>' + esc(s.name) + (s.enabled ? "" : ' <span class="tag">désactivé</span>') + '</h3><div class="muted">' + esc(EVENT_LABELS[s.event] || s.event) + " · " + esc(CATEGORY_LABELS[s.category] || s.category) + " · volume " + esc(s.volume) + (s.loop ? " · boucle" : "") + "</div><div class=\"muted\">" + sourceText(s) + "</div>";
       if (s.note) h += '<div class="hint">' + esc(s.note) + "</div>";
       if (s.source.type === "file") h += '<audio controls preload="none" src="' + esc(backend.storage.sounds.url(s.source)) + '" aria-label="Écouter ' + esc(s.name) + '"></audio>';
-      h += '<div class="row" style="gap:8px"><button class="copy" data-edit="' + esc(s.id) + '" type="button">Modifier</button><button class="copy" data-delsound="' + esc(s.id) + '" type="button">' + (sons.confirm === s.id ? "Confirmer ?" : "Supprimer") + "</button></div></div>";
+      h += '<div class="row" style="gap:8px">' + (can("sounds.edit") ? '<button class="copy" data-edit="' + esc(s.id) + '" type="button">Modifier</button>' : "") + (can("sounds.delete") ? '<button class="copy" data-delsound="' + esc(s.id) + '" type="button">' + (sons.confirm === s.id ? "Confirmer ?" : "Supprimer") + "</button>" : "") + "</div></div>";
     });
     root.innerHTML = h + "</div>";
     if (sons.editing && $("s-save")) $("s-msg").textContent = sons.formMsg || "";
@@ -832,8 +832,8 @@
       [["Conversations de l'assistant", s.chats], ["Contributions", s.contributions], ["Exécutions de tests", s.runs], ["Sons", s.sounds]].forEach(function (r) { h += "<tr><td>" + r[0] + '</td><td class="num">' + r[1].count + '</td><td class="num">' + fmtBytes(r[1].bytes) + "</td></tr>"; });
       h += "<tr><td>Réglages de la page</td><td class=\"num\">" + (s.settings.exists ? 1 : 0) + "</td><td></td></tr></tbody></table></div>";
     }
-    h += '<div class="card stack" style="gap:10px"><h3>Sauvegarde et restauration</h3><div class="row" style="gap:10px;align-items:center"><button class="btn" id="stock-export" type="button">Exporter une sauvegarde</button></div>';
-    h += '<div class="field"><label for="stock-file">Restaurer depuis un fichier de sauvegarde</label><div class="composer"><input id="stock-file" type="file" accept="application/json,.json"><button class="btn" id="stock-import" type="button">Importer</button></div><span class="hint">La restauration fusionne : rien n\'est supprimé, une conversation plus récente est conservée, les éléments déjà présents sont ignorés.</span></div>';
+    h += '<div class="card stack" style="gap:10px"><h3>Sauvegarde et restauration</h3><div class="row" style="gap:10px;align-items:center">' + (can("storage.export") ? '<button class="btn" id="stock-export" type="button">Exporter une sauvegarde</button>' : '<span class="hint">L\'export est réservé aux administrateurs.</span>') + '</div>';
+    if (can("storage.import")) h += '<div class="field"><label for="stock-file">Restaurer depuis un fichier de sauvegarde</label><div class="composer"><input id="stock-file" type="file" accept="application/json,.json"><button class="btn" id="stock-import" type="button">Importer</button></div><span class="hint">La restauration fusionne : rien n\'est supprimé, une conversation plus récente est conservée, les éléments déjà présents sont ignorés.</span></div>';
     h += '<span class="hint" id="stock-msg" role="status" aria-live="polite">' + esc(stock.msg) + "</span>";
     if (stock.report) {
       var r = stock.report;

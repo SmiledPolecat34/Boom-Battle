@@ -3,6 +3,7 @@
 // et historique de chaque ticket. Un ticket = un fichier data/tickets/<id>.json ; écriture atomique.
 // L'historique et les dates sont produits ICI (jamais fournis par le navigateur) ; tout est revalidé avant écriture et restauration.
 const fs = require("node:fs");
+const { normalizeLinks, LinkError } = require("./links");
 const path = require("node:path");
 
 const STATUSES = [{ id: "todo", label: "À faire" }, { id: "doing", label: "En cours" }, { id: "done", label: "Terminé" }];
@@ -11,7 +12,7 @@ const TYPES = [{ id: "tache", label: "Tâche" }, { id: "bug", label: "Bug" }, { 
 const ids = (list) => list.map((x) => x.id);
 const TICKET_ID = /^t[a-z0-9]{6,24}$/;
 const COMMENT_ID = /^k[a-z0-9]{6,24}$/;
-const MAX_TICKETS = 500, MAX_COMMENTS = 100, MAX_HISTORY = 200;
+const MAX_TICKETS = 500, MAX_COMMENTS = 100, MAX_HISTORY = 200, MAX_LINKS = 10;
 
 class BoardError extends Error {
   constructor(message, status) {
@@ -43,6 +44,7 @@ function cleanFields(raw, partial) {
   if (!partial || has("description")) { const d = raw.description === undefined ? "" : raw.description; if (!text(d, 0, 4000)) throw new BoardError("description invalide (4000 caractères au plus)"); out.description = d; }
   if (!partial || has("priority")) { const p = raw.priority === undefined ? "P2" : raw.priority; if (!ids(PRIORITIES).includes(p)) throw new BoardError("priorité inconnue"); out.priority = p; }
   if (!partial || has("type")) { const t = raw.type === undefined ? "tache" : raw.type; if (!ids(TYPES).includes(t)) throw new BoardError("type inconnu"); out.type = t; }
+  if (has("links")) { try { out.links = normalizeLinks(raw.links, MAX_LINKS); } catch (e) { if (e instanceof LinkError) throw new BoardError("liens : " + e.message); throw e; } }
   if (!partial || has("module")) { const m = raw.module === undefined ? "" : raw.module; if (!text(m, 0, 60)) throw new BoardError("module invalide (60 caractères au plus)"); out.module = m; }
   return out;
 }
@@ -57,6 +59,7 @@ function createBoard({ dir, activity, clock }) {
   function validStored(t) {
     return isObject(t) && typeof t.id === "string" && TICKET_ID.test(t.id) && text(t.title, 1, 120) && text(t.description, 0, 4000) && ids(PRIORITIES).includes(t.priority) &&
       ids(TYPES).includes(t.type) && ids(STATUSES).includes(t.status) && text(t.module, 0, 60) && Number.isInteger(t.createdAt) && Number.isInteger(t.updatedAt) && Number.isFinite(t.position) &&
+      (t.links === undefined || (Array.isArray(t.links) && t.links.length <= MAX_LINKS && t.links.every((l) => isObject(l) && typeof l.url === "string" && /^https?:\/\//.test(l.url) && text(l.url, 8, 500) && text(l.name, 1, 60)))) &&
       Array.isArray(t.comments) && t.comments.length <= MAX_COMMENTS && t.comments.every((c) => isObject(c) && COMMENT_ID.test(c.id) && text(c.text, 1, 2000) && Number.isInteger(c.at)) &&
       Array.isArray(t.history) && t.history.length <= MAX_HISTORY && t.history.every((h) => isObject(h) && Number.isInteger(h.at) && text(h.action, 1, 30) && (h.text === undefined || text(h.text, 0, 500)) && (h.from === undefined || text(h.from, 0, 40)) && (h.to === undefined || text(h.to, 0, 40)));
   }
@@ -96,7 +99,7 @@ function createBoard({ dir, activity, clock }) {
     const f = cleanFields(raw, false);
     let status = "todo";
     if (isObject(raw) && raw.status !== undefined) { if (!ids(STATUSES).includes(raw.status)) throw new BoardError("statut inconnu"); status = raw.status; }
-    const t = Object.assign({ id: rid("t"), status, position: 0, createdAt: now(), updatedAt: now(), comments: [], history: [] }, f);
+    const t = Object.assign({ id: rid("t"), status, position: 0, createdAt: now(), updatedAt: now(), comments: [], history: [], links: [] }, f);
     if (status === "done") t.doneAt = now();
     pushHistory(t, { action: "created", to: status });
     renumber([t].concat(column(status))); // un nouveau ticket arrive en haut de sa colonne
@@ -110,7 +113,7 @@ function createBoard({ dir, activity, clock }) {
     const f = cleanFields(raw, true);
     const changed = [];
     for (const k of Object.keys(f)) {
-      if (f[k] === t[k]) continue;
+      if (k === "links" ? JSON.stringify(f[k]) === JSON.stringify(t.links || []) : f[k] === t[k]) continue;
       if (k === "priority") pushHistory(t, { action: "priority", from: t.priority, to: f.priority });
       changed.push(k);
       t[k] = f[k];
@@ -192,7 +195,7 @@ function createBoard({ dir, activity, clock }) {
         const current = have.get(raw.id);
         if (current && current.updatedAt >= raw.updatedAt) continue;
         if (!current && have.size >= MAX_TICKETS) { skip("ticket", "trop de tickets"); continue; }
-        const clean = { id: raw.id, title: raw.title, description: raw.description, priority: raw.priority, type: raw.type, module: raw.module, status: raw.status, position: raw.position, createdAt: raw.createdAt, updatedAt: raw.updatedAt, comments: raw.comments.map((c) => ({ id: c.id, text: c.text, at: c.at })), history: raw.history.map((h) => { const o = { at: h.at, action: h.action }; for (const k of ["text", "from", "to"]) if (h[k] !== undefined) o[k] = h[k]; return o; }) };
+        const clean = { id: raw.id, title: raw.title, description: raw.description, priority: raw.priority, type: raw.type, module: raw.module, status: raw.status, position: raw.position, createdAt: raw.createdAt, updatedAt: raw.updatedAt, links: (raw.links || []).map((l) => ({ name: l.name, url: l.url })), comments: raw.comments.map((c) => ({ id: c.id, text: c.text, at: c.at })), history: raw.history.map((h) => { const o = { at: h.at, action: h.action }; for (const k of ["text", "from", "to"]) if (h[k] !== undefined) o[k] = h[k]; return o; }) };
         if (Number.isInteger(raw.doneAt)) clean.doneAt = raw.doneAt;
         save(clean);
         have.set(clean.id, clean);
@@ -204,4 +207,4 @@ function createBoard({ dir, activity, clock }) {
   return { list, get: load, create, update, move, addComment, removeComment, remove, extra };
 }
 
-module.exports = { createBoard, BoardError, STATUSES, PRIORITIES, TYPES, MAX_TICKETS, MAX_COMMENTS, MAX_HISTORY };
+module.exports = { createBoard, BoardError, STATUSES, PRIORITIES, TYPES, MAX_TICKETS, MAX_COMMENTS, MAX_HISTORY, MAX_LINKS };

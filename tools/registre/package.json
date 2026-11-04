@@ -1,0 +1,17 @@
+{
+  "name": "registre-boom-battle",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Registre du projet : tableau, journaux, comptes et rôles.",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "start": "node serve.js",
+    "test": "node --test \"*.test.js\" \"auth/*.test.js\""
+  },
+  "dependencies": {
+    "pg": "^8.13.0"
+  },
+  "devDependencies": {
+    "pg-mem": "^3.0.5"
+  }
+}

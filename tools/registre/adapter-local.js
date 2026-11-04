@@ -164,6 +164,7 @@
     }
     function check(res) {
       if (res.ok) return res;
+      if (res.status === 401) { try { location.reload(); } catch (e) { /* session expirée : la page de connexion s'affichera */ } }
       return res.json().catch(function () { return {}; }).then(function (b) { throw new Error((b && b.error) || ("Erreur " + res.status)); });
     }
     function tick() {
@@ -242,6 +243,33 @@
       },
       activity: function (limit) { return api("GET", "/api/activity?limit=" + (limit || 200)); },
       runs: function () { return api("GET", "/api/tests/latest"); },
+      auth: {
+        me: function () { return api("GET", "/api/auth/me"); },
+        logout: function () { return api("POST", "/api/auth/logout", {}); },
+        password: function (current, next) { return api("POST", "/api/auth/password", { current: current, next: next }); },
+        profile: function (displayName) { return api("PATCH", "/api/auth/profile", { displayName: displayName }); },
+        users: {
+          list: function () { return api("GET", "/api/admin/users"); },
+          create: function (raw) { return api("POST", "/api/admin/users", raw); },
+          update: function (id, patch) { return api("PATCH", "/api/admin/users/" + encodeURIComponent(id), patch); },
+          reset: function (id, password) { return api("POST", "/api/admin/users/" + encodeURIComponent(id) + "/reset-password", password ? { password: password } : {}); },
+          remove: function (id) { return api("DELETE", "/api/admin/users/" + encodeURIComponent(id)); },
+          sessions: function (id) { return api("GET", "/api/admin/users/" + encodeURIComponent(id) + "/sessions"); },
+          revoke: function (id) { return api("DELETE", "/api/admin/users/" + encodeURIComponent(id) + "/sessions"); }
+        },
+        roles: {
+          list: function () { return api("GET", "/api/admin/roles"); },
+          catalog: function () { return api("GET", "/api/admin/permissions"); },
+          create: function (raw) { return api("POST", "/api/admin/roles", raw); },
+          update: function (id, raw) { return api("PUT", "/api/admin/roles/" + encodeURIComponent(id), raw); },
+          remove: function (id) { return api("DELETE", "/api/admin/roles/" + encodeURIComponent(id)); }
+        },
+        settings: {
+          get: function () { return api("GET", "/api/admin/settings"); },
+          put: function (patch) { return api("PUT", "/api/admin/settings", patch); }
+        },
+        audit: function (limit) { return api("GET", "/api/admin/audit?limit=" + (limit || 300)); }
+      },
       stats: function () { return api("GET", "/api/storage"); },
       backup: function () { return api("GET", "/api/backup"); },
       restore: function (bundle) { return api("POST", "/api/backup", bundle); }

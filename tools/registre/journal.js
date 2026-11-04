@@ -4,6 +4,7 @@
 const fs = require("node:fs");
 const path = require("node:path");
 
+const { normalizeLink, LinkError } = require("./links");
 const ENTRY_ID = /^j[a-z0-9]{6,24}$/;
 const MAX_ENTRIES = 1000;
 const DATE = /^\d{4}-\d{2}-\d{2}$/;
@@ -15,6 +16,7 @@ const f = {
   int: (key, label, min, max, o) => Object.assign({ key, label, type: "int", min, max }, o),
   date: (key, label, o) => Object.assign({ key, label, type: "date" }, o),
   bool: (key, label) => ({ key, label, type: "bool" }),
+  link: (key, label) => ({ key, label, type: "link", optional: true }),
 };
 const opt = { optional: true };
 const E = (list) => list.map(([id, label]) => ({ id, label }));
@@ -22,23 +24,23 @@ const E = (list) => list.map(([id, label]) => ({ id, label }));
 // values : liste {id, label} ; le serveur n'accepte que les identifiants.
 const SCHEMAS = [
   { id: "playtests", label: "Tests réels", description: "Ce que tu testes toi-même dans Studio ou en jeu publié (plusieurs clients, mobile, DataStore, invitations…).", titleField: "scenario",
-    fields: [f.date("date", "Date"), f.text("scenario", "Scénario testé"), f.enum("result", "Résultat", E([["ok", "Réussi"], ["partiel", "Partiel"], ["ko", "Échec"], ["non_teste", "Non testé"]])), f.text("device", "Appareil", { optional: true, max: 60 }), f.int("players", "Joueurs", 1, 8, opt), f.long("notes", "Notes")] },
+    fields: [f.date("date", "Date"), f.text("scenario", "Scénario testé"), f.enum("result", "Résultat", E([["ok", "Réussi"], ["partiel", "Partiel"], ["ko", "Échec"], ["non_teste", "Non testé"]])), f.text("device", "Appareil", { optional: true, max: 60 }), f.int("players", "Joueurs", 1, 8, opt), f.long("notes", "Notes"), f.link("link", "Lien")] },
   { id: "balance", label: "Équilibrage", description: "Prix, récompenses, bonus et durées : valeur actuelle, valeur proposée, et celle que tu retiens.", titleField: "name",
-    fields: [f.text("name", "Réglage"), f.enum("area", "Domaine", E([["prix", "Prix"], ["recompenses", "Récompenses"], ["bonus", "Bonus"], ["durees", "Durées"], ["carte", "Carte"], ["autre", "Autre"]])), f.text("current", "Valeur actuelle", { optional: true, max: 60 }), f.text("proposed", "Valeur proposée", { max: 60 }), f.bool("retained", "Retenue"), f.long("note", "Raison")] },
+    fields: [f.text("name", "Réglage"), f.enum("area", "Domaine", E([["prix", "Prix"], ["recompenses", "Récompenses"], ["bonus", "Bonus"], ["durees", "Durées"], ["carte", "Carte"], ["autre", "Autre"]])), f.text("current", "Valeur actuelle", { optional: true, max: 60 }), f.text("proposed", "Valeur proposée", { max: 60 }), f.bool("retained", "Retenue"), f.long("note", "Raison"), f.link("link", "Lien")] },
   { id: "feedback", label: "Retours de playtest", description: "Ce que disent les testeurs, rattaché à un écran.", titleField: "text",
-    fields: [f.enum("screen", "Écran", E([["menu", "Menu"], ["lobby", "Lobby"], ["hud", "HUD de manche"], ["resultats", "Résultats"], ["boutique", "Boutique"], ["quetes", "Quêtes"], ["emotes", "Émotes"], ["chat", "Chat rapide"], ["carte", "Carte"], ["autre", "Autre"]])), f.enum("severity", "Gravité", E([["mineur", "Mineur"], ["moyen", "Moyen"], ["majeur", "Majeur"]])), f.text("author", "Testeur", { optional: true, max: 60 }), f.text("text", "Retour", { max: 500 }), f.bool("handled", "Traité")] },
+    fields: [f.enum("screen", "Écran", E([["menu", "Menu"], ["lobby", "Lobby"], ["hud", "HUD de manche"], ["resultats", "Résultats"], ["boutique", "Boutique"], ["quetes", "Quêtes"], ["emotes", "Émotes"], ["chat", "Chat rapide"], ["carte", "Carte"], ["autre", "Autre"]])), f.enum("severity", "Gravité", E([["mineur", "Mineur"], ["moyen", "Moyen"], ["majeur", "Majeur"]])), f.text("author", "Testeur", { optional: true, max: 60 }), f.text("text", "Retour", { max: 500 }), f.bool("handled", "Traité"), f.link("link", "Lien")] },
   { id: "images", label: "Images à importer", description: "PNG de l'interface : empreinte et identifiant Roblox une fois importés (jamais inventé).", titleField: "file",
-    fields: [f.text("file", "Fichier", { max: 80 }), f.text("usage", "Utilisation", { max: 120 }), f.text("sha256", "sha256", { optional: true, max: 64, min: 64, pattern: "^[0-9a-f]{64}$" }), f.text("assetId", "Identifiant Roblox", { optional: true, max: 40, pattern: "^rbxassetid://[0-9]{1,20}$" }), f.enum("status", "Statut", E([["a_faire", "À faire"], ["prete", "Prête"], ["importee", "Importée"]]))] },
+    fields: [f.text("file", "Fichier", { max: 80 }), f.text("usage", "Utilisation", { max: 120 }), f.text("sha256", "sha256", { optional: true, max: 64, min: 64, pattern: "^[0-9a-f]{64}$" }), f.text("assetId", "Identifiant Roblox", { optional: true, max: 40, pattern: "^rbxassetid://[0-9]{1,20}$" }), f.enum("status", "Statut", E([["a_faire", "À faire"], ["prete", "Prête"], ["importee", "Importée"]])), f.link("link", "Lien")] },
   { id: "texts", label: "Textes du jeu", description: "Libellés et descriptions à relire au même endroit.", titleField: "key",
-    fields: [f.text("key", "Clé", { max: 60 }), f.text("where", "Où", { optional: true, max: 80 }), f.text("text", "Texte", { max: 500 }), f.bool("reviewed", "Relu")] },
+    fields: [f.text("key", "Clé", { max: 60 }), f.text("where", "Où", { optional: true, max: 80 }), f.text("text", "Texte", { max: 500 }), f.bool("reviewed", "Relu"), f.link("link", "Lien")] },
   { id: "seeds", label: "Cartes notables", description: "Seeds à rejouer : une carte qui plaît ou qui pose problème.", titleField: "seed",
-    fields: [f.int("seed", "Seed", 0, 2147483647), f.enum("theme", "Thème", E([["Classic", "Classique"], ["Desert", "Désert"], ["Ice", "Glace"], ["Volcano", "Volcan"], ["Jungle", "Jungle"]])), f.enum("size", "Taille", E([["10", "10 × 10"], ["16", "16 × 16"], ["24", "24 × 24"]])), f.enum("verdict", "Verdict", E([["aime", "Plaît"], ["neutre", "Neutre"], ["probleme", "Problème"]])), f.long("note", "Note", { max: 500 })] },
+    fields: [f.int("seed", "Seed", 0, 2147483647), f.enum("theme", "Thème", E([["Classic", "Classique"], ["Desert", "Désert"], ["Ice", "Glace"], ["Volcano", "Volcan"], ["Jungle", "Jungle"]])), f.enum("size", "Taille", E([["10", "10 × 10"], ["16", "16 × 16"], ["24", "24 × 24"]])), f.enum("verdict", "Verdict", E([["aime", "Plaît"], ["neutre", "Neutre"], ["probleme", "Problème"]])), f.long("note", "Note", { max: 500 }), f.link("link", "Lien")] },
   { id: "decisions", label: "Décisions", description: "Questions à trancher (par exemple le nom du jeu) et la décision prise.", titleField: "question",
-    fields: [f.text("question", "Question", { max: 200 }), f.long("options", "Options"), f.long("decision", "Décision"), f.enum("status", "Statut", E([["ouverte", "Ouverte"], ["tranchee", "Tranchée"]])), f.date("decidedAt", "Date de décision", opt)] },
+    fields: [f.text("question", "Question", { max: 200 }), f.long("options", "Options"), f.long("decision", "Décision"), f.enum("status", "Statut", E([["ouverte", "Ouverte"], ["tranchee", "Tranchée"]])), f.date("decidedAt", "Date de décision", opt), f.link("link", "Lien")] },
   { id: "perf", label: "Performance", description: "Mesures par appareil, pour alimenter docs/PERFORMANCE.md.", titleField: "device",
-    fields: [f.date("date", "Date"), f.text("device", "Appareil", { max: 60 }), f.text("scenario", "Scénario", { max: 120 }), f.int("fps", "Images par seconde", 0, 1000), f.int("memoryMb", "Mémoire (Mo)", 0, 100000, opt), f.long("note", "Note", { max: 500 })] },
+    fields: [f.date("date", "Date"), f.text("device", "Appareil", { max: 60 }), f.text("scenario", "Scénario", { max: 120 }), f.int("fps", "Images par seconde", 0, 1000), f.int("memoryMb", "Mémoire (Mo)", 0, 100000, opt), f.long("note", "Note", { max: 500 }), f.link("link", "Lien")] },
   { id: "releases", label: "Publications", description: "Versions publiées : date, numéro, tests lancés avant.", titleField: "version",
-    fields: [f.date("date", "Date"), f.text("version", "Version", { max: 40 }), f.text("tests", "Tests avant publication", { optional: true, max: 120 }), f.long("notes", "Contenu")] },
+    fields: [f.date("date", "Date"), f.text("version", "Version", { max: 40 }), f.text("tests", "Tests avant publication", { optional: true, max: 120 }), f.long("notes", "Contenu"), f.link("link", "Lien")] },
 ];
 
 class JournalError extends Error {
@@ -66,6 +68,12 @@ function validateEntry(schema, raw) {
   for (const fd of schema.fields) {
     let v = raw[fd.key];
     const empty = v === undefined || v === null || v === "";
+    if (fd.type === "link") {
+      const blank = v === undefined || v === null || (typeof v === "object" && !Array.isArray(v) && !String(v.url || "").trim() && !String(v.name || "").trim());
+      if (blank) continue;
+      try { out[fd.key] = normalizeLink(v); } catch (e) { if (e instanceof LinkError) throw new JournalError(fd.label + " : " + e.message); throw e; }
+      continue;
+    }
     if (fd.type === "bool") {
       if (v !== undefined && typeof v !== "boolean") throw new JournalError(fd.label + " : oui ou non attendu");
       out[fd.key] = v === true;
