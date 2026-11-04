@@ -44,6 +44,88 @@ local function isInSafeZone(x: number, y: number, spawns: { Types.Cell }): boole
 	return false
 end
 
+-- Piliers ALÉATOIRES mais équitables : on part de la grille classique et chaque pilier d'un quart de map est déplacé
+-- d'au plus MAX_SHIFT cases, puis recopié par symétrie miroir sur les deux axes (même nombre, même équité pour tous).
+-- Contraintes : jamais en bordure, jamais dans la zone de sécurité d'un spawn, jamais au contact (côté) d'un autre pilier,
+-- sauf la paire miroir qui se touche au centre comme dans la grille classique. La connexité est vérifiée par validate().
+-- Retourne false si aucun tirage ne passe : l'appelant retombe sur la grille classique.
+local PILLAR_MAX_SHIFT = 2
+
+local function placeRandomPillars(
+	cells: { { Types.CellKind } },
+	size: number,
+	sizeDef: MapConfig.SizeDefinition,
+	rng: Random
+): boolean
+	local half = size // 2
+	local allSpawns = MapConfig.getSpawns(size)
+	local origins: { Types.Cell } = {}
+	for _, py in sizeDef.pillarAxis do
+		for _, px in sizeDef.pillarAxis do
+			if px <= half and py <= half and size + 1 - px ~= px and size + 1 - py ~= py then
+				table.insert(origins, { x = px, y = py })
+			end
+		end
+	end
+	local expected = (#sizeDef.pillarAxis) ^ 2
+	if #origins * 4 ~= expected then
+		return false -- axe non symétrique : on garde la grille classique
+	end
+	for _ = 1, 20 do
+		for i = #origins, 2, -1 do
+			local j = rng:NextInteger(1, i)
+			origins[i], origins[j] = origins[j], origins[i]
+		end
+		local taken: { [number]: boolean } = {}
+		local placed: { Types.Cell } = {}
+		local complete = true
+		for _, origin in origins do
+			local options: { Types.Cell } = {}
+			for y = math.max(2, origin.y - PILLAR_MAX_SHIFT), math.min(half, origin.y + PILLAR_MAX_SHIFT) do
+				for x = math.max(2, origin.x - PILLAR_MAX_SHIFT), math.min(half, origin.x + PILLAR_MAX_SHIFT) do
+					local xs = { x, size + 1 - x }
+					local ys = { y, size + 1 - y }
+					local ok = true
+					for _, ox in xs do
+						for _, oy in ys do
+							if isInSafeZone(ox, oy, allSpawns) or taken[(oy - 1) * size + ox] then
+								ok = false
+							end
+							for _, d in DIRECTIONS do
+								local nx, ny = ox + d.x, oy + d.y
+								if nx >= 1 and nx <= size and ny >= 1 and ny <= size and taken[(ny - 1) * size + nx] then
+									ok = false
+								end
+							end
+						end
+					end
+					if ok then
+						table.insert(options, { x = x, y = y })
+					end
+				end
+			end
+			if #options == 0 then
+				complete = false
+				break
+			end
+			local pick = options[rng:NextInteger(1, #options)]
+			for _, ox in { pick.x, size + 1 - pick.x } do
+				for _, oy in { pick.y, size + 1 - pick.y } do
+					taken[(oy - 1) * size + ox] = true
+					table.insert(placed, { x = ox, y = oy })
+				end
+			end
+		end
+		if complete then
+			for _, pc in placed do
+				cells[pc.y][pc.x] = "PILLAR"
+			end
+			return true
+		end
+	end
+	return false
+end
+
 local function placeCrates(cells: { { Types.CellKind } }, size: number, spawns: { Types.Cell }, rng: Random)
 	for y = 1, size do
 		for x = 1, size do
@@ -124,7 +206,10 @@ function MapGenerator.generate(
 	for attempt = 0, MapConfig.MaxGenerationAttempts - 1 do
 		local usedSeed = seed + attempt
 		local cells = newCells(size)
-		placePillars(cells, sizeDef.pillarAxis)
+		-- Rng dédié aux piliers (seed + sel) : ne décale pas le tirage des caisses. Repli : grille classique.
+		if not placeRandomPillars(cells, size, sizeDef, Random.new(usedSeed + 31337)) then
+			placePillars(cells, sizeDef.pillarAxis)
+		end
 		placeCrates(cells, size, spawns, Random.new(usedSeed))
 		if MapGenerator.validate(cells, size, spawns) then
 			return {
@@ -143,7 +228,9 @@ function MapGenerator.generate(
 		seed
 	))
 	local cells = newCells(size)
-	placePillars(cells, sizeDef.pillarAxis)
+	if not placeRandomPillars(cells, size, sizeDef, Random.new(seed + 31337)) then
+		placePillars(cells, sizeDef.pillarAxis)
+	end
 	return {
 		seed = seed,
 		sizeId = sizeDef.id,

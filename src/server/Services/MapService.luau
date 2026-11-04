@@ -9,6 +9,7 @@ local MapConfig = require(ReplicatedStorage.Shared.MapConfig)
 local Types = require(ReplicatedStorage.Shared.Types)
 local GridService = require(script.Parent.GridService)
 local MapGenerator = require(script.Parent.MapGenerator)
+local ModularAssets = require(script.Parent.ModularAssets)
 
 local ARENA_NAME = "Arena"
 local WALL_HEIGHT_RATIO = 1 -- hauteur des piliers / murs = 1 case
@@ -164,6 +165,27 @@ function MapService.generateAndBuild(
 	folder:SetAttribute("Size", size)
 	folder:SetAttribute("Theme", layout.theme)
 
+	-- Rendu modulaire (modèles 3D) : thème compatible ET tous les modèles obligatoires présents, sinon rendu en Parts.
+	-- Tirages dans un générateur SÉPARÉ : ils ne décalent jamais ceux du rendu historique (même seed = mêmes décors).
+	local modular = theme.modular == true and ModularAssets.isAvailable()
+	local modularConfig = MapConfig.Modular
+	local mrng = Random.new(layout.seed + modularConfig.randomSalt)
+	local spawnKeys: { [number]: boolean } = {}
+	for _, spawn in layout.spawns do
+		spawnKeys[(spawn.y - 1) * size + spawn.x] = true
+	end
+	local blockedFloors: { [string]: boolean } = {}
+	for _, name in modularConfig.decorBlockedFloors do
+		blockedFloors[name] = true
+	end
+	local propsFolder: Folder? = nil
+	if modular then
+		folder:SetAttribute("Modular", true)
+		propsFolder = Instance.new("Folder")
+		propsFolder.Name = "Props"
+		propsFolder.Parent = folder
+	end
+
 	local wallHeight = cellSize * WALL_HEIGHT_RATIO
 	local crates: { [number]: BasePart } = {}
 
@@ -181,6 +203,10 @@ function MapService.generateAndBuild(
 	local floorPlate = makePart("Floor", Vector3.new(size * cellSize, 1, size * cellSize),
 		Vector3.new(0, -0.5, 0), theme.floorColorA, theme.floorMaterial, folder)
 	floorPlate.CastShadow = false
+	if modular then
+		-- Les modèles de sol (sans collision) couvrent chaque case : la plaque ne sert plus qu'à la collision.
+		floorPlate.Transparency = 1
+	end
 
 	for y = 1, size do
 		for x = 1, size do
@@ -190,7 +216,20 @@ function MapService.generateAndBuild(
 			if rng:NextNumber() < FLOOR_ACCENT_RATIO then
 				floorColor = theme.floorAccentColor
 			end
-			if floorColor ~= theme.floorColorA then
+			local floorName: string? = nil
+			if modular then
+				-- Damier de deux sols de base ; une case sur `floorVariantChance` reçoit une variante pondérée.
+				floorName = modularConfig.floorBase[(x + y) % 2 + 1]
+				if mrng:NextNumber() < modularConfig.floorVariantChance then
+					floorName = ModularAssets.pickWeighted(modularConfig.floorVariants, mrng, ModularAssets.has) or floorName
+				end
+				local floorPart = ModularAssets.place(
+					floorName :: string,
+					CFrame.new(grid:cellToWorld(cell, 0)) * CFrame.Angles(0, math.rad(90 * mrng:NextInteger(0, 3)), 0),
+					folder
+				)
+				floorPart.Name = ("Tile_%d_%d"):format(x, y) -- même nom que les dalles de couleur du rendu historique
+			elseif floorColor ~= theme.floorColorA then
 				local tile = makePart(
 					("Tile_%d_%d"):format(x, y),
 					Vector3.new(cellSize, FLOOR_TILE_THICKNESS, cellSize),
@@ -207,7 +246,26 @@ function MapService.generateAndBuild(
 			end
 
 			local kind = layout.cells[y][x]
-			if kind == "PILLAR" then
+			if modular and kind == "PILLAR" then
+				local pillar = ModularAssets.place(
+					ModularAssets.pickWeighted(modularConfig.walls, mrng, ModularAssets.has) :: string,
+					CFrame.new(grid:cellToWorld(cell, 0)) * CFrame.Angles(0, math.rad(90 * mrng:NextInteger(0, 3)), 0),
+					folder
+				)
+				pillar.Name = ("Pillar_%d_%d"):format(x, y)
+				pillar:SetAttribute("CellX", x)
+				pillar:SetAttribute("CellY", y)
+			elseif modular and kind == "CRATE" then
+				local crate = ModularAssets.place(
+					ModularAssets.pickWeighted(modularConfig.obstacles, mrng, ModularAssets.has) :: string,
+					CFrame.new(grid:cellToWorld(cell, 0)) * CFrame.Angles(0, math.rad(90 * mrng:NextInteger(0, 3)), 0),
+					folder
+				)
+				crate.Name = ("Crate_%d_%d"):format(x, y)
+				crate:SetAttribute("CellX", x)
+				crate:SetAttribute("CellY", y)
+				crates[(y - 1) * size + x] = crate
+			elseif kind == "PILLAR" then
 				local pillar = makePart(
 					("Pillar_%d_%d"):format(x, y),
 					Vector3.new(cellSize, wallHeight, cellSize),
@@ -241,6 +299,27 @@ function MapService.generateAndBuild(
 				lid.CanCollide = false
 				lid.CanQuery = false
 				crates[(y - 1) * size + x] = crate
+			elseif
+				modular
+				and kind == "EMPTY"
+				and not spawnKeys[(y - 1) * size + x]
+				and floorName
+				and not blockedFloors[floorName]
+				and mrng:NextNumber() < modularConfig.decorChance
+			then
+				-- Petit décor sans collision (facultatif : ignoré si aucun modèle de décor n'est présent).
+				local decorName = ModularAssets.pickWeighted(modularConfig.decor, mrng, ModularAssets.has)
+				if decorName then
+					local jitter = modularConfig.decorJitter
+					local offset = Vector3.new(mrng:NextNumber(-jitter, jitter), 0, mrng:NextNumber(-jitter, jitter))
+					local prop = ModularAssets.place(
+						decorName,
+						CFrame.new(grid:cellToWorld(cell, 0) + offset)
+							* CFrame.Angles(0, math.rad(mrng:NextNumber(0, 360)), 0),
+						propsFolder :: Folder
+					)
+					prop.Name = ("Deco_%d_%d"):format(x, y)
+				end
 			end
 		end
 	end
@@ -258,6 +337,35 @@ function MapService.generateAndBuild(
 	wall("Border_South", Vector3.new(ringLength, wallHeight, cellSize), Vector3.new(0, wallY, half + cellSize / 2))
 	wall("Border_West", Vector3.new(cellSize, wallHeight, sideLength), Vector3.new(-half - cellSize / 2, wallY, 0))
 	wall("Border_East", Vector3.new(cellSize, wallHeight, sideLength), Vector3.new(half + cellSize / 2, wallY, 0))
+
+	if modular then
+		-- Enceinte visible : une pierre par case de l'anneau (coins compris), mêmes modèles que les piliers intérieurs, variante
+		-- tirée au hasard. Les 4 longs murs ci-dessus restent la collision continue (rendus invisibles) : aucune ouverture.
+		for _, border in folder:GetChildren() do
+			if border.Name:match("^Border_") then
+				(border :: Part).Transparency = 1
+				(border :: Part).CastShadow = false
+			end
+		end
+		local borderStones = Instance.new("Folder")
+		borderStones.Name = "BorderStones"
+		borderStones.Parent = folder
+		for cy = 0, size + 1 do
+			for cx = 0, size + 1 do
+				if cx == 0 or cy == 0 or cx == size + 1 or cy == size + 1 then
+					local stone = ModularAssets.place(
+						ModularAssets.pickWeighted(modularConfig.walls, mrng, ModularAssets.has) :: string,
+						CFrame.new(grid:cellToWorld({ x = cx, y = cy }, 0))
+							* CFrame.Angles(0, math.rad(90 * mrng:NextInteger(0, 3)), 0),
+						borderStones
+					)
+					stone.Name = ("BorderStone_%d_%d"):format(cx, cy)
+					stone.CanCollide = false -- la collision est portée par les longs murs invisibles
+					stone.CanQuery = false
+				end
+			end
+		end
+	end
 
 	-- Décors : uniquement dans la bande extérieure à l'anneau de murs (jamais sur la zone de jeu).
 	local decorFolder = Instance.new("Folder")

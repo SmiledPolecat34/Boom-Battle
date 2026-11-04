@@ -17,6 +17,9 @@ export type SizeDefinition = {
 export type ThemeDefinition = {
 	enabled: boolean,
 	displayName: string,
+	-- true : l'arène est construite avec les modèles 3D importés (ReplicatedStorage.MapAssets, voir MapConfig.Modular) ;
+	-- absent ou false : Parts colorées. Retombe aussi sur les Parts si un modèle obligatoire manque.
+	modular: boolean?,
 	-- Sol : damier A/B, avec des cases « accent » (taches) discrètes ; jamais de couleur de danger.
 	floorColorA: Color3,
 	floorColorB: Color3,
@@ -39,6 +42,22 @@ export type ThemeDefinition = {
 	decorPrimary: Color3, -- feuillage, cactus
 	decorSecondary: Color3, -- roches, pointes
 	lighting: { clockTime: number, ambient: Color3, outdoorAmbient: Color3, brightness: number },
+}
+
+export type WeightedAsset = { name: string, weight: number }
+
+export type ModularConfig = {
+	assetsFolder: string,
+	randomSalt: number,
+	floorBase: { string },
+	floorVariantChance: number,
+	floorVariants: { WeightedAsset },
+	walls: { WeightedAsset },
+	obstacles: { WeightedAsset },
+	decor: { WeightedAsset },
+	decorChance: number,
+	decorJitter: number,
+	decorBlockedFloors: { string },
 }
 
 local MapConfig = {}
@@ -118,6 +137,62 @@ function MapConfig.getSizeForPlayerCount(playerCount: number): SizeDefinition
 	return MapConfig.Sizes[MapConfig.DefaultSize]
 end
 
+-- Modèles 3D importés (Blender -> ReplicatedStorage.MapAssets) pour les thèmes `modular`. Une pièce par case de 4 studs :
+-- sol (4 x 4, épaisseur sous Y = 0), mur indestructible (3,84), obstacle destructible (3,6), petit décor (< 1,4).
+-- Origine de chaque modèle = centre de la case ; face haute du sol jouable à Y = 0. Les noms sont ceux des MeshParts.
+-- Les poids sont des PROPOSITIONS visuelles (rendu proche de la maquette) : à ajuster librement. Ils ne changent JAMAIS
+-- la grille (qui reste calculée par MapGenerator) : seulement l'aspect des cases.
+local function weighted(name: string, weight: number): WeightedAsset
+	return table.freeze({ name = name, weight = weight })
+end
+
+MapConfig.Modular = table.freeze({
+	assetsFolder = "MapAssets", -- sous-dossiers Floors / Walls / Destructibles / Decor (recherche récursive)
+	randomSalt = 7919, -- tirages des modèles : Random.new(seed + randomSalt), indépendants des autres tirages
+	-- Damier : case paire = [1], case impaire = [2]. Une case sur `floorVariantChance` reçoit une variante à la place.
+	floorBase = table.freeze({ "BB_FLOOR_01_Grass", "BB_FLOOR_08_GrassDark" }),
+	floorVariantChance = 0.32,
+	floorVariants = table.freeze({
+		weighted("BB_FLOOR_03_Sand", 4),
+		weighted("BB_FLOOR_02_GrassFlowers", 3),
+		weighted("BB_FLOOR_07_GrassDirtMix", 3),
+		weighted("BB_FLOOR_05_SandRocks", 1.5),
+		weighted("BB_FLOOR_04_DirtCracked", 1.5),
+		weighted("BB_FLOOR_06_Cobble", 1),
+	}),
+	-- Murs indestructibles (piliers). Les deux variantes détaillées (fissures, mousse en volume) sont les plus lourdes.
+	walls = table.freeze({
+		weighted("BB_WALL_01_StoneLight", 5),
+		weighted("BB_WALL_02_StoneDark", 3),
+		weighted("BB_WALL_03_StoneCracked", 1.5),
+		weighted("BB_WALL_04_StoneMossy", 1.5),
+	}),
+	-- Obstacles destructibles (cases « CRATE » de la grille, quel que soit leur aspect).
+	obstacles = table.freeze({
+		weighted("BB_DESTR_01_CrateWood", 6),
+		weighted("BB_DESTR_02_CrateDark", 2),
+		weighted("BB_DESTR_03_BushFlowers", 5),
+		weighted("BB_DESTR_04_HayBale", 1.5),
+		weighted("BB_DESTR_05_RockBrown", 1),
+		weighted("BB_DESTR_06_RockGrey", 1),
+	}),
+	-- Petits décors de sol : FACULTATIFS (un modèle absent est simplement ignoré). Sans collision ; jamais sur un spawn,
+	-- un pilier, une caisse ni une tuile déjà chargée en relief.
+	decor = table.freeze({
+		weighted("BB_DECOR_01_GrassBush", 4),
+		weighted("BB_DECOR_02_GrassBladesA", 3),
+		weighted("BB_DECOR_03_GrassBladesB", 2),
+		weighted("BB_DECOR_04_FlowerWhite", 2),
+		weighted("BB_DECOR_05_FlowerCluster", 2),
+		weighted("BB_DECOR_06_Pebble", 3),
+		weighted("BB_DECOR_07_PebbleGroup", 2),
+		weighted("BB_DECOR_08_LeafPlant", 2),
+	}),
+	decorChance = 0.24, -- part des cases vides (hors spawns) qui reçoivent un décor
+	decorJitter = 1.0, -- décalage maximal (studs) autour du centre de la case
+	decorBlockedFloors = table.freeze({ "BB_FLOOR_02_GrassFlowers", "BB_FLOOR_05_SandRocks" }),
+}) :: ModularConfig
+
 -- Cinq thèmes sur le MÊME générateur : seuls les couleurs, matériaux, décors et l'éclairage changent. Les règles de
 -- grille, de collision et de jouabilité sont identiques (H8 : les accents de sol restent sobres pour ne jamais
 -- ressembler à une zone dangereuse).
@@ -129,6 +204,7 @@ MapConfig.Themes = table.freeze({
 	Classic = table.freeze({
 		enabled = true,
 		displayName = "Classique",
+		modular = true,
 		floorColorA = Color3.fromRGB(122, 196, 70),
 		floorColorB = Color3.fromRGB(104, 178, 58),
 		floorAccentColor = Color3.fromRGB(196, 150, 78),

@@ -8,6 +8,7 @@ local Controllers = script.Parent.Controllers
 local CameraController = require(Controllers.CameraController)
 local ChatController = require(Controllers.ChatController)
 local EffectsController = require(Controllers.EffectsController)
+local MobileAssets = require(Controllers.MobileAssets)
 local MovementController = require(Controllers.MovementController)
 local RoundController = require(Controllers.RoundController)
 local UIController = require(Controllers.UIController)
@@ -48,4 +49,5 @@ mapReady.OnClientEvent:Connect(function(info: CameraController.MapInfo)
 	EffectsController.start(info, remotes)
 end)
 
+MobileAssets.start() -- modèles allégés sur appareil tactile (sans effet sur PC)
 clientReady:FireServer()

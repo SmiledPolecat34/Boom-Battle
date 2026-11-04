@@ -109,7 +109,16 @@ check("chemin : départ == cible => {}", path ~= nil and #path == 0)
 path = grid:findPath({ x = 1, y = 1 }, { x = 5, y = 1 })
 check("chemin : ligne libre de 4 cases", path ~= nil and #path == 4)
 
-path = grid:findPath({ x = 1, y = 1 }, { x = 3, y = 3 }) -- (3, 3) est un pilier
+-- Les piliers sont aléatoires (symétriques) : on cible un pilier réellement présent.
+local pillarCell = { x = 3, y = 3 }
+for y = 1, layout.size do
+	for x = 1, layout.size do
+		if layout.cells[y][x] == "PILLAR" then
+			pillarCell = { x = x, y = y }
+		end
+	end
+end
+path = grid:findPath({ x = 1, y = 1 }, pillarCell)
 check("chemin : cible = pilier => refus", path == nil)
 
 path = grid:findPath({ x = 1, y = 1 }, { x = 0, y = 1 })
