@@ -36,12 +36,10 @@ function DamageService.isAlive(player: Player): boolean
 	return player:GetAttribute("Alive") == true and humanoid ~= nil and humanoid.Health > 0
 end
 
--- Retourne true si le joueur est éliminé par ce coup, false s'il est protégé ou déjà éliminé.
-function DamageService.hit(player: Player): boolean
+-- Élimine un joueur vivant sans tenir compte du bouclier (coup mortel, ou abandon de la manche via le menu).
+-- Retourne false s'il était déjà éliminé.
+function DamageService.eliminate(player: Player): boolean
 	if not DamageService.isAlive(player) then
-		return false
-	end
-	if PowerupService.consumeShield(player) then
 		return false
 	end
 
@@ -62,6 +60,17 @@ function DamageService.hit(player: Player): boolean
 		callback(player)
 	end
 	return true
+end
+
+-- Retourne true si le joueur est éliminé par ce coup, false s'il est protégé ou déjà éliminé.
+function DamageService.hit(player: Player): boolean
+	if not DamageService.isAlive(player) then
+		return false
+	end
+	if PowerupService.consumeShield(player) then
+		return false
+	end
+	return DamageService.eliminate(player)
 end
 
 return DamageService

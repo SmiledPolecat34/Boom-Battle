@@ -47,10 +47,10 @@ local function botFolder(): Folder
 end
 
 -- Crée `count` bots (acteurs, sans personnage). Ils sont enregistrés pour les dégâts et les bonus.
-function BotService.createBots(count: number): { any }
+function BotService.createBots(count: number, difficulties: { number }?): { any }
 	local created: { any } = {}
 	for index = 1, count do
-		local bot = BotActor.new(index)
+		local bot = BotActor.new(index, if difficulties then difficulties[index] else nil)
 		ActorRegistry.addBot(bot)
 		table.insert(created, bot)
 	end
@@ -164,6 +164,7 @@ local function think(bot: any, rng: Random, memory: { target: string?, issuedAt:
 		danger = BombService.getDangerKeys(info),
 		enemies = enemiesOf(bot, info),
 		rng = rng,
+		difficulty = bot.difficulty,
 	})
 
 	if action.kind == "bomb" then
@@ -196,7 +197,7 @@ function BotService.startAI(bots: { any })
 				if not ok then
 					warn("[BotService] Erreur de décision : " .. tostring(err))
 				end
-				task.wait(DECISION_INTERVAL)
+				task.wait(BotBrain.profile(bot.difficulty or 5).interval)
 			end
 		end)
 	end

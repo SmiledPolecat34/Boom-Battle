@@ -91,7 +91,8 @@ end
 -- Retourne les cellules à parcourir SANS la case de départ, AVEC la cible ; {} si départ == cible ;
 -- nil si la cible n'est pas franchissable ou n'est pas atteignable.
 function GridService.findPath(self: GridService, from: Types.Cell, to: Types.Cell): { Types.Cell }?
-	if not self:isWalkable(to.x, to.y) then
+	if not self:isWalkable(to.x, to.y) or not self:inBounds(from.x, from.y) then
+		-- Un départ hors grille ferait collisionner les clés numériques avec une autre case (piège connu : clés numériques hors grille).
 		return nil
 	end
 	if from.x == to.x and from.y == to.y then

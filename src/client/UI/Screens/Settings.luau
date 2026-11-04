@@ -5,6 +5,7 @@
 local Components = require(script.Parent.Parent.Components)
 local SettingsStore = require(script.Parent.Parent.Parent.Controllers.SettingsStore)
 local Theme = require(script.Parent.Parent.Theme)
+local TouchControls = require(script.Parent.Parent.TouchControls)
 
 local Settings = {}
 
@@ -13,7 +14,21 @@ function Settings.new(parent: Instance, ctx: any)
 	frame.BackgroundColor3 = Color3.new(0, 0, 0)
 	frame.BackgroundTransparency = 0.45
 
+	-- Clic en dehors du panneau : referme et revient au jeu.
+	local backdrop = Instance.new("TextButton")
+	backdrop.Name = "Backdrop"
+	backdrop.Size = UDim2.fromScale(1, 1)
+	backdrop.BackgroundTransparency = 1
+	backdrop.Text = ""
+	backdrop.AutoButtonColor = false
+	backdrop.ZIndex = 1
+	backdrop.Parent = frame
+	backdrop.Activated:Connect(function()
+		ctx.closeOverlay()
+	end)
+
 	local panel = Components.panel(frame, "Panel", UDim2.fromOffset(560, 440))
+	panel.ZIndex = 2 -- au-dessus du fond cliquable
 	panel.AnchorPoint = Vector2.new(0.5, 0.5)
 	panel.Position = UDim2.fromScale(0.5, 0.5)
 
@@ -23,7 +38,15 @@ function Settings.new(parent: Instance, ctx: any)
 
 	local choiceButtons: { { button: TextButton, key: string, value: any } } = {}
 
-	local function addChoiceRow(y: number, caption: string, key: string, options: { string })
+	-- Section tactile : créée toujours, affichée selon l'appareil en direct (l'émulateur de Studio peut changer après le chargement).
+	local touchSection = Instance.new("Frame")
+	touchSection.Name = "TouchSection"
+	touchSection.Size = UDim2.fromScale(1, 1)
+	touchSection.BackgroundTransparency = 1
+	touchSection.Parent = panel
+
+	local function addChoiceRow(y: number, caption: string, key: string, options: { string }, host: Instance?)
+		local panel = host or panel
 		local label = Components.label(panel, key .. "Caption", caption, 20, Theme.white, Theme.fontBold)
 		label.Position = UDim2.fromOffset(24, y)
 		label.Size = UDim2.new(1, -48, 0, 26)
@@ -64,8 +87,30 @@ function Settings.new(parent: Instance, ctx: any)
 		SettingsStore.set("showTimer", not SettingsStore.get("showTimer"))
 	end)
 
+	-- Commandes tactiles : seulement sur mobile / tablette (pas de faux bouton sur PC).
+	local touchToggles: { { button: TextButton, key: string, on: string, off: string } } = {}
+	local followsLabel: TextLabel, followsToggle: TextButton, flipLabel: TextLabel, flipToggle: TextButton
+	do
+		addChoiceRow(352, "Commandes tactiles", "controlMode", { "Joystick", "Croix" }, touchSection)
+		local function addToggleRow(y: number, caption: string, key: string, on: string, off: string): (TextLabel, TextButton)
+			local label = Components.label(touchSection, key .. "Caption", caption, 20, Theme.white, Theme.fontBold)
+			label.Position = UDim2.fromOffset(24, y)
+			label.Size = UDim2.fromOffset(300, 46)
+			label.TextXAlignment = Enum.TextXAlignment.Left
+			local toggle = Components.button(touchSection, key .. "Toggle", "", Theme.green, UDim2.fromOffset(150, 46))
+			toggle.Position = UDim2.fromOffset(340, y)
+			toggle.TextSize = 20
+			toggle.Activated:Connect(function()
+				SettingsStore.set(key :: any, not SettingsStore.get(key :: any))
+			end)
+			table.insert(touchToggles, { button = toggle, key = key, on = on, off = off })
+			return label, toggle
+		end
+		followsLabel, followsToggle = addToggleRow(440, "Joystick sous le doigt", "joystickFollows", "Activé", "Désactivé")
+		flipLabel, flipToggle = addToggleRow(496, "Inverser les commandes", "flipControls", "Inversé", "Normal")
+	end
+
 	local note = Components.label(panel, "Note", "Réglages conservés pendant la session.", 14, Theme.muted, Theme.fontBody)
-	note.Position = UDim2.fromOffset(0, 360)
 	note.Size = UDim2.new(1, 0, 0, 20)
 
 	local close = Components.button(panel, "CloseButton", "RETOUR", Theme.orange, UDim2.fromOffset(180, 52))
@@ -86,9 +131,29 @@ function Settings.new(parent: Instance, ctx: any)
 		local timerShown = SettingsStore.get("showTimer")
 		timerToggle.Text = if timerShown then "Affiché" else "Masqué"
 		timerToggle.BackgroundColor3 = if timerShown then Theme.green else Theme.disabled
+		for _, entry in touchToggles do
+			local value = SettingsStore.get(entry.key :: any) == true
+			entry.button.Text = if value then entry.on else entry.off
+			entry.button.BackgroundColor3 = if value then Theme.green else Theme.disabled
+		end
+
+		-- « Joystick sous le doigt » n'existe qu'avec le joystick ; avec la croix la ligne disparaît et l'autre remonte.
+		local touch = TouchControls.isTouchDevice()
+		local joystick = SettingsStore.get("controlMode") == "Joystick"
+		followsLabel.Visible = joystick
+		followsToggle.Visible = joystick
+		local flipY = if joystick then 496 else 440
+		flipLabel.Position = UDim2.fromOffset(24, flipY)
+		flipToggle.Position = UDim2.fromOffset(340, flipY)
+		touchSection.Visible = touch
+		local height = if not touch then 440 elseif joystick then 640 else 584
+		panel.Size = UDim2.fromOffset(560, height)
+		note.Position = UDim2.fromOffset(0, height - 84)
 	end
 	SettingsStore.Changed:Connect(refresh)
 	refresh()
+
+	TouchControls.onDeviceChanged(refresh)
 
 	return { frame = frame, update = function(_s: any, _m: any) end, tick = function(_r: number?) end }
 end

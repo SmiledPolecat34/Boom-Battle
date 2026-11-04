@@ -17,6 +17,9 @@ GameConfig.States = table.freeze({
 
 GameConfig.Round = table.freeze({
 	MinimumPlayers = 1, -- PROVISOIRE : partie rapide dès 1 joueur (à remonter à 2 plus tard)
+	PrivateMinPlayers = 2, -- partie privée : l'hôte peut lancer dès 2 joueurs dans le groupe
+	MaxBotDifficulty = 10, -- partie privée : niveau des bots de 1 (très facile) à 10 (très fort)
+	DefaultBotDifficulty = 5,
 	QuickCountdown = 6, -- secondes : compte à rebours de la partie rapide (aucun lobby, aucun « prêt »)
 	MaximumPlayers = 8,
 	ReadyCountdown = 10, -- secondes
@@ -26,7 +29,6 @@ GameConfig.Round = table.freeze({
 	-- PROPOSITION : délai après lequel la manche démarre avec les seuls joueurs prêts (si assez nombreux),
 	-- pour qu'un joueur inactif ne bloque pas le groupe.
 	ReadyTimeout = 45, -- secondes
-	MaxSoloBots = 3, -- mode solo : bots maximum (le cahier des charges prévoit 1 à 3)
 	-- Uniquement dans Roblox Studio : permet de tester seul. Jamais actif en production.
 	AllowSoloInStudio = true,
 })

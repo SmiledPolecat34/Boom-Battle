@@ -110,7 +110,8 @@ function MovementController.start(info: CameraController.MapInfo, remotes: Folde
 			end
 			local cx = math.floor((root.Position.X - info.origin.X) / info.cellSize) + 1
 			local cy = math.floor((root.Position.Z - info.origin.Z) / info.cellSize) + 1
-			local x, y = cx + direction.X, cy + direction.Y
+			local gridDirection = CameraController.screenToGrid(direction)
+			local x, y = cx + gridDirection.X, cy + gridDirection.Y
 			if x < 1 or x > info.size or y < 1 or y > info.size then
 				return
 			end

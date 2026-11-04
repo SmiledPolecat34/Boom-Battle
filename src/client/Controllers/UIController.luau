@@ -12,6 +12,7 @@ local RunService = game:GetService("RunService")
 local AssetIds = require(script.Parent.Parent.UI.AssetIds)
 
 local SettingsStore = require(script.Parent.SettingsStore)
+local ScreenSelector = require(script.Parent.ScreenSelector)
 local GameHUD = require(script.Parent.Parent.UI.Screens.GameHUD)
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
@@ -21,10 +22,10 @@ local InviteController = require(script.Parent.InviteController)
 local QuickChatStore = require(script.Parent.QuickChatStore)
 local CosmeticBrowser = require(script.Parent.Parent.UI.Screens.CosmeticBrowser)
 local EmoteWheel = require(script.Parent.Parent.UI.Screens.EmoteWheel)
-local Solo = require(script.Parent.Parent.UI.Screens.Solo)
 local QuickChat = require(script.Parent.Parent.UI.Screens.QuickChat)
 local Events = require(script.Parent.Parent.UI.Screens.Events)
 local Help = require(script.Parent.Parent.UI.Screens.Help)
+local Pause = require(script.Parent.Parent.UI.Screens.Pause)
 local Quests = require(script.Parent.Parent.UI.Screens.Quests)
 local Lobby = require(script.Parent.Parent.UI.Screens.Lobby)
 local MainMenu = require(script.Parent.Parent.UI.Screens.MainMenu)
@@ -59,26 +60,8 @@ local function findMe(snapshot: any): any
 	return nil
 end
 
--- Quel écran principal afficher ? (pur : même entrée, même sortie)
-local function selectScreen(snapshot: any, me: any): string
-	local state: string = snapshot.state
-	local queued = me ~= nil and me.queued == true
-	local participant = me ~= nil and me.participant == true
-
-	if state == "FINISHED" and (queued or participant) then
-		return "Results"
-	end
-	if state == "COUNTDOWN" or state == "PLAYING" then
-		if participant or queued then
-			return "GameHUD" -- participant, ou spectateur déjà inscrit
-		end
-		return "MainMenu"
-	end
-	if queued then
-		return "Lobby"
-	end
-	return "MainMenu"
-end
+-- Quel écran principal afficher ? Logique pure dans ScreenSelector (testée hors Studio).
+local selectScreen = ScreenSelector.select
 UIController.selectScreen = selectScreen
 
 local function applyScale()
@@ -103,18 +86,32 @@ local function remaining(): number?
 	return nil
 end
 
-local function closeOverlay()
+-- Fenêtre à rouvrir à la fermeture de la courante (Aide / Réglages ouverts depuis le menu de pause).
+local returnOverlay: string? = nil
+
+local function hideOverlay()
 	if openOverlay then
 		overlays[openOverlay].frame.Visible = false
 		openOverlay = nil
 	end
 end
 
-local function showOverlay(name: string)
-	closeOverlay()
+local function showOverlay(name: string, backTo: string?)
+	hideOverlay()
+	returnOverlay = nil
 	if overlays[name] then
 		overlays[name].frame.Visible = true
 		openOverlay = name
+		returnOverlay = backTo
+	end
+end
+
+local function closeOverlay()
+	local back = returnOverlay
+	hideOverlay()
+	returnOverlay = nil
+	if back then
+		showOverlay(back)
 	end
 end
 
@@ -131,9 +128,20 @@ local function render()
 		-- aucune sur l'écran des résultats.
 		if openOverlay then
 			local inRound = target == "GameHUD"
-			local allowed = target == "MainMenu" or target == "Lobby" or (inRound and (openOverlay == "Emotes" or openOverlay == "QuickChat"))
+			local allowed = target == "MainMenu"
+				or target == "Lobby"
+				or (
+					inRound
+					and (
+						openOverlay == "Emotes"
+						or openOverlay == "QuickChat"
+						or openOverlay == "Pause"
+						or returnOverlay == "Pause" -- Aide / Réglages ouverts depuis la pause
+					)
+				)
 			if not allowed then
-				closeOverlay()
+				hideOverlay()
+				returnOverlay = nil
 			end
 		end
 	end
@@ -164,6 +172,9 @@ function UIController.onProfile(profile: any)
 	currentProfile = profile
 	if screens.MainMenu then
 		screens.MainMenu.setProfile(profile)
+	end
+	if screens.GameHUD then
+		screens.GameHUD.setProfile(profile)
 	end
 	for _, overlay in overlays do
 		if overlay.setProfile then
@@ -220,11 +231,12 @@ function UIController.start(remotes: Folder)
 	local requestEmote = remotes:WaitForChild("RequestEmote") :: RemoteEvent
 	local requestQuickChat = remotes:WaitForChild("RequestQuickChat") :: RemoteEvent
 
-	local startSolo = remotes:WaitForChild("StartSolo") :: RemoteEvent
+	local partyAction = remotes:WaitForChild("PartyAction") :: RemoteEvent
 
 	local ctx = {
-		startSolo = function(botCount: number)
-			startSolo:FireServer(botCount)
+		-- Partie privée : "create" (devient hôte), "join", "start", "addBot", "removeBot", "botLevel" (hôte seulement ; le serveur revalide tout).
+		partyAction = function(action: string, arg: any?)
+			partyAction:FireServer(action, arg)
 		end,
 		-- Menu : aperçu local sur le personnage du décor 3D ; ailleurs : demande au serveur (répliquée à tous).
 		playEmote = function(id: string)
@@ -270,7 +282,24 @@ function UIController.start(remotes: Folder)
 			placeBomb:FireServer()
 		end,
 		openOverlay = showOverlay,
+		-- Raccourcis clavier : ouvre la fenêtre si aucune n'est ouverte, la referme si c'est elle qui est ouverte.
+		toggleOverlay = function(name: string)
+			if openOverlay == name then
+				closeOverlay()
+			elseif openOverlay == nil then
+				showOverlay(name)
+			end
+		end,
+		openOverlayFromPause = function(name: string)
+			showOverlay(name, "Pause")
+		end,
 		closeOverlay = closeOverlay,
+		-- Abandon de la manche en cours (ou simple retour au menu hors manche) : le serveur décide (élimination, file).
+		leaveMatch = function()
+			setQueued:FireServer(false, true)
+			hideOverlay()
+			returnOverlay = nil
+		end,
 	}
 
 	local screenGui = Instance.new("ScreenGui")
@@ -296,20 +325,21 @@ function UIController.start(remotes: Folder)
 	screens.Results = Results.new(rootFrame, ctx)
 	overlays.Settings = Settings.new(rootFrame, ctx)
 	overlays.Help = Help.new(rootFrame, ctx)
+	overlays.Pause = Pause.new(rootFrame, ctx)
 	overlays.Shop = CosmeticBrowser.new(rootFrame, ctx, "shop")
 	overlays.Inventory = CosmeticBrowser.new(rootFrame, ctx, "inventory")
 	overlays.Quests = Quests.new(rootFrame, ctx)
 	overlays.Events = Events.new(rootFrame, ctx)
 	overlays.Emotes = EmoteWheel.new(rootFrame, ctx)
 	overlays.QuickChat = QuickChat.new(rootFrame, ctx)
-	overlays.Solo = Solo.new(rootFrame, ctx)
 
 	-- Message court (ex. « Invitations indisponibles ici ») : un seul à la fois, disparaît seul.
 	local toast = Instance.new("TextLabel")
 	toast.Name = "Toast"
+	-- En bas, décalé à gauche du bouton PLAY et au-dessus du bas de l'écran : ne recouvre ni ÉMOTES/CHAT ni PLAY.
 	toast.AnchorPoint = Vector2.new(0.5, 1)
-	toast.Position = UDim2.new(0.5, 0, 1, -150)
-	toast.Size = UDim2.fromOffset(520, 44)
+	toast.Position = UDim2.new(0.42, 0, 1, -24)
+	toast.Size = UDim2.fromOffset(400, 56)
 	toast.BackgroundColor3 = Color3.fromRGB(21, 27, 49)
 	toast.BackgroundTransparency = 0.1
 	toast.TextColor3 = Color3.new(1, 1, 1)

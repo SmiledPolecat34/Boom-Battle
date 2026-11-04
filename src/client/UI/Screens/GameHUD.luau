@@ -2,10 +2,14 @@
 -- HUD de manche : chronomètre, survivants, statistiques, bouton bombe, compte à rebours, mode spectateur.
 -- Il reste en périphérie : rien ne couvre le centre de l'arène (cases de départ, trajectoires d'explosion).
 
+local UserInputService = game:GetService("UserInputService")
+
 local Components = require(script.Parent.Parent.Components)
 local InputController = require(script.Parent.Parent.Parent.Controllers.InputController)
 local SettingsStore = require(script.Parent.Parent.Parent.Controllers.SettingsStore)
 local Theme = require(script.Parent.Parent.Theme)
+local TouchControls = require(script.Parent.Parent.TouchControls)
+local CosmeticConfig = require(game:GetService("ReplicatedStorage").Shared.CosmeticConfig)
 
 local GameHUD = {}
 
@@ -53,6 +57,62 @@ function GameHUD.new(parent: Instance, ctx: any)
 		bombCorner.CornerRadius = UDim.new(1, 0)
 	end
 
+	-- Le bouton montre la bombe équipée (même couleur et matière que la vraie bombe), pas un simple texte.
+	bomb.Text = ""
+	bomb.BackgroundColor3 = Theme.navy
+	Components.stroke(bomb, Theme.orange, 4)
+	local viewport = Instance.new("ViewportFrame")
+	viewport.Name = "BombIcon"
+	viewport.AnchorPoint = Vector2.new(0.5, 0.5)
+	viewport.Position = UDim2.fromScale(0.5, 0.5)
+	viewport.Size = UDim2.fromScale(0.86, 0.86)
+	viewport.BackgroundTransparency = 1
+	viewport.Active = false
+	viewport.Ambient = Color3.fromRGB(150, 150, 165)
+	viewport.LightColor = Color3.new(1, 1, 1)
+	viewport.LightDirection = Vector3.new(-1, -1.2, -0.8)
+	viewport.ZIndex = 2
+	viewport.Parent = bomb
+	local iconCamera = Instance.new("Camera")
+	iconCamera.FieldOfView = 35
+	iconCamera.CFrame = CFrame.lookAt(Vector3.new(0, 2.2, 9), Vector3.new(0, 0.6, 0))
+	iconCamera.Parent = viewport
+	viewport.CurrentCamera = iconCamera
+	local function iconPart(shape: Enum.PartType, size: Vector3, cframe: CFrame, color: Color3, material: Enum.Material): Part
+		local part = Instance.new("Part")
+		part.Anchored = true
+		part.CanCollide = false
+		part.Shape = shape
+		part.Size = size
+		part.CFrame = cframe
+		part.Color = color
+		part.Material = material
+		part.Parent = viewport
+		return part
+	end
+	local body = iconPart(Enum.PartType.Ball, Vector3.new(3, 3, 3), CFrame.new(0, 0, 0), Color3.fromRGB(35, 35, 45), Enum.Material.SmoothPlastic)
+	iconPart(Enum.PartType.Cylinder, Vector3.new(0.7, 0.5, 0.5), CFrame.new(0, 1.7, 0) * CFrame.Angles(0, 0, math.pi / 2), Color3.fromRGB(70, 70, 80), Enum.Material.Metal)
+	iconPart(Enum.PartType.Ball, Vector3.new(0.7, 0.7, 0.7), CFrame.new(0, 2.25, 0), Color3.fromRGB(255, 170, 40), Enum.Material.Neon)
+
+	local function setBombSkin(profile: any)
+		local equipped = if typeof(profile) == "table" and typeof(profile.equipped) == "table" then profile.equipped.bomb else nil
+		local skin = CosmeticConfig.get(equipped) or CosmeticConfig.get(CosmeticConfig.Defaults.bomb)
+		if skin then
+			body.Color = skin.color
+			body.Material = skin.material or Enum.Material.SmoothPlastic
+		end
+	end
+	setBombSkin(nil)
+
+	-- Haut droite : menu de pause (quitter, aide, réglages). Toujours disponible, y compris pour un spectateur.
+	local menu = Components.button(frame, "MenuButton", "MENU", Theme.navy, UDim2.fromOffset(120, 44))
+	menu.AnchorPoint = Vector2.new(1, 0)
+	menu.Position = UDim2.new(1, -24, 0, 20)
+	menu.TextSize = 18
+	menu.Activated:Connect(function()
+		ctx.openOverlay("Pause")
+	end)
+
 	-- Haut droite : émotes et chat rapide (joueurs de la manche seulement). Les petits boutons restent en périphérie.
 	local emotes = Components.button(frame, "EmotesButton", "ÉMOTES", Theme.violet, UDim2.fromOffset(120, 44))
 	emotes.AnchorPoint = Vector2.new(1, 0)
@@ -90,6 +150,23 @@ function GameHUD.new(parent: Instance, ctx: any)
 		ctx.setQueued(false)
 	end)
 
+	-- Raccourcis clavier (PC) : M = menu, E = émotes, C = chat rapide. Ignorés pendant une saisie de texte,
+	-- hors du HUD, ou quand le bouton correspondant n'est pas affiché (ex. émotes pour un spectateur sans personnage).
+	local SHORTCUTS: { [Enum.KeyCode]: { overlay: string, button: GuiButton } } = {
+		[Enum.KeyCode.M] = { overlay = "Pause", button = menu },
+		[Enum.KeyCode.E] = { overlay = "Emotes", button = emotes },
+		[Enum.KeyCode.C] = { overlay = "QuickChat", button = chat },
+	}
+	UserInputService.InputBegan:Connect(function(input: InputObject, _gameProcessed: boolean)
+		local shortcut = SHORTCUTS[input.KeyCode]
+		if not shortcut or UserInputService:GetFocusedTextBox() then
+			return
+		end
+		if frame.Visible and shortcut.button.Visible then
+			ctx.toggleOverlay(shortcut.overlay)
+		end
+	end)
+
 	local canBomb = false
 	local function placeBomb()
 		if canBomb then
@@ -99,14 +176,42 @@ function GameHUD.new(parent: Instance, ctx: any)
 	bomb.Activated:Connect(placeBomb)
 	InputController.onBombKey(placeBomb) -- Espace : raccourci facultatif
 
+	-- Commandes tactiles (mobile / tablette) : joystick ou croix. Sur appareil tactile, les statistiques passent en haut
+	-- à gauche pour laisser le coin bas aux commandes ; « inverser » met les commandes à droite et BOMBE à gauche.
+	local touchControls = TouchControls.new(frame)
+	local function applyStatsSide()
+		if TouchControls.isTouchDevice() then
+			stats.AnchorPoint = Vector2.new(0, 0)
+			-- Sous la barre Roblox (logo, menu, chat, micro) qui occupe le coin haut gauche sur mobile.
+			stats.Position = UDim2.fromOffset(16, 120)
+		else
+			stats.AnchorPoint = Vector2.new(0, 1)
+			stats.Position = UDim2.new(0, 16, 1, -16)
+		end
+	end
+	applyStatsSide()
+
 	local function applyBombSize()
 		local px = SettingsStore.bombButtonPixels()
 		bomb.Size = UDim2.fromOffset(px, px)
 	end
+	local function applyBombSide()
+		local flipped = TouchControls.isTouchDevice() and SettingsStore.get("flipControls") == true
+		bomb.AnchorPoint = Vector2.new(if flipped then 0 else 1, 1)
+		bomb.Position = UDim2.new(if flipped then 0 else 1, if flipped then 24 else -24, 1, -24)
+	end
 	applyBombSize()
+	applyBombSide()
+	TouchControls.onDeviceChanged(function()
+		applyStatsSide()
+		applyBombSide()
+		touchControls.setActive(canBomb)
+	end)
 	SettingsStore.Changed:Connect(function(key: string)
 		if key == "bombButtonSize" then
 			applyBombSize()
+		elseif key == "flipControls" then
+			applyBombSide()
 		end
 	end)
 
@@ -130,6 +235,7 @@ function GameHUD.new(parent: Instance, ctx: any)
 
 	return {
 		frame = frame,
+		setProfile = setBombSkin,
 		setStats = function(value: any)
 			if typeof(value) ~= "table" then
 				return
@@ -148,6 +254,7 @@ function GameHUD.new(parent: Instance, ctx: any)
 			canBomb = playing
 
 			bomb.Visible = playing
+			touchControls.setActive(playing)
 			-- Émotes et chat : tant qu'on a un personnage dans la manche (pas pour un spectateur sans personnage).
 			local hasCharacter = participant and (state == "COUNTDOWN" or alive)
 			emotes.Visible = hasCharacter

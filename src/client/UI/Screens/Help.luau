@@ -13,6 +13,7 @@ local TEXT = table.concat({
 	"COMMANDES",
 	"• Se déplacer : clique ou touche une case de l'arène.",
 	"• Poser une bombe : bouton BOMBE à l'écran (ou barre d'espace sur PC).",
+	"• Raccourcis PC : M = menu, E = émotes, C = chat rapide.",
 	"",
 	"BOMBES",
 	"• Elles explosent après 2 secondes, en croix.",
@@ -37,7 +38,21 @@ function Help.new(parent: Instance, ctx: any)
 	frame.BackgroundColor3 = Color3.new(0, 0, 0)
 	frame.BackgroundTransparency = 0.45
 
+	-- Clic en dehors du panneau : referme et revient au jeu.
+	local backdrop = Instance.new("TextButton")
+	backdrop.Name = "Backdrop"
+	backdrop.Size = UDim2.fromScale(1, 1)
+	backdrop.BackgroundTransparency = 1
+	backdrop.Text = ""
+	backdrop.AutoButtonColor = false
+	backdrop.ZIndex = 1
+	backdrop.Parent = frame
+	backdrop.Activated:Connect(function()
+		ctx.closeOverlay()
+	end)
+
 	local panel = Components.panel(frame, "Panel", UDim2.fromOffset(620, 500))
+	panel.ZIndex = 2 -- au-dessus du fond cliquable
 	panel.AnchorPoint = Vector2.new(0.5, 0.5)
 	panel.Position = UDim2.fromScale(0.5, 0.5)
 

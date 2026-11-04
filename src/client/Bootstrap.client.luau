@@ -18,19 +18,31 @@ local mapReady = remotes:WaitForChild("MapReady") :: RemoteEvent
 local clientReady = remotes:WaitForChild("ClientReady") :: RemoteEvent
 
 -- Les contrôles par défaut (clavier / joystick Roblox) sont inutiles : le déplacement se fait par clic ou toucher.
+-- Le joystick Roblox par défaut (mobile) doit rester inactif : seules nos commandes (joystick/croix) comptent.
+-- Le module de contrôles peut se réactiver quand le type d'appareil change (émulateur de Studio) : on le coupe à nouveau.
 task.spawn(function()
+	local UserInputService = game:GetService("UserInputService")
 	local playerScripts = Players.LocalPlayer:WaitForChild("PlayerScripts")
 	local playerModule = playerScripts:WaitForChild("PlayerModule", 10)
 	if not playerModule then
 		return
 	end
-	local ok, err = pcall(function()
-		local controls = require(playerModule):GetControls()
-		controls:Disable()
-	end)
-	if not ok then
-		warn("[BOOM BATTLE] Impossible de désactiver les contrôles par défaut : " .. tostring(err))
+	local function disableDefaultControls()
+		local ok, err = pcall(function()
+			local controls = require(playerModule):GetControls()
+			controls:Disable()
+		end)
+		if not ok then
+			warn("[BOOM BATTLE] Impossible de désactiver les contrôles par défaut : " .. tostring(err))
+		end
 	end
+	disableDefaultControls()
+	UserInputService.LastInputTypeChanged:Connect(function()
+		task.defer(disableDefaultControls)
+	end)
+	UserInputService:GetPropertyChangedSignal("TouchEnabled"):Connect(function()
+		task.defer(disableDefaultControls)
+	end)
 end)
 
 -- Les écrans de manche d'abord, pour ne manquer aucun état envoyé en réponse à ClientReady.

@@ -10,6 +10,7 @@ BotActor.__index = BotActor
 
 export type BotActor = typeof(setmetatable(
 	{} :: {
+		difficulty: number,
 		UserId: number,
 		Name: string,
 		DisplayName: string,
@@ -20,8 +21,9 @@ export type BotActor = typeof(setmetatable(
 	BotActor
 ))
 
-function BotActor.new(index: number): BotActor
+function BotActor.new(index: number, difficulty: number?): BotActor
 	return setmetatable({
+		difficulty = difficulty or 5, -- 1 (très facile) à 10 (très fort) : voir BotBrain.profile
 		UserId = BOT_ID_BASE - index,
 		Name = "Bot" .. index,
 		DisplayName = "Bot " .. index,

@@ -51,16 +51,22 @@ local alive: { [Player]: boolean } = {}
 local eliminations: { RoundResolver.Elimination } = {}
 local spawnIndex: { [Player]: number } = {}
 local roundStartedAt = 0
+local startingCount = 0 -- nombre de participants au début de la manche (un départ ne doit pas la transformer en solo)
 local roundId = 0 -- identifiant de la manche en cours : garantit une seule récompense par joueur et par manche
 local lastEliminationAt = 0
 local lastReadyRequest: { [Player]: number } = {}
 
 -- Mode solo : manche d'entraînement contre des bots. Aucune récompense ni statistique (pas d'exploitation possible).
 local soloRound = false
-local pendingSolo: { player: Player, botCount: number }? = nil
-local lastBotCount = 0 -- bots de la dernière manche : relancés tels quels par REJOUER en solo
 local fastStart = false -- vrai après une revanche unanime : compte à rebours court
 local countdownSeconds = ROUND.QuickCountdown
+
+-- Partie privée : un groupe par serveur, créé par un hôte, rejoint depuis le menu (ou via une invitation Roblox qui
+-- amène l'ami sur ce serveur). Seul l'hôte lance la manche, à partir de PrivateMinPlayers. Les membres sont aussi
+-- « queued » (écran Lobby) mais ne passent jamais par le lancement automatique de la partie rapide.
+local party: { host: Player, members: { Player }, bots: { number } }? = nil -- bots : niveau (1-10) de chaque bot du groupe
+local pendingParty = false
+local lastPartyRequest: { [Player]: number } = {}
 
 local roundStateRemote: RemoteEvent
 local roundEndedRemote: RemoteEvent
@@ -72,6 +78,29 @@ local function minPlayers(): number
 		return 1
 	end
 	return ROUND.MinimumPlayers
+end
+
+local function isPartyMember(player: Player): boolean
+	return party ~= nil and table.find(party.members, player) ~= nil
+end
+
+-- Retire un joueur du groupe privé ; l'hôte part => le plus ancien membre le remplace ; groupe vide => dissous.
+local function leaveParty(player: Player)
+	local current = party
+	if not current then
+		return
+	end
+	local index = table.find(current.members, player)
+	if not index then
+		return
+	end
+	table.remove(current.members, index)
+	if #current.members == 0 then
+		party = nil
+		pendingParty = false
+	elseif current.host == player then
+		current.host = current.members[1]
+	end
 end
 
 local function countAlive(): number
@@ -91,6 +120,7 @@ local function buildSnapshot()
 			userId = player.UserId,
 			name = player.DisplayName,
 			queued = queued[player] == true,
+			inParty = isPartyMember(player),
 			-- Écran de résultats : « prêt » = a cliqué REJOUER (le prêt de la manche terminée ne compte plus).
 			ready = if state == "FINISHED" then rematch[player] == true else (ready[player] == true or rematch[player] == true),
 			participant = participants[player] == true,
@@ -117,6 +147,15 @@ local function buildSnapshot()
 		players = list,
 		survivors = countAlive(),
 		participantCount = #participantOrder,
+		party = if party
+			then {
+				hostUserId = party.host.UserId,
+				count = #party.members + #party.bots,
+				bots = table.clone(party.bots),
+				max = ROUND.MaximumPlayers,
+				minToStart = ROUND.PrivateMinPlayers,
+			}
+			else nil,
 	}
 end
 
@@ -238,11 +277,10 @@ end
 -- Transitions ------------------------------------------------------------------------------------------------
 
 -- botCount : nombre de bots (mode solo) ; 0 pour une manche normale.
-local function startCountdown(group: { Player }, botCount: number?)
+local function startCountdown(group: { Player }, botCount: number?, botDifficulties: { number }?)
 	BotService.clear()
 	countdownSeconds = if fastStart then ROUND.RematchCountdown else ROUND.QuickCountdown
 	fastStart = false
-	lastBotCount = botCount or 0
 	table.clear(participants)
 	table.clear(participantOrder)
 	table.clear(alive)
@@ -258,7 +296,7 @@ local function startCountdown(group: { Player }, botCount: number?)
 	end
 
 	-- Bots : participants à part entière (ils comptent dans la taille de l'arène et les spawns).
-	local bots: { any } = if botCount and botCount > 0 then BotService.createBots(botCount) else {}
+	local bots: { any } = if botCount and botCount > 0 then BotService.createBots(botCount, botDifficulties) else {}
 	soloRound = #bots > 0
 	for botIndex, bot in bots do
 		local index = #group + botIndex
@@ -310,6 +348,7 @@ local function beginPlaying()
 		alive[player] = true
 		PlayState.setActive(player, true)
 	end
+	startingCount = #participantOrder
 	roundStartedAt = os.clock()
 	lastEliminationAt = 0
 	setState("PLAYING", ROUND.RoundDuration)
@@ -356,7 +395,7 @@ end
 local function queuedPlayers(): { Player }
 	local list: { Player } = {}
 	for _, player in Players:GetPlayers() do
-		if queued[player] then
+		if queued[player] and not isPartyMember(player) then
 			table.insert(list, player)
 		end
 	end
@@ -418,22 +457,32 @@ local function checkRematch()
 			return
 		end
 	end
-	local wasSolo, bots = soloRound, lastBotCount
+	local wasParty = isPartyMember(humans[1])
 	fastStart = true
 	resetRound() -- rematch[player] => prêts dès le retour au lobby
-	if wasSolo then
-		pendingSolo = { player = humans[1], botCount = bots }
+	if wasParty then
+		pendingParty = true -- revanche unanime d'une partie privée (bots compris) : relance directe
 	end
 end
 
 local function tick()
-	-- Demande de mode solo (validée par la remote) : exécutée ici, dans le fil de la machine d'états.
-	if pendingSolo and (state == "WAITING" or state == "READY") then
-		local request = pendingSolo
-		pendingSolo = nil
-		if request.player.Parent == Players and queued[request.player] then
-			ready[request.player] = true
-			startCountdown({ request.player }, request.botCount)
+	-- Lancement de la partie privée demandé par l'hôte (validé par la remote).
+	if pendingParty and (state == "WAITING" or state == "READY") then
+		pendingParty = false
+		local group: { Player } = {}
+		if party then
+			for _, member in party.members do
+				if member.Parent == Players and queued[member] then
+					table.insert(group, member)
+				end
+			end
+		end
+		local botLevels: { number } = if party then table.clone(party.bots) else {}
+		if #group >= 1 and #group + #botLevels >= ROUND.PrivateMinPlayers then
+			for _, member in group do
+				ready[member] = true
+			end
+			startCountdown(group, #botLevels, botLevels)
 			return
 		end
 	end
@@ -486,7 +535,7 @@ local function tick()
 		end
 	elseif state == "PLAYING" then
 		local survivors = countAlive()
-		local threshold = if #participantOrder <= 1 then 0 else 1 -- le solo Studio dure jusqu'à la mort ou la fin du temps
+		local threshold = if startingCount <= 1 then 0 else 1 -- le solo Studio dure jusqu'à la mort ou la fin du temps ; un départ en cours de manche laisse un gagnant
 		local settled = os.clock() - lastEliminationAt >= SETTLE_DELAY
 		if survivors <= threshold and settled then
 			finishRound()
@@ -517,10 +566,17 @@ local function onPlayerAdded(player: Player)
 end
 
 local function onPlayerRemoving(player: Player)
+	-- Un joueur qui quitte en pleine manche est éliminé comme s'il avait abandonné : élimination diffusée aux clients,
+	-- comptée dans le classement et fin de manche évaluée normalement.
+	if state == "PLAYING" and alive[player] then
+		DamageService.eliminate(player)
+	end
 	ready[player] = nil
 	queued[player] = nil
 	rematch[player] = nil
 	lastReadyRequest[player] = nil
+	lastPartyRequest[player] = nil
+	leaveParty(player)
 	spawnIndex[player] = nil
 	if participants[player] then
 		participants[player] = nil
@@ -589,10 +645,11 @@ function RoundService.start(remotes: Folder)
 		end
 	end)
 
-	-- PLAY / retour au menu. Un participant encore en jeu ne peut pas quitter la file.
+	-- PLAY / retour au menu. Un participant encore en jeu ne peut quitter la file qu'en abandonnant explicitement
+	-- (menu de pause, 2e argument `true`) : il est alors éliminé, puis retiré de la file.
 	local setQueued = remotes:WaitForChild("SetQueued") :: RemoteEvent
-	setQueued.OnServerEvent:Connect(function(player: Player, value: any)
-		if typeof(value) ~= "boolean" then
+	setQueued.OnServerEvent:Connect(function(player: Player, value: any, forfeit: any)
+		if typeof(value) ~= "boolean" or (forfeit ~= nil and typeof(forfeit) ~= "boolean") then
 			return
 		end
 		local now = os.clock()
@@ -604,46 +661,122 @@ function RoundService.start(remotes: Folder)
 		local lockedIn = participants[player]
 			and (state == "COUNTDOWN" or (state == "PLAYING" and alive[player] == true))
 		if not value and lockedIn then
-			return
+			if forfeit ~= true then
+				return
+			end
+			if state == "PLAYING" and alive[player] == true then
+				DamageService.eliminate(player) -- déclenche onEliminated : mise à jour de la manche et diffusion
+			end
+			-- Pendant le compte à rebours : la file est quittée ci-dessous, ce qui interrompt le départ.
 		end
 		queued[player] = if value then true else nil
 		if not value then
 			ready[player] = nil
 			rematch[player] = nil
+			leaveParty(player)
 		end
 		broadcast()
 		checkRematch()
 	end)
 
-	-- Mode solo : manche d'entraînement contre 1 à 3 bots. Le client n'envoie que le nombre de bots.
-	local startSolo = remotes:WaitForChild("StartSolo") :: RemoteEvent
-	startSolo.OnServerEvent:Connect(function(player: Player, botCount: any)
-		if typeof(botCount) ~= "number" or botCount ~= math.floor(botCount) then
-			return
-		end
-		if botCount < 1 or botCount > ROUND.MaxSoloBots then
+	-- Partie privée : créer, rejoindre, lancer. Le client n'envoie qu'un mot ; tout est revalidé ici.
+	local partyAction = remotes:WaitForChild("PartyAction") :: RemoteEvent
+	partyAction.OnServerEvent:Connect(function(player: Player, action: any, arg: any)
+		if typeof(action) ~= "string" then
 			return
 		end
 		local now = os.clock()
-		if now - (lastReadyRequest[player] or 0) < GameConfig.RemoteLimits.ReadyToggleMinInterval then
+		if now - (lastPartyRequest[player] or 0) < GameConfig.RemoteLimits.ReadyToggleMinInterval then
 			return
 		end
-		lastReadyRequest[player] = now
+		lastPartyRequest[player] = now
 
-		if state ~= "WAITING" and state ~= "READY" then
-			noticeRemote:FireClient(player, "Une manche est en cours : attends la fin pour lancer le mode solo.")
-			return
-		end
-		for other in queued do
-			if other ~= player then
-				noticeRemote:FireClient(player, "Mode solo impossible : d'autres joueurs attendent une manche.")
+		local open = state == "WAITING" or state == "READY"
+		if action == "create" then
+			if queued[player] then
 				return
 			end
+			if not open then
+				noticeRemote:FireClient(player, "Une manche est en cours : attends la fin pour créer une partie privée.")
+				return
+			end
+			if party then
+				noticeRemote:FireClient(player, "Une partie privée existe déjà sur ce serveur : rejoins-la.")
+				return
+			end
+			party = { host = player, members = { player }, bots = {} }
+			queued[player] = true
+			ready[player] = nil
+			broadcast()
+		elseif action == "join" then
+			local current = party
+			if queued[player] or not current then
+				return
+			end
+			if not open then
+				noticeRemote:FireClient(player, "Une manche est en cours : attends la fin pour rejoindre la partie.")
+				return
+			end
+			if #current.members + #current.bots >= ROUND.MaximumPlayers then
+				noticeRemote:FireClient(player, "La partie privée est complète.")
+				return
+			end
+			table.insert(current.members, player)
+			queued[player] = true
+			ready[player] = nil
+			broadcast()
+		elseif action == "start" then
+			local current = party
+			if not current or current.host ~= player or not open then
+				return
+			end
+			if #current.members + #current.bots < ROUND.PrivateMinPlayers then
+				noticeRemote:FireClient(player, ("Il faut au moins %d joueurs pour lancer la partie."):format(ROUND.PrivateMinPlayers))
+				return
+			end
+			pendingParty = true
+		elseif action == "addBot" or action == "removeBot" or action == "botLevel" then
+			-- Gestion des bots du groupe : hôte seulement, hors manche.
+			local current = party
+			if not current or current.host ~= player or not open then
+				return
+			end
+			if action == "addBot" then
+				if #current.members + #current.bots >= ROUND.MaximumPlayers then
+					noticeRemote:FireClient(player, "La partie est complète.")
+					return
+				end
+				local level = ROUND.DefaultBotDifficulty
+				if typeof(arg) == "number" and arg == math.floor(arg) and arg >= 1 and arg <= ROUND.MaxBotDifficulty then
+					level = arg
+				end
+				table.insert(current.bots, level)
+			elseif action == "removeBot" then
+				if typeof(arg) ~= "number" or arg ~= math.floor(arg) or arg < 1 or arg > #current.bots then
+					return
+				end
+				table.remove(current.bots, arg)
+			else
+				if typeof(arg) ~= "table" then
+					return
+				end
+				local index, level = arg.index, arg.level
+				if
+					typeof(index) ~= "number"
+					or typeof(level) ~= "number"
+					or index ~= math.floor(index)
+					or level ~= math.floor(level)
+					or index < 1
+					or index > #current.bots
+					or level < 1
+					or level > ROUND.MaxBotDifficulty
+				then
+					return
+				end
+				current.bots[index] = level
+			end
+			broadcast()
 		end
-		queued[player] = true
-		ready[player] = nil
-		pendingSolo = { player = player, botCount = botCount }
-		broadcast()
 	end)
 
 	task.spawn(function()
