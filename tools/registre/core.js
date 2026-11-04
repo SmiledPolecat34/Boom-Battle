@@ -249,7 +249,7 @@
   function renderContribuer() {
     var spec = FORMS[formState.type];
     var h = '<div class="stack" style="gap:6px"><h2>Ajouter du contenu au jeu</h2><p class="muted">Ce que tu envoies est enregistré dans la page. Il entre dans le dépôt quand tu demandes à l\'assistant de le traiter dans ta session de travail : il écrit le code et ses tests, puis te laisse valider. Rien n\'est commité sans ton accord.</p></div>';
-    h += '<div class="pills" id="type-pills" role="group" aria-label="Type de contenu">' + Object.keys(FORMS).map(function (k) { return '<button class="pill" data-t="' + k + '" aria-pressed="' + (k === formState.type) + '">' + esc(FORMS[k].label) + "</button>"; }).join("") + "</div>";
+    h += '<div class="pills" id="type-pills" role="group" aria-label="Type de contenu">' + Object.keys(FORMS).map(function (k) { return '<button class="pill" data-t="' + k + '" aria-pressed="' + (k === formState.type) + '">' + ico(TYPE_ICON[k] || "edit", 18) + esc(FORMS[k].label) + "</button>"; }).join("") + "</div>";
     h += '<div class="split"><div class="stack" style="gap:16px"><div class="card stack" style="gap:14px"><h3>' + esc(spec.label) + "</h3>";
     h += '<form id="contrib-form" class="stack" style="gap:14px" novalidate><div class="form">' + spec.fields.map(fieldHtml).join("") + "</div>";
     h += spec.idFrom ? '<div class="field wide"><label>Identifiant (automatique)</label><code class="mono" id="auto-id" style="padding:9px 12px;background:var(--soft);border-radius:10px"></code></div>' : "";

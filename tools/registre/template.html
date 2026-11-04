@@ -7,7 +7,7 @@
 <meta name="description" content="Un espace commun pour retrouver et suivre les projets BOOM BATTLE et Luma.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 /* Idée : un registre de poste de pilotage. Bandeau marine à onglets, contenu en cartes denses, accent violet du jeu,
    jaune réservé aux prix et aux repères. Trois vues : tests, données du jeu, assets. */
@@ -414,6 +414,100 @@ footer .copy { margin-top: 12px; }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; scroll-behavior: auto !important; } }
 @media (forced-colors: active) { nav [data-view][aria-selected="true"], .pill[aria-pressed="true"] { border: 2px solid Highlight; } .status, .tile::before { border: 2px solid CanvasText; } }
 </style>
+<style id="theme-carre">
+/* Thème « carré » : barre du haut et onglets, angles droits (2 px), cartes sobres, tableau compact à la Jira, grande respiration à la Airbnb.
+   Un seul rayon (--r) : le changer suffit pour arrondir à nouveau l'ensemble. */
+:root {
+  --r: 2px;
+  --bg: #ffffff; --surface: #ffffff; --ink: #222222; --muted: #5c5c5c; --grey: #f7f7f7;
+  --accent: #0a6f6a; --accent-solid: #0a6f6a; --soft: #e6f2f1; --line: #dddddd; --field: #8a8a8a;
+  --coin: #9a5b00; --good: #0f5a36; --bad: #b3261e;
+  --font-display: "Figtree", system-ui, sans-serif; --font-body: "Figtree", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --bg: #141414; --surface: #1c1c1c; --ink: #f2f2f2; --muted: #adadad; --grey: #232323; --accent: #5fd0c7; --accent-solid: #0a6f6a; --soft: #12302e; --line: #333333; --field: #7a7a7a; --coin: #efc065; --good: #71d5a0; --bad: #ff919e; }
+}
+:root[data-theme="dark"] { --bg: #141414; --surface: #1c1c1c; --ink: #f2f2f2; --muted: #adadad; --grey: #232323; --accent: #5fd0c7; --accent-solid: #0a6f6a; --soft: #12302e; --line: #333333; --field: #7a7a7a; --coin: #efc065; --good: #71d5a0; --bad: #ff919e; }
+:where(*, *::before, *::after) { border-radius: var(--r) !important; }
+body { font-family: var(--font-body); }
+h1, h2, h3, .tile b { font-family: var(--font-display); }
+/* Menu latéral (conservé), en angles droits */
+.app-sidebar { background: var(--surface); border-right: 1px solid var(--line); }
+.brand-mark { width: 160px; height: auto; max-height: 90px; }
+.workspace-heading { font-size: 1.1rem; font-weight: 700; letter-spacing: .02em; }
+.project-picker select { border-color: var(--field); }
+.project-links a:hover, nav [data-view]:hover:not([aria-selected="true"]) { background: var(--grey); color: var(--ink); }
+.project-links a[aria-current="page"], nav [data-view][aria-selected="true"] { background: var(--soft); color: var(--accent); font-weight: 600; }
+nav [data-view] svg { display: block; width: 20px; height: 20px; stroke-width: 1.6; }
+.topbar { border-bottom: 1px solid var(--line); background: var(--surface); }
+main { padding-top: 32px; gap: 32px; }
+.page-intro h2 { font-size: clamp(1.7rem, 3vw, 2rem); font-weight: 700; letter-spacing: -.015em; }
+.eyebrow { color: var(--accent); }
+/* Surfaces et champs */
+.card { box-shadow: none; padding: 24px; border: 1px solid var(--line); background: var(--surface); }
+.card:hover { box-shadow: none; }
+input, select, textarea, input[type="search"], .runbar input[type="text"], .field input, .field select, .field textarea, .composer textarea { border: 1px solid var(--field); background: var(--surface); color: var(--ink); min-height: 48px; padding-inline: 14px; }
+textarea { padding-block: 12px; }
+th { background: var(--grey); color: var(--muted); }
+tbody tr:hover { background: var(--grey); }
+.tablewrap, details.suite, .banner { border-color: var(--line); }
+/* Boutons */
+.btn { background: var(--accent-solid); border-color: var(--accent-solid); color: #fff; font-weight: 600; padding: 10px 20px; }
+.btn:hover:not(:disabled) { filter: none; background: #08524e; border-color: #08524e; box-shadow: none; }
+.btn.ghost, a.btn.ghost, a.btn.ghost:visited { background: var(--surface); color: var(--ink); border-color: var(--ink); }
+.btn.ghost:hover:not(:disabled) { background: var(--grey); }
+.copy { background: var(--surface); color: var(--ink); border-color: var(--ink); font-weight: 600; min-height: 40px; }
+.copy:hover { background: var(--grey); }
+/* Catégories : barre soulignée (esprit Airbnb) */
+.pills { background: none; border: 0; border-bottom: 1px solid var(--line); padding: 0; gap: 8px; align-self: stretch; overflow-x: auto; flex-wrap: nowrap; }
+.pill { border: 0; border-bottom: 2px solid transparent; margin-bottom: -1px; min-height: 48px; padding: 0 14px; background: none; color: var(--muted); font-weight: 500; white-space: nowrap; }
+.pill:hover { background: none; color: var(--ink); border-bottom-color: #b0b0b0; }
+.pill[aria-pressed="true"] { background: none; color: var(--ink); font-weight: 600; border-bottom-color: var(--ink); }
+/* Bilan de tests : bandeau d'indicateurs d'un seul tenant */
+.tiles { gap: 0; border: 0; border-top: 1px solid var(--line); border-left: 1px solid var(--line); }
+.tile { border: 0; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 24px; background: var(--surface); }
+.tile::before { width: 8px; height: 8px; }
+/* Losanges de statut */
+.tag { text-transform: uppercase; letter-spacing: .04em; font-weight: 700; font-size: .68rem; padding: 2px 8px; }
+.prio-tag-P0 { background: color-mix(in srgb, var(--bad) 14%, var(--surface)); color: var(--bad); }
+.prio-tag-P1 { background: color-mix(in srgb, var(--coin) 16%, var(--surface)); color: var(--coin); }
+.prio-tag-P2 { background: color-mix(in srgb, var(--accent) 14%, var(--surface)); color: var(--accent); }
+.prio-tag-P3 { background: color-mix(in srgb, var(--good) 14%, var(--surface)); color: var(--good); }
+/* Tableau de suivi (esprit Jira) */
+.kanban { gap: 12px; }
+.kcol { background: var(--grey); border: 0; padding: 12px; gap: 8px; min-height: 200px; }
+.kcol h3 { font-size: .72rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); padding: 4px 4px 8px; }
+.kdrop { gap: 8px; }
+.kcard { border: 1px solid var(--line); border-left: 1px solid var(--line); box-shadow: 0 1px 1px #0000000f; padding: 12px; gap: 8px; }
+.kcard.prio-P0, .kcard.prio-P1, .kcard.prio-P2, .kcard.prio-P3 { border-left-color: var(--line); }
+.kcard:hover { background: var(--grey); }
+.kcard .ktitle { order: -1; font-weight: 500; font-size: .95rem; line-height: 1.4; }
+.kcard.selected { outline: 2px solid var(--accent); outline-offset: 0; }
+.kcomment { border-color: var(--line); }
+.journal-custom { border-left: 0; padding-left: 0; }
+.gallery .card:hover, .grid .item:hover { box-shadow: 0 4px 14px #0000001f; }
+.msg.user { background: var(--ink); color: var(--surface); }
+.msg.bot { background: var(--grey); }
+@media (max-width: 800px) {
+  .tile { border-right: 0; }
+  .tiles { border-left: 0; }
+}
+@media (max-width: 1000px) { .jsplit { grid-template-columns: minmax(0, 1fr) !important; } }
+@media (max-width: 520px) { .tiles { grid-template-columns: minmax(0, 1fr); } .tile:last-child { grid-column: auto; } }
+/* Icônes : un seul style (trait 1,6, bouts arrondis, couleur du texte) */
+.ico { width: 20px; height: 20px; flex: none; stroke-width: 1.6; }
+.pill, .copy { display: inline-flex; align-items: center; gap: 8px; }
+.pill .ico { width: 18px; height: 18px; }
+.kmove .copy { width: 40px; padding: 0; justify-content: center; }
+.hdel { display: inline-grid; place-items: center; min-width: 36px; min-height: 36px; }
+.jhead { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 16px; }
+.jhead > .stack { flex: 1 1 360px; max-width: 70ch; }
+.jhead p { margin: 0; }
+.jhead h2 { font-size: 1.4rem; }
+.jsplit { display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 24px; align-items: start; }
+.jform { display: flex; flex-direction: column; gap: 16px; }
+@media (forced-colors: active) { nav [data-view][aria-selected="true"], .pill[aria-pressed="true"] { border-bottom: 3px solid Highlight; } }
+</style>
 </head>
 <body>
 <a class="skip-link" href="#main">Aller au contenu</a>
@@ -432,7 +526,7 @@ footer .copy { margin-top: 12px; }
       <div id="extra-project-links" class="project-links"></div>
     </div>
     <div id="boom-navigation" hidden><div class="nav-caption">Dans ce projet</div>
-    <nav role="tablist" aria-label="Vues" aria-orientation="vertical">
+    <nav role="tablist" aria-label="Vues" aria-orientation="horizontal">
       <a href="#tests" role="tab" id="tab-tests" data-view="tests" aria-selected="true">Tests</a>
       <a href="#donnees" role="tab" id="tab-donnees" data-view="donnees" aria-selected="false">Données du jeu</a>
       <a href="#assets" role="tab" id="tab-assets" data-view="assets" aria-selected="false">Assets</a>
@@ -711,7 +805,7 @@ footer .copy { margin-top: 12px; }
 
   function renderGame() {
     var h = '<div class="pills" role="group" aria-label="Catégories">';
-    gameTabs.forEach(function (t) { h += '<button class="pill" data-g="' + t[0] + '" aria-pressed="' + (t[0] === currentGame) + '">' + t[1] + "</button>"; });
+    gameTabs.forEach(function (t) { h += '<button class="pill" data-g="' + t[0] + '" aria-pressed="' + (t[0] === currentGame) + '">' + ico(GAME_ICON[t[0]] || "edit", 18) + t[1] + "</button>"; });
     h += '</div><div id="game-body" class="stack" style="gap:16px"></div>';
     $("view-donnees").innerHTML = h;
     function show() {
@@ -845,7 +939,7 @@ footer .copy { margin-top: 12px; }
     document.title = (isBoom ? builtinProfile("boom").name : "Espace projets") + " — " + info[0];
     $("foot").hidden = !isBoom;
     document.querySelectorAll(".tablewrap").forEach(function (el) { el.setAttribute("tabindex", "0"); el.setAttribute("role", "region"); el.setAttribute("aria-label", "Tableau défilant"); });
-    document.querySelectorAll('[role="tablist"]').forEach(function (el) { el.setAttribute("aria-orientation", window.matchMedia && window.matchMedia("(max-width: 800px)").matches ? "horizontal" : "vertical"); });
+    document.querySelectorAll('[role="tablist"]').forEach(function (el) { el.setAttribute("aria-orientation", window.matchMedia && "horizontal"); });
     if (isBoom) saveSetting({ tab: v });
     if (v === "stockage") loadStock();
     if (v === "journal" && kb.ready) loadJournal();
@@ -870,7 +964,7 @@ footer .copy { margin-top: 12px; }
   window.addEventListener("popstate", route);
   window.addEventListener("resize", function () {
     document.querySelectorAll('[role="tablist"]').forEach(function (el) {
-      el.setAttribute("aria-orientation", window.matchMedia && window.matchMedia("(max-width: 800px)").matches ? "horizontal" : "vertical");
+      el.setAttribute("aria-orientation", window.matchMedia && "horizontal");
     });
   });
 

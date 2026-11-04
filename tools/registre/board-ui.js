@@ -1,5 +1,24 @@
   /* ---------- Tableau de suivi (colonnes À faire / En cours / Terminé) et journaux du projet ----------
      Ce fichier est inséré dans le script de la page (même portée que core.js : esc, $, backend, whenText, fmtBytes…). */
+  /* Icônes : un seul style (trait 1,6, bouts arrondis, couleur du texte), partagé par tous les écrans. */
+  var ICON = {
+    up: '<path d="m6 15 6-6 6 6"/>', down: '<path d="m6 9 6 6 6-6"/>', left: '<path d="m15 6-6 6 6 6"/>', right: '<path d="m9 6 6 6-6 6"/>', close: '<path d="m6 6 12 12M18 6 6 18"/>',
+    plus: '<path d="M12 5v14M5 12h14"/>', bomb: '<circle cx="10" cy="14" r="6"/><path d="M14 9l3-3M17 3.5l.6 1.9 1.9.6-1.9.6-.6 1.9-.6-1.9-1.9-.6 1.9-.6z"/>',
+    flag: '<path d="M5 21V4M5 5h12l-2 4 2 4H5"/>', map: '<path d="m3 6 6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/>',
+    palette: '<path d="M12 3a9 9 0 1 0 0 18c1.5 0 2-1 1.5-2.2-.5-1.3.3-2.3 1.7-2.3H17a4 4 0 0 0 4-4C21 6.5 17 3 12 3z"/><circle cx="8" cy="11" r="1"/><circle cx="12" cy="7.5" r="1"/><circle cx="16" cy="11" r="1"/>',
+    star: '<path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/>', smile: '<circle cx="12" cy="12" r="9"/><path d="M8 14c1 1.5 2.3 2 4 2s3-.5 4-2M9 9.5v.5M15 9.5v.5"/>',
+    bubble: '<path d="M4 5h16v11H9l-5 4z"/>', sliders: '<path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/>',
+    check: '<path d="m8 12 3 3 5-6"/><rect x="3" y="3" width="18" height="18"/>', image: '<rect x="3" y="3" width="18" height="18"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m3 17 6-6 4 4 3-3 5 5"/>',
+    type: '<path d="M5 6V4h14v2M12 4v16M9 20h6"/>', gauge: '<path d="M4 17a8 8 0 1 1 16 0"/><path d="m12 17 4-5"/>', pack: '<path d="m3 8 9-5 9 5v8l-9 5-9-5zM3 8l9 5 9-5M12 13v8"/>',
+    clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>', bars: '<path d="M5 20V10M12 20V4M19 20v-7"/>', edit: '<path d="M4 20h4L19 9l-4-4L4 16z"/>'
+  };
+  function ico(name, size) {
+    var s = size || 20;
+    return '<svg class="ico" viewBox="0 0 24 24" width="' + s + '" height="' + s + '" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + (ICON[name] || ICON.edit) + "</svg>";
+  }
+  var GAME_ICON = { cosmetiques: "bomb", quetes: "flag", cartes: "map", themes: "palette", bonus: "star", emotes: "smile", chat: "bubble", reglages: "sliders" };
+  var TYPE_ICON = { quest: "flag", bomb: "bomb", effect: "star", chat: "bubble", emote: "smile", note: "edit" };
+  var JOURNAL_ICON = { playtests: "check", balance: "sliders", feedback: "bubble", images: "image", texts: "type", seeds: "map", decisions: "flag", perf: "gauge", releases: "pack", activity: "clock", coverage: "bars" };
   var ACTION_LABELS = {
     ticket_cree: "Ticket créé", ticket_modifie: "Ticket modifié", priorite_changee: "Priorité changée", ticket_deplace: "Ticket déplacé", ticket_reordonne: "Ticket réordonné",
     ticket_supprime: "Ticket supprimé", retour_ajoute: "Retour ajouté", retour_supprime: "Retour supprimé", entree_ajoutee: "Entrée ajoutée", entree_modifiee: "Entrée modifiée", entree_supprimee: "Entrée supprimée"
@@ -55,7 +74,7 @@
     h += '<input type="search" id="kb-q" placeholder="Rechercher un ticket" aria-label="Rechercher un ticket" value="' + esc(kb.filter.q) + '" style="max-width:240px">';
     h += '<select id="kb-ftype" aria-label="Filtrer par type">' + options(p.types, kb.filter.type, "Tous les types") + "</select>";
     h += '<select id="kb-fprio" aria-label="Filtrer par priorité">' + options(p.priorities, kb.filter.priority, "Toutes les priorités") + "</select></div>";
-    h += '<button class="btn" type="button" data-newticket="1">Nouveau ticket</button></div>';
+    h += '<button class="btn" type="button" data-newticket="1">' + ico("plus", 18) + 'Nouveau ticket</button></div>';
     if (kb.error) h += '<div class="notice" role="alert">' + esc(kb.error) + "</div>";
     if (kb.msg) h += '<div class="notice" role="status">' + esc(kb.msg) + "</div>";
     h += '<div class="kanban" id="kb-cols">';
@@ -68,9 +87,9 @@
         h += '<button class="ktitle" type="button" data-open="' + esc(t.id) + '">' + esc(t.title) + "</button>";
         if (t.module) h += '<div class="hint mono">' + esc(t.module) + "</div>";
         h += '<div class="row" style="justify-content:space-between;align-items:center"><span class="hint">' + (t.comments.length ? t.comments.length + " retour" + (t.comments.length > 1 ? "s" : "") : "Aucun retour") + '</span><span class="kmove">';
-        h += '<button class="copy" type="button" data-mv="' + esc(t.id) + '|up" aria-label="Monter « ' + esc(t.title) + ' »">▲</button><button class="copy" type="button" data-mv="' + esc(t.id) + '|down" aria-label="Descendre « ' + esc(t.title) + ' »">▼</button>';
-        if (ci > 0) h += '<button class="copy" type="button" data-mv="' + esc(t.id) + '|left" aria-label="Déplacer « ' + esc(t.title) + ' » vers « ' + esc(p.statuses[ci - 1].label) + ' »">◀</button>';
-        if (ci < p.statuses.length - 1) h += '<button class="copy" type="button" data-mv="' + esc(t.id) + '|right" aria-label="Déplacer « ' + esc(t.title) + ' » vers « ' + esc(p.statuses[ci + 1].label) + ' »">▶</button>';
+        h += '<button class="copy" type="button" data-mv="' + esc(t.id) + '|up" aria-label="Monter « ' + esc(t.title) + ' »">' + ico("up") + '</button><button class="copy" type="button" data-mv="' + esc(t.id) + '|down" aria-label="Descendre « ' + esc(t.title) + ' »">' + ico("down") + '</button>';
+        if (ci > 0) h += '<button class="copy" type="button" data-mv="' + esc(t.id) + '|left" aria-label="Déplacer « ' + esc(t.title) + ' » vers « ' + esc(p.statuses[ci - 1].label) + ' »">' + ico("left") + '</button>';
+        if (ci < p.statuses.length - 1) h += '<button class="copy" type="button" data-mv="' + esc(t.id) + '|right" aria-label="Déplacer « ' + esc(t.title) + ' » vers « ' + esc(p.statuses[ci + 1].label) + ' »">' + ico("right") + '</button>';
         h += "</span></div></article>";
       });
       if (!shown.length) h += '<p class="hint">' + (list.length ? "Aucun ticket ne correspond au filtre." : "Aucun ticket.") + "</p>";
@@ -96,7 +115,7 @@
     h += '<span class="hint" id="kb-formmsg" role="status" aria-live="polite"></span></div></form>';
     if (!isNew) {
       h += '<div class="card stack" style="gap:10px"><h3>Retours <span class="tag">' + t.comments.length + "</span></h3>";
-      t.comments.forEach(function (c) { h += '<div class="kcomment"><div class="row" style="justify-content:space-between;gap:8px"><span class="hint">' + esc(whenText(c.at)) + '</span><button class="hdel" type="button" data-delcomment="' + esc(c.id) + '" aria-label="Supprimer ce retour">×</button></div><div style="white-space:pre-wrap">' + esc(c.text) + "</div></div>"; });
+      t.comments.forEach(function (c) { h += '<div class="kcomment"><div class="row" style="justify-content:space-between;gap:8px"><span class="hint">' + esc(whenText(c.at)) + '</span><button class="hdel" type="button" data-delcomment="' + esc(c.id) + '" aria-label="Supprimer ce retour">' + ico("close", 18) + '</button></div><div style="white-space:pre-wrap">' + esc(c.text) + "</div></div>"; });
       if (!t.comments.length) h += '<p class="hint">Aucun retour pour l\'instant.</p>';
       h += '<div class="composer"><textarea id="kb-ctext" rows="2" maxlength="2000" placeholder="Ajouter un retour (test, remarque, blocage…)" aria-label="Nouveau retour"></textarea><button class="btn" id="kb-cadd" type="button">Ajouter</button></div><span class="hint" id="kb-cmsg" role="status" aria-live="polite"></span></div>';
       h += '<div class="card stack" style="gap:8px"><h3>Historique du ticket</h3><ol class="khistory">';
@@ -226,8 +245,8 @@
     if (!backend.storage) { root.innerHTML = '<div class="notice">' + esc(NO_SERVER) + "</div>"; return; }
     if (!kb.schema) { root.innerHTML = kb.error ? '<div class="notice" role="alert">' + esc(kb.error) + "</div>" : '<p class="hint">Chargement…</p>'; return; }
     var c = journalState.coll, h = '<div class="pills" role="group" aria-label="Rubriques">';
-    kb.schema.journal.forEach(function (s) { h += '<button class="pill" type="button" data-jcoll="' + esc(s.id) + '" aria-pressed="' + (s.id === c) + '">' + esc(s.label) + "</button>"; });
-    h += '<button class="pill" type="button" data-jcoll="activity" aria-pressed="' + (c === "activity") + '">Activité</button><button class="pill" type="button" data-jcoll="coverage" aria-pressed="' + (c === "coverage") + '">Couverture des tests</button></div>';
+    kb.schema.journal.forEach(function (s) { h += '<button class="pill" type="button" data-jcoll="' + esc(s.id) + '" aria-pressed="' + (s.id === c) + '">' + ico(JOURNAL_ICON[s.id] || "edit", 18) + esc(s.label) + "</button>"; });
+    h += '<button class="pill" type="button" data-jcoll="activity" aria-pressed="' + (c === "activity") + '">' + ico("clock", 18) + 'Activité</button><button class="pill" type="button" data-jcoll="coverage" aria-pressed="' + (c === "coverage") + '">' + ico("bars", 18) + 'Couverture des tests</button></div>';
     if (journalState.error) h += '<div class="notice" role="alert">' + esc(journalState.error) + "</div>";
     if (journalState.msg) h += '<div class="notice" role="status">' + esc(journalState.msg) + "</div>";
     if (c === "activity") {
@@ -248,14 +267,15 @@
       root.innerHTML = h + "</tbody></table></div></div>"; return;
     }
     var schema = jschema(c) || kb.schema.journal[0], items = journalState.items[schema.id] || [];
-    h += '<div class="row" style="justify-content:space-between;align-items:center"><div class="stack" style="gap:6px"><h2>' + esc(schema.label) + ' <span class="tag">' + items.length + '</span></h2><p class="muted">' + esc(schema.description) + '</p></div><button class="btn" type="button" data-jnew="1">Ajouter</button></div>';
-    if (journalState.editing) h += entryFormHtml(schema, journalState.editing === "new" ? null : items.filter(function (e) { return e.id === journalState.editing; })[0]);
+    h += '<div class="jhead"><div class="stack" style="gap:6px"><h2>' + esc(schema.label) + ' <span class="tag">' + items.length + '</span></h2><p class="muted">' + esc(schema.description) + '</p></div><button class="btn" type="button" data-jnew="1">' + ico("plus", 18) + 'Ajouter</button></div>';
+    var formHtml = journalState.editing ? entryFormHtml(schema, journalState.editing === "new" ? null : items.filter(function (e) { return e.id === journalState.editing; })[0]) : "";
+    h += '<div class="' + (formHtml ? "jsplit" : "") + '">';
     h += '<div class="card tablewrap"><table><thead><tr>' + schema.fields.map(function (fd) { return "<th>" + esc(fd.label) + "</th>"; }).join("") + "<th></th></tr></thead><tbody>";
     items.forEach(function (e) {
       h += "<tr>" + schema.fields.map(function (fd) { return "<td>" + cell(fd, e[fd.key]) + "</td>"; }).join("") + '<td><button class="copy" type="button" data-jedit="' + esc(e.id) + '">Modifier</button> <button class="copy" type="button" data-jdel="' + esc(e.id) + '">' + (journalState.confirm === e.id ? "Confirmer ?" : "Supprimer") + "</button></td></tr>";
     });
     if (!items.length) h += '<tr><td colspan="' + (schema.fields.length + 1) + '" class="hint">Aucune entrée pour l\'instant.</td></tr>';
-    root.innerHTML = h + "</tbody></table></div>";
+    root.innerHTML = h + "</tbody></table></div>" + formHtml + "</div>";
   }
   function readEntryForm(schema) {
     var raw = {};
