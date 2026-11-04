@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Registre BOOM BATTLE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Outfit:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* Idée : un registre de poste de pilotage. Bandeau marine à onglets, contenu en cartes denses, accent violet du jeu,
+   jaune réservé aux prix et aux repères. Trois vues : tests, données du jeu, assets. */
+:root {
+  --bg: #f3f2fa;
+  --surface: #ffffff;
+  --ink: #171a2e;
+  --muted: #5a5f82;
+  --accent: #5b36e0;
+  --coin: #b87900;
+  --good: #17803f;
+  --bad: #c93a32;
+  --line: #dcdaec;
+  --soft: #ebe9f8;
+  --font-display: "Fredoka", "Trebuchet MS", system-ui, sans-serif;
+  --font-body: "Outfit", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f1329; --surface: #171d3b; --ink: #eceffb; --muted: #9aa2c9; --accent: #a58bff;
+    --coin: #ffc94b; --good: #4cc77f; --bad: #ff7a70; --line: #2a3260; --soft: #1f2750; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f1329; --surface: #171d3b; --ink: #eceffb; --muted: #9aa2c9; --accent: #a58bff;
+  --coin: #ffc94b; --good: #4cc77f; --bad: #ff7a70; --line: #2a3260; --soft: #1f2750; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 16px; line-height: 1.5; }
+h1, h2, h3 { font-family: var(--font-display); font-weight: 600; margin: 0; text-wrap: balance; }
+h2 { font-size: 1.5rem; }
+h3 { font-size: 1.1rem; }
+.mono { font-family: var(--font-mono); font-size: .85em; }
+.num { font-variant-numeric: tabular-nums; }
+a { color: var(--accent); }
+
+header { background: #151b31; color: #eceffb; }
+.bar { max-width: 1240px; margin: 0 auto; padding: 18px 16px 0; display: flex; flex-wrap: wrap; align-items: end; gap: 8px 24px; }
+.brand { display: flex; flex-direction: column; padding-bottom: 12px; }
+.brand h1 { font-size: 1.6rem; letter-spacing: .02em; }
+.brand small { color: #9aa2c9; }
+nav { display: flex; gap: 4px; flex-wrap: wrap; margin-left: auto; }
+nav button { font: inherit; font-weight: 500; color: #b4bbdc; background: none; border: 0; padding: 10px 16px; border-radius: 10px 10px 0 0; cursor: pointer; }
+nav button[aria-selected="true"] { background: var(--bg); color: var(--ink); }
+nav button:hover:not([aria-selected="true"]) { color: #fff; }
+button:focus-visible, input:focus-visible, summary:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+main { max-width: 1240px; margin: 0 auto; padding: 24px 16px 56px; display: flex; flex-direction: column; gap: 24px; }
+section[hidden] { display: none; }
+.stack { display: flex; flex-direction: column; gap: 24px; }
+.row { display: flex; flex-wrap: wrap; gap: 12px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 16px; }
+.muted { color: var(--muted); }
+
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; }
+.tile { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; border-left: 6px solid var(--line); }
+.tile b { display: block; font-family: var(--font-display); font-size: 2rem; line-height: 1.1; }
+.tile span { color: var(--muted); font-size: .9rem; }
+.tile.good { border-left-color: var(--good); }
+.tile.bad { border-left-color: var(--bad); }
+.tile.info { border-left-color: var(--accent); }
+.tile.warn { border-left-color: var(--coin); }
+
+.banner { border-radius: 14px; padding: 14px 18px; display: flex; gap: 12px; align-items: center; font-weight: 500; }
+.banner.good { background: color-mix(in srgb, var(--good) 16%, var(--surface)); border: 1px solid var(--good); }
+.banner.bad { background: color-mix(in srgb, var(--bad) 16%, var(--surface)); border: 1px solid var(--bad); }
+
+.bars { display: flex; flex-direction: column; gap: 6px; }
+.barrow { display: grid; grid-template-columns: minmax(120px, 210px) 1fr 44px; gap: 10px; align-items: center; font-size: .92rem; }
+.barrow .track { background: var(--soft); border-radius: 6px; height: 14px; overflow: hidden; }
+.barrow .fill { height: 100%; background: var(--accent); border-radius: 6px; min-width: 3px; }
+.barrow .fill.bad { background: var(--bad); }
+.barrow .label { overflow-wrap: anywhere; }
+
+.tools { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+input[type="search"] { font: inherit; padding: 9px 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); min-width: min(100%, 280px); }
+.pills { display: flex; flex-wrap: wrap; gap: 6px; }
+.pill { font: inherit; font-size: .92rem; font-weight: 500; padding: 7px 14px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer; }
+.pill[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+details.suite { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; }
+details.suite summary { cursor: pointer; padding: 12px 16px; display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: center; list-style: none; }
+details.suite summary::-webkit-details-marker { display: none; }
+details.suite summary .name { font-weight: 600; overflow-wrap: anywhere; }
+details.suite summary .count { margin-left: auto; color: var(--muted); }
+details.suite ul { margin: 0; padding: 0 16px 14px 36px; display: flex; flex-direction: column; gap: 4px; font-size: .92rem; }
+li.fail { color: var(--bad); }
+.status { width: 12px; height: 12px; border-radius: 50%; background: var(--good); flex: none; }
+.status.bad { background: var(--bad); }
+
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 12px; }
+.swatch { display: inline-block; width: 22px; height: 22px; border-radius: 6px; border: 1px solid color-mix(in srgb, var(--ink) 25%, transparent); vertical-align: middle; flex: none; }
+.dot { width: 44px; height: 44px; border-radius: 50%; border: 2px solid color-mix(in srgb, var(--ink) 25%, transparent); flex: none; }
+.item { display: flex; gap: 12px; align-items: flex-start; }
+.item p { margin: 2px 0 0; color: var(--muted); font-size: .92rem; }
+.price { color: var(--coin); font-weight: 600; font-variant-numeric: tabular-nums; }
+.tag { display: inline-block; font-size: .78rem; font-weight: 500; padding: 1px 8px; border-radius: 999px; background: var(--soft); color: var(--muted); }
+
+.tablewrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: .95rem; }
+th, td { text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { color: var(--muted); font-weight: 500; font-size: .85rem; }
+td.right, th.right { text-align: right; }
+
+.palette { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.palette span { display: inline-flex; align-items: center; gap: 6px; font-size: .8rem; color: var(--muted); }
+.maps { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
+.mapcard svg { width: 100%; height: auto; max-width: 320px; display: block; margin: 8px auto 0; }
+.kv { display: grid; grid-template-columns: minmax(160px, 1fr) auto; gap: 4px 16px; font-size: .95rem; }
+.kv dt { color: var(--muted); }
+.kv dd { margin: 0; text-align: right; font-variant-numeric: tabular-nums; }
+
+.gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+.thumb { background: repeating-conic-gradient(var(--soft) 0 25%, transparent 0 50%) 0 0 / 20px 20px; border-radius: 10px; height: 170px; display: flex; align-items: center; justify-content: center; padding: 8px; }
+.thumb img { max-width: 100%; max-height: 100%; object-fit: contain; }
+.copy { font: inherit; font-size: .85rem; padding: 4px 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--soft); color: var(--ink); cursor: pointer; }
+.copy:hover { border-color: var(--accent); }
+/* Assistant */
+.chat { display: flex; flex-direction: column; gap: 12px; }
+.msgs { display: flex; flex-direction: column; gap: 10px; max-height: 58vh; min-height: 220px; overflow-y: auto; padding: 4px 2px; }
+.msg { max-width: 92%; padding: 10px 14px; border-radius: 14px; white-space: pre-wrap; overflow-wrap: anywhere; }
+.msg.user { align-self: flex-end; background: var(--accent); color: #fff; border-bottom-right-radius: 4px; }
+.msg.bot { align-self: flex-start; background: var(--surface); border: 1px solid var(--line); border-bottom-left-radius: 4px; }
+.msg.bot code { font-family: var(--font-mono); font-size: .88em; background: var(--soft); padding: 1px 5px; border-radius: 5px; }
+.msg .draft { display: inline-block; margin-top: 8px; }
+.composer { display: flex; gap: 8px; align-items: flex-end; }
+.composer textarea, .field input, .field select, .field textarea { font: inherit; padding: 9px 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); width: 100%; }
+.composer textarea { resize: vertical; min-height: 46px; max-height: 160px; }
+.btn { font: inherit; font-weight: 600; padding: 9px 18px; border-radius: 10px; border: 1px solid var(--accent); background: var(--accent); color: #fff; cursor: pointer; }
+.btn.ghost { background: transparent; color: var(--accent); }
+.btn:disabled { opacity: .5; cursor: not-allowed; }
+.hint { font-size: .85rem; color: var(--muted); }
+.notice { border-radius: 12px; padding: 12px 16px; background: var(--soft); color: var(--ink); }
+
+/* Contributions */
+.form { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px 16px; }
+.field { display: flex; flex-direction: column; gap: 4px; }
+.field label { font-weight: 500; font-size: .92rem; }
+.field.wide { grid-column: 1 / -1; }
+.field .err { color: var(--bad); font-size: .85rem; min-height: 1.1em; }
+.field input[type="color"] { padding: 2px; height: 42px; }
+.field input[type="checkbox"] { width: 20px; height: 20px; }
+.status-pill { display: inline-block; font-size: .8rem; font-weight: 600; padding: 2px 10px; border-radius: 999px; }
+.status-pill.pending { background: color-mix(in srgb, var(--coin) 22%, var(--surface)); color: var(--ink); }
+.status-pill.applied { background: color-mix(in srgb, var(--good) 22%, var(--surface)); color: var(--ink); }
+.status-pill.rejected { background: color-mix(in srgb, var(--bad) 22%, var(--surface)); color: var(--ink); }
+.contrib { display: flex; flex-direction: column; gap: 6px; }
+.contrib header { background: none; color: inherit; display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; }
+.split { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: 16px; align-items: start; }
+@media (max-width: 900px) { .split { grid-template-columns: 1fr; } }
+.chatsplit { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(0, .9fr); gap: 16px; align-items: start; }
+@media (max-width: 900px) { .split, .chatsplit { grid-template-columns: 1fr; } }
+.hitem { display: flex; align-items: stretch; gap: 4px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+.hitem.active { border-color: var(--accent); background: var(--soft); }
+.hopen { flex: 1; min-width: 0; text-align: left; font: inherit; background: none; border: 0; padding: 8px 10px; color: var(--ink); cursor: pointer; display: flex; flex-direction: column; gap: 2px; border-radius: 10px; }
+.htitle { font-weight: 600; font-size: .92rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.hmeta { font-size: .78rem; color: var(--muted); }
+.hdel { font: inherit; font-size: 1.1rem; line-height: 1; background: none; border: 0; padding: 0 10px; color: var(--muted); cursor: pointer; border-radius: 10px; }
+.hdel:hover { color: var(--bad); }
+.runpanel { display: flex; flex-direction: column; gap: 12px; }
+.runbar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.runbar input[type="text"] { font: inherit; padding: 9px 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); min-width: min(100%, 260px); flex: 1; }
+.fdoc { display: grid; grid-template-columns: 120px 1fr; gap: 2px 12px; font-size: .9rem; padding: 6px 0; border-bottom: 1px solid var(--line); }
+.fdoc b { font-family: var(--font-mono); font-weight: 500; font-size: .85rem; }
+.fdoc span { color: var(--muted); }
+pre.json { margin: 0; overflow-x: auto; font-family: var(--font-mono); font-size: .82rem; background: var(--soft); padding: 10px 12px; border-radius: 10px; }
+footer { color: var(--muted); font-size: .85rem; }
+@media (max-width: 520px) { .barrow { grid-template-columns: 1fr 44px; } .barrow .track { grid-column: 1 / -1; order: 3; } nav { margin-left: 0; } }
+@media (prefers-reduced-motion: no-preference) { .fill { transition: width .4s ease; } }
+</style>
+</head>
+<body>
+<header>
+  <div class="bar">
+    <div class="brand">
+      <h1>BOOM BATTLE</h1>
+      <small>Registre des tests, des données de jeu et des assets</small>
+    </div>
+    <nav role="tablist" aria-label="Vues">
+      <button role="tab" id="tab-tests" data-view="tests" aria-selected="true">Tests</button>
+      <button role="tab" id="tab-donnees" data-view="donnees" aria-selected="false">Données du jeu</button>
+      <button role="tab" id="tab-assets" data-view="assets" aria-selected="false">Assets</button>
+      <button role="tab" id="tab-contribuer" data-view="contribuer" aria-selected="false">Contribuer</button>
+      <button role="tab" id="tab-assistant" data-view="assistant" aria-selected="false">Assistant</button>
+      <button role="tab" id="tab-sons" data-view="sons" aria-selected="false">Sons</button>
+      <button role="tab" id="tab-stockage" data-view="stockage" aria-selected="false">Stockage</button>
+    </nav>
+  </div>
+</header>
+<main>
+  <section id="view-tests" aria-labelledby="tab-tests"></section>
+  <section id="view-donnees" aria-labelledby="tab-donnees" hidden></section>
+  <section id="view-assets" aria-labelledby="tab-assets" hidden></section>
+  <section id="view-contribuer" aria-labelledby="tab-contribuer" hidden></section>
+  <section id="view-assistant" aria-labelledby="tab-assistant" hidden></section>
+  <section id="view-sons" aria-labelledby="tab-sons" hidden></section>
+  <section id="view-stockage" aria-labelledby="tab-stockage" hidden></section>
+  <footer id="foot"></footer>
+</main>
+
+<script id="data" type="application/json">__DATA__</script>
+<script>
+(function () {
+  var D = JSON.parse(document.getElementById("data").textContent);
+  var esc = function (s) { return String(s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); };
+  var fmt = function (n) { return Number(n).toLocaleString("fr-FR"); };
+  var $ = function (id) { return document.getElementById(id); };
+
+  /* ---------- Tests ---------- */
+  var TRIGGERS = { site: "Site", demarrage: "Démarrage du serveur", publication: "Publication de la page" };
+  var runMessage = "", runFilterValue = "";
+  function dateTime(ts) { return new Date(ts).toLocaleString("fr-FR", { dateStyle: "medium", timeStyle: "medium" }); }
+  function scopeText(run) { return run.filter ? "Suite « " + run.filter + " » (partielle)" : "Tous les tests"; }
+
+  function runPanelHtml() {
+    var runs = D.runs || [], last = runs[0];
+    var canRun = typeof backend !== "undefined" && backend && backend.tests;
+    var h = '<div class="card runpanel"><h2>Exécution des tests</h2>';
+    if (last) {
+      h += '<p style="margin:0">Dernière exécution : <b>' + esc(dateTime(last.startedAt)) + "</b> · " + (last.durationMs / 1000).toFixed(1) + " s · " + esc(scopeText(last)) + ' · <span class="status-pill ' + (last.ok ? "applied" : "rejected") + '">' + (last.ok ? "Réussie" : "Échec") + "</span></p>";
+      if (last.filter) h += '<p class="hint" style="margin:0">Exécution partielle : les chiffres ci-dessous ne concernent que cette suite. Relance sans filtre pour le bilan complet.</p>';
+    } else h += '<p class="muted" style="margin:0">Aucune exécution enregistrée.</p>';
+    if (canRun) {
+      h += '<div class="runbar"><input type="text" id="run-filter" maxlength="60" placeholder="Suite à lancer (ex. GridService) : vide = tous les tests" aria-label="Suite à lancer" value="' + esc(runFilterValue) + '"><button class="btn" id="run-btn" type="button">Lancer les tests</button><span class="hint" id="run-msg" role="status" aria-live="polite">' + esc(runMessage) + "</span></div>";
+    } else {
+      h += '<div class="notice">Pour lancer les tests depuis cette page, utilise la version locale : <span class="mono">node tools/registre/serve.js</span>.</div>';
+    }
+    if (runs.length) {
+      h += '<h3>Historique</h3><div class="tablewrap"><table><thead><tr><th>Date et heure</th><th>Déclencheur</th><th>Portée</th><th class="right">Réussis</th><th class="right">Échecs</th><th class="right">Durée</th></tr></thead><tbody>';
+      runs.slice(0, 20).forEach(function (run) {
+        h += "<tr><td class=\"num\">" + esc(dateTime(run.startedAt)) + "</td><td>" + esc(TRIGGERS[run.trigger] || run.trigger) + "</td><td>" + esc(scopeText(run)) + '</td><td class="right num">' + fmt(run.passed) + '</td><td class="right num" style="' + (run.failed ? "color:var(--bad);font-weight:600" : "") + '">' + fmt(run.failed) + '</td><td class="right num">' + (run.durationMs / 1000).toFixed(1) + " s</td></tr>";
+      });
+      h += "</tbody></table></div>";
+    }
+    return h + "</div>";
+  }
+
+  function bindRunPanel() {
+    var btn = $("run-btn");
+    if (!btn) return;
+    btn.addEventListener("click", function () {
+      runFilterValue = $("run-filter").value.trim(); saveSetting({ runFilter: runFilterValue });
+      btn.disabled = true; $("run-msg").textContent = "Tests en cours…";
+      backend.tests.run(runFilterValue).then(function (res) {
+        D.tests = res.report; D.runs = res.runs;
+        runMessage = "Terminé à " + new Date().toLocaleTimeString("fr-FR");
+        renderTests();
+      }, function (err) { btn.disabled = false; $("run-msg").textContent = "Échec : " + ((err && err.message) || err); });
+    });
+  }
+
+  function renderTests() {
+    var r = D.tests, bySuite = {}, order = [];
+    r.results.forEach(function (t) {
+      if (!bySuite[t.suite]) { bySuite[t.suite] = []; order.push(t.suite); }
+      bySuite[t.suite].push(t);
+    });
+    var untested = Object.keys(D.untested.untested || {});
+    var seconds = r.results.reduce(function (a, t) { return a + (t.seconds || 0); }, 0);
+    var failed = r.failed;
+    var groups = {};
+    order.forEach(function (s) { var g = s.split("/")[0]; (groups[g] = groups[g] || []).push(s); });
+    var max = Math.max.apply(null, order.map(function (s) { return bySuite[s].length; }));
+
+    var html = "";
+    if (r.error) html += '<div class="banner bad" role="alert">' + esc(r.error) + '</div>';
+    html += runPanelHtml();
+    html += '<div class="banner ' + (failed ? "bad" : "good") + '" role="status"><span class="status ' + (failed ? "bad" : "") + '"></span>' +
+      (failed ? failed + " test(s) en échec : voir le détail ci-dessous" : "Tous les tests automatisés passent") + "</div>";
+    html += '<div class="tiles">' +
+      '<div class="tile good"><b class="num">' + fmt(r.passed) + "</b><span>tests réussis</span></div>" +
+      '<div class="tile ' + (failed ? "bad" : "good") + '"><b class="num">' + fmt(failed) + "</b><span>échecs</span></div>" +
+      '<div class="tile info"><b class="num">' + r.suites + "</b><span>suites</span></div>" +
+      '<div class="tile ' + (untested.length > 1 ? "warn" : "info") + '"><b class="num">' + untested.length + "</b><span>module(s) sans suite</span></div>" +
+      '<div class="tile info"><b class="num">' + seconds.toFixed(2) + " s</b><span>durée cumulée des tests</span></div></div>";
+
+    html += '<div class="card stack" style="gap:12px"><h2>Tests par suite</h2><div class="bars">';
+    order.forEach(function (s) {
+      var tests = bySuite[s], bad = tests.filter(function (t) { return !t.ok; }).length;
+      html += '<div class="barrow"><span class="label mono">' + esc(s) + '</span><span class="track"><span class="fill' + (bad ? " bad" : "") + '" style="display:block;width:' + (tests.length / max * 100) + '%"></span></span><span class="num" style="text-align:right">' + tests.length + "</span></div>";
+    });
+    html += "</div></div>";
+
+    html += '<div class="stack" style="gap:12px"><div class="tools"><h2>Détail</h2><input id="q" type="search" placeholder="Filtrer les tests (ex. pilier, bouclier)" aria-label="Filtrer les tests"><span id="qcount" class="muted"></span></div><div id="suites" class="stack" style="gap:8px"></div></div>';
+
+    html += '<div class="card stack" style="gap:8px"><h2>Modules sans suite de tests</h2>';
+    if (!untested.length) html += '<p class="muted">Aucun : tous les modules de src/ sont couverts.</p>';
+    else {
+      html += '<p class="muted">Raison indiquée dans tests/untested.json. Cette liste ne doit que rétrécir.</p><div class="tablewrap"><table><thead><tr><th>Module</th><th>Raison</th></tr></thead><tbody>';
+      untested.forEach(function (n) { html += "<tr><td class=\"mono\">" + esc(n) + "</td><td>" + esc(D.untested.untested[n]) + "</td></tr>"; });
+      html += "</tbody></table></div>";
+    }
+    html += "</div>";
+    $("view-tests").innerHTML = html;
+    bindRunPanel();
+
+    function drawSuites(filter) {
+      var f = (filter || "").toLowerCase(), shown = 0, out = "";
+      order.forEach(function (s) {
+        var tests = bySuite[s].filter(function (t) { return !f || (s + " " + t.name).toLowerCase().indexOf(f) >= 0; });
+        if (!tests.length) return;
+        shown += tests.length;
+        var bad = tests.filter(function (t) { return !t.ok; }).length;
+        out += '<details class="suite"' + (f || bad ? " open" : "") + '><summary><span class="status ' + (bad ? "bad" : "") + '"></span><span class="name mono">' + esc(s) + '</span><span class="count num">' + tests.length + " test" + (tests.length > 1 ? "s" : "") + "</span></summary><ul>";
+        tests.forEach(function (t) { out += '<li class="' + (t.ok ? "" : "fail") + '">' + esc(t.name) + (t.ok ? "" : " : " + esc(t.message || "")) + "</li>"; });
+        out += "</ul></details>";
+      });
+      $("suites").innerHTML = out || '<p class="muted">Aucun test ne correspond.</p>';
+      $("qcount").textContent = f ? shown + " résultat(s)" : "";
+    }
+    drawSuites("");
+    $("q").addEventListener("input", function (e) { drawSuites(e.target.value); });
+  }
+
+  /* ---------- Données du jeu ---------- */
+  var gameTabs = [
+    ["cosmetiques", "Cosmétiques"], ["quetes", "Quêtes"], ["cartes", "Cartes"], ["themes", "Thèmes"],
+    ["bonus", "Bonus"], ["emotes", "Émotes"], ["chat", "Chat rapide"], ["reglages", "Réglages"]
+  ];
+  var currentGame = "cosmetiques";
+
+  function kv(obj) {
+    var h = '<dl class="kv">';
+    Object.keys(obj).forEach(function (k) {
+      var v = obj[k];
+      h += "<dt class=\"mono\">" + esc(k) + "</dt><dd>" + esc(typeof v === "boolean" ? (v ? "oui" : "non") : v) + "</dd>";
+    });
+    return h + "</dl>";
+  }
+  function sw(c, label) { return '<span title="' + esc(label) + " " + esc(c) + '"><i class="swatch" style="background:' + esc(c) + '"></i>' + esc(label) + "</span>"; }
+
+  function mapSvg(size) {
+    var cell = 20, n = size.size, W = n * cell, ax = size.pillarAxis;
+    var s = '<svg viewBox="0 0 ' + W + " " + W + '" role="img" aria-label="Plan de la carte ' + esc(size.id) + '"><rect width="' + W + '" height="' + W + '" rx="6" fill="var(--soft)"/>';
+    for (var i = 0; i <= n; i++) {
+      s += '<line x1="' + i * cell + '" y1="0" x2="' + i * cell + '" y2="' + W + '" stroke="var(--line)" stroke-width=".6"/>';
+      s += '<line x1="0" y1="' + i * cell + '" x2="' + W + '" y2="' + i * cell + '" stroke="var(--line)" stroke-width=".6"/>';
+    }
+    ax.forEach(function (a) { ax.forEach(function (b) { s += '<rect x="' + (a - 1) * cell + '" y="' + (b - 1) * cell + '" width="' + cell + '" height="' + cell + '" fill="var(--muted)" opacity=".75"/>'; }); });
+    size.spawns.forEach(function (p, i) {
+      s += '<circle cx="' + ((p.x - 0.5) * cell) + '" cy="' + ((p.y - 0.5) * cell) + '" r="7" fill="var(--accent)"/><text x="' + ((p.x - 0.5) * cell) + '" y="' + ((p.y - 0.5) * cell + 3.6) + '" text-anchor="middle" font-size="10" font-weight="600" fill="#fff">' + (i + 1) + "</text>";
+    });
+    return s + "</svg>";
+  }
+
+  var gamePanels = {
+    cosmetiques: function () {
+      var h = "";
+      [["bomb", "Bombes"], ["effect", "Effets d'explosion"]].forEach(function (k) {
+        h += "<h2>" + k[1] + ' <span class="tag">' + D.game.cosmetics[k[0]].length + "</span></h2><div class=\"grid\">";
+        D.game.cosmetics[k[0]].forEach(function (c) {
+          var free = c.price === 0;
+          h += '<div class="card item"><i class="dot" style="background:' + esc(c.color) + '"></i><div><h3>' + esc(c.name) + '</h3><div><span class="price">' + (free ? "Gratuit" : fmt(c.price) + " pièces") + '</span> <span class="tag mono">' + esc(c.id) + "</span>" + (D.game.cosmeticDefaults[c.kind] === c.id ? ' <span class="tag">par défaut</span>' : "") + "</div><p>" + esc(c.description) + "</p>" + (c.material ? '<p class="mono">' + esc(c.material) + "</p>" : "") + "</div></div>";
+        });
+        h += "</div>";
+      });
+      return h;
+    },
+    quetes: function () {
+      var h = "<h2>Quêtes <span class=\"tag\">" + D.game.quests.length + '</span></h2><div class="card tablewrap"><table><thead><tr><th>Quête</th><th>Description</th><th>Événement</th><th class="right">Objectif</th><th class="right">Récompense</th></tr></thead><tbody>';
+      D.game.quests.forEach(function (q) {
+        h += "<tr><td><b>" + esc(q.name) + '</b><br><span class="mono muted">' + esc(q.id) + "</span></td><td>" + esc(q.description) + '</td><td class="mono">' + esc(q.event) + '</td><td class="right num">' + q.goal + '</td><td class="right price">+' + q.reward + "</td></tr>";
+      });
+      var total = D.game.quests.reduce(function (a, q) { return a + q.reward; }, 0);
+      return h + '</tbody></table></div><p class="muted">Total des récompenses de quêtes : <span class="price">' + total + " pièces</span>.</p>";
+    },
+    cartes: function () {
+      var m = D.game.map;
+      var h = '<h2>Cartes</h2><p class="muted">Cases de ' + m.cellSize + " studs. Les piliers gris marquent la grille classique ; la génération actuelle les déplace de façon équitable et symétrique. Les ronds numérotés sont les 8 points d'apparition. Densité de caisses : " + Math.round(m.crateDensity * 100) + " %.</p><div class=\"maps\">";
+      m.sizes.forEach(function (s) {
+        h += '<div class="card mapcard"><h3>' + esc(s.id) + (s.id === m.defaultSize ? ' <span class="tag">par défaut</span>' : "") + '</h3><div class="muted">' + s.size + " × " + s.size + " cases jouables · " + s.minPlayers + " à " + s.maxPlayers + " joueurs</div>" + mapSvg(s) + "</div>";
+      });
+      return h + "</div>";
+    },
+    themes: function () {
+      var h = '<h2>Thèmes <span class="tag">' + D.game.map.themes.length + '</span></h2><div class="grid">';
+      D.game.map.themes.forEach(function (t) {
+        h += '<div class="card"><h3>' + esc(t.displayName) + (D.game.map.defaultTheme === t.id ? ' <span class="tag">par défaut</span>' : "") + (t.modular ? ' <span class="tag">modèles 3D</span>' : "") + '</h3><div class="muted mono">' + esc(t.id) + '</div><div class="palette">' +
+          sw(t.floorColorA, "sol A") + sw(t.floorColorB, "sol B") + sw(t.floorAccentColor, "accent") + sw(t.pillarColor, "pilier") + sw(t.crateColor, "caisse") + sw(t.borderColor, "bord") + sw(t.groundColor, "terrain") + sw(t.decorPrimary, "décor") +
+          '</div><p class="muted" style="margin:10px 0 0">Heure ' + t.lighting.clockTime + " h · luminosité " + t.lighting.brightness + "<br>Décors : " + esc(Array.from(new Set(t.decorKinds)).join(", ")) + "</p></div>";
+      });
+      return h + "</div>";
+    },
+    bonus: function () {
+      var h = '<h2>Bonus</h2><div class="grid">';
+      D.game.powerups.forEach(function (p) {
+        h += '<div class="card"><h3>' + esc(p.displayName) + '</h3><p class="muted" style="margin:4px 0 8px">' + esc(p.description) + '</p><span class="tag mono">' + esc(p.stat) + " +" + p.amount + "</span></div>";
+      });
+      var s = D.game.settings;
+      return h + '</div><div class="card"><h3>Tirage et plafonds</h3>' + kv({ "Chance de bonus par caisse": Math.round(s.powerupDrops.DropChancePerCrate * 100) + " %", "Bombes maximum": s.bomb.MaxCapacity, "Portée maximum (cases)": s.bomb.MaxBlastRange, "Bonus de vitesse maximum": s.movement.MaxSpeedPickups, "Vitesse par bonus (studs/s)": s.movement.SpeedBonusPerPickup, "Boucliers maximum": s.powerupDrops.MaxShield }) + "</div>";
+    },
+    emotes: function () {
+      var e = D.game.emotes;
+      var h = '<h2>Émotes <span class="tag">' + e.list.length + '</span></h2><p class="muted">Jouées par le serveur. Une danse s\'arrête après ' + e.maxLoopSeconds + ' s ; bouger l\'interrompt.</p><div class="card tablewrap"><table><thead><tr><th>Émote</th><th>Identifiant</th><th>Animation</th><th>Type</th></tr></thead><tbody>';
+      e.list.forEach(function (x) { h += "<tr><td><b>" + esc(x.name) + '</b></td><td class="mono">' + esc(x.id) + '</td><td class="mono">' + esc(x.animationId) + "</td><td>" + (x.looped ? "Danse (en boucle)" : "Geste") + "</td></tr>"; });
+      return h + "</tbody></table></div>";
+    },
+    chat: function () {
+      var q = D.game.quickChat, fav = {};
+      q.defaultFavorites.forEach(function (id) { fav[id] = true; });
+      var h = '<h2>Chat rapide <span class="tag">' + q.phrases.length + '</span></h2><p class="muted">Phrases préfaites : seul l\'identifiant part au serveur. Bulle de ' + q.bubbleSeconds + " s, " + q.maxRecents + " récents, " + q.maxFavorites + " favoris au maximum.</p><div class=\"row\">";
+      q.phrases.forEach(function (p) { h += '<div class="card" style="padding:10px 16px"><b>' + esc(p.text) + '</b> <span class="mono muted">' + esc(p.id) + "</span>" + (fav[p.id] ? ' <span class="tag">favori</span>' : "") + "</div>"; });
+      return h + "</div>";
+    },
+    reglages: function () {
+      var s = D.game.settings, names = { round: "Manche", bomb: "Bombes", movement: "Déplacement", rewards: "Récompenses (Bomb Coins)", remoteLimits: "Limites anti-spam (secondes)", data: "Données joueur" };
+      var h = "<h2>Réglages <span class=\"tag\">v" + esc(D.game.version) + '</span></h2><p class="muted">Valeurs de départ marquées PROPOSITION dans le code : non équilibrées.</p><div class="maps">';
+      Object.keys(names).forEach(function (k) { h += '<div class="card"><h3>' + names[k] + "</h3>" + kv(s[k]) + "</div>"; });
+      return h + "</div>";
+    }
+  };
+
+  function renderGame() {
+    var h = '<div class="pills" role="group" aria-label="Catégories">';
+    gameTabs.forEach(function (t) { h += '<button class="pill" data-g="' + t[0] + '" aria-pressed="' + (t[0] === currentGame) + '">' + t[1] + "</button>"; });
+    h += '</div><div id="game-body" class="stack" style="gap:16px"></div>';
+    $("view-donnees").innerHTML = h;
+    function show() {
+      $("game-body").innerHTML = gamePanels[currentGame]();
+      Array.prototype.forEach.call($("view-donnees").querySelectorAll(".pill"), function (b) { b.setAttribute("aria-pressed", String(b.getAttribute("data-g") === currentGame)); });
+    }
+    $("view-donnees").querySelector(".pills").addEventListener("click", function (e) {
+      var b = e.target.closest(".pill"); if (!b) return;
+      currentGame = b.getAttribute("data-g"); show(); saveSetting({ gameTab: currentGame });
+    });
+    show();
+  }
+
+  /* ---------- Assets ---------- */
+  function renderAssets() {
+    var m = D.manifest;
+    var h = '<h2>Images importées dans Roblox <span class="tag">' + m.assets.length + '</span></h2><p class="muted">Importées par ' + esc(m.createur) + ". Un identifiant n'est jamais inventé : il provient d'un import réel (assets/manifest.json).</p><div class=\"gallery\">";
+    m.assets.forEach(function (a) {
+      var name = a.fichier.split("/").pop();
+      h += '<div class="card stack" style="gap:10px"><div class="thumb"><img src="img/' + esc(name) + '" alt="' + esc(name) + '" loading="lazy"></div><div><h3 class="mono" style="font-size:.95rem">' + esc(name) + '</h3><div class="muted">' + esc(a.dimensions) + " px · " + esc(a.type) + " · importé le " + esc(a.importeLe) + '</div></div><div class="row" style="align-items:center;gap:8px"><span class="mono" style="overflow-wrap:anywhere">' + esc(a.assetId) + '</span><button class="copy" data-copy="' + esc(a.assetId) + '">Copier</button></div><div class="muted" style="font-size:.88rem">' + esc(a.utilisePar) + '</div><div class="mono muted" title="' + esc(a.sha256) + '">sha256 ' + esc(a.sha256.slice(0, 16)) + "…</div></div>";
+    });
+    h += "</div>";
+    $("view-assets").innerHTML = h;
+    $("view-assets").addEventListener("click", function (e) {
+      var b = e.target.closest(".copy"); if (!b) return;
+      var text = b.getAttribute("data-copy");
+      try { navigator.clipboard.writeText(text).then(function () { b.textContent = "Copié"; }, function () { b.textContent = "Sélectionne et copie"; }); }
+      catch (err) { b.textContent = "Sélectionne et copie"; }
+      setTimeout(function () { b.textContent = "Copier"; }, 1800);
+    });
+  }
+
+/*__BACKEND__*/
+/*__EXTRA__*/
+  /* ---------- Navigation par hash ---------- */
+  var views = ["tests", "donnees", "assets", "contribuer", "assistant", "sons", "stockage"];
+  function route() {
+    var v = location.hash.replace("#", "");
+    if (views.indexOf(v) < 0) v = "tests";
+    views.forEach(function (n) {
+      $("view-" + n).hidden = n !== v;
+      $("tab-" + n).setAttribute("aria-selected", String(n === v));
+    });
+    saveSetting({ tab: v });
+    if (v === "stockage") loadStock();
+  }
+  Array.prototype.forEach.call(document.querySelectorAll("nav button"), function (b) {
+    b.addEventListener("click", function () { location.hash = b.getAttribute("data-view"); });
+  });
+  window.addEventListener("hashchange", route);
+
+  renderTests(); renderGame(); renderAssets(); renderContribuer(); renderAssistant(); route();
+  startContribDb(); startSample(); startStorage();
+  $("foot").textContent = "Données générées le " + D.generatedAt + " à partir de lune run tests/run -- --json, tools/export_game_data.luau, tests/untested.json et assets/manifest.json.";
+  mountExtras();
+})();
+</script>
+</body>
+</html>

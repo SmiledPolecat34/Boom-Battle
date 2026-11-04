@@ -53,6 +53,13 @@ jobs:
       - name: Tests automatisés (syntaxe, logique, configs, intégrité)
         run: lune run tests/run -- --json test-report.json
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Tests des outils (registre : validation, serveur local, adaptateur)
+        run: node --test "tools/registre/*.test.js"
+
       - name: Rapport de tests
         if: always()
         uses: actions/upload-artifact@v4
