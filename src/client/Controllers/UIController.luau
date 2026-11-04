@@ -222,7 +222,13 @@ function UIController.start(remotes: Folder)
 
 	local startSolo = remotes:WaitForChild("StartSolo") :: RemoteEvent
 
+	local partyAction = remotes:WaitForChild("PartyAction") :: RemoteEvent
+
 	local ctx = {
+		-- Partie privée : "create" (devient hôte), "join", "start", "addBot", "removeBot", "botLevel" (hôte seulement ; le serveur revalide tout).
+		partyAction = function(action: string, arg: any?)
+			partyAction:FireServer(action, arg)
+		end,
 		startSolo = function(botCount: number)
 			startSolo:FireServer(botCount)
 		end,

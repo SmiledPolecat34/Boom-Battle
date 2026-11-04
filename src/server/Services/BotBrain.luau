@@ -18,6 +18,15 @@ export type Context = {
 	danger: { [number]: boolean }, -- cases menacées (clé grid:key)
 	enemies: { Types.Cell },
 	rng: Random?, -- facultatif : hésitation occasionnelle pour paraître moins mécanique
+	difficulty: number?, -- facultatif, 1 à 10 (absent : comportement historique du mode solo)
+}
+
+-- Réglages d'un niveau de difficulté (1 = très facile, 10 = très fort), interpolés linéairement.
+export type Profile = {
+	hesitation: number, -- probabilité de ne rien faire à une décision
+	reaction: number, -- probabilité de réagir quand la case est menacée (en dessous de 1, le bot peut se faire surprendre)
+	hunts: boolean, -- vise les ennemis (sinon il ne casse que des caisses)
+	interval: number, -- secondes entre deux décisions
 }
 
 export type Action = {
@@ -38,6 +47,16 @@ local ESCAPE_DEPTH = 6 -- cases max pour s'éloigner d'une bombe qu'on vient de 
 local FLEE_DEPTH = 12
 local SEEK_DEPTH = 26
 local HESITATION_CHANCE = 0.06
+
+function BotBrain.profile(difficulty: number): Profile
+	local t = (math.clamp(difficulty, 1, 10) - 1) / 9
+	return {
+		hesitation = 0.4 - 0.36 * t, -- 0.40 -> 0.04
+		reaction = 0.45 + 0.55 * t, -- 0.45 -> 1.00
+		hunts = difficulty >= 4,
+		interval = 0.9 - 0.65 * t, -- 0.90 s -> 0.25 s
+	}
+end
 
 -- Cases touchées par une bombe posée en `cell` (croix, arrêtée par piliers, murs et caisses).
 function BotBrain.blastKeys(grid: GridService.GridService, cell: Types.Cell, range: number): { [number]: boolean }
@@ -149,8 +168,13 @@ function BotBrain.decide(grid: GridService.GridService, context: Context): Actio
 		return not context.danger[grid:key(x, y)]
 	end
 
+	local profile = if context.difficulty then BotBrain.profile(context.difficulty) else nil
+
 	-- 1. Fuir : on peut traverser des cases dangereuses pour sortir, mais le but est une case sûre.
 	if context.danger[selfKey] then
+		if profile and context.rng and context.rng:NextNumber() > profile.reaction then
+			return { kind = "wait" } -- bot peu attentif : il tarde à réagir
+		end
 		local target = search(grid, cell, FLEE_DEPTH, walkable, safeCell)
 		if target then
 			return { kind = "move", cell = target }
@@ -158,12 +182,15 @@ function BotBrain.decide(grid: GridService.GridService, context: Context): Actio
 		return { kind = "wait" }
 	end
 
-	if context.rng and context.rng:NextNumber() < HESITATION_CHANCE then
+	local hesitation = if profile then profile.hesitation else HESITATION_CHANCE
+	if context.rng and context.rng:NextNumber() < hesitation then
 		return { kind = "wait" }
 	end
 
+	local hunts = profile == nil or profile.hunts
+	local enemies = if hunts then context.enemies else {}
 	local enemyKeys: { [number]: boolean } = {}
-	for _, enemy in context.enemies do
+	for _, enemy in enemies do
 		enemyKeys[grid:key(enemy.x, enemy.y)] = true
 	end
 
@@ -190,7 +217,7 @@ function BotBrain.decide(grid: GridService.GridService, context: Context): Actio
 	end
 
 	-- 4. Rejoindre un ennemi : case libre voisine de l'un d'eux.
-	if #context.enemies > 0 then
+	if #enemies > 0 then
 		local approach = search(grid, cell, SEEK_DEPTH, safeWalkable, function(x: number, y: number): boolean
 			for _, d in DIRECTIONS do
 				local nx, ny = x + d.x, y + d.y

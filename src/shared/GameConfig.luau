@@ -17,6 +17,9 @@ GameConfig.States = table.freeze({
 
 GameConfig.Round = table.freeze({
 	MinimumPlayers = 1, -- PROVISOIRE : partie rapide dès 1 joueur (à remonter à 2 plus tard)
+	PrivateMinPlayers = 2, -- partie privée : l'hôte peut lancer dès 2 joueurs dans le groupe
+	MaxBotDifficulty = 10, -- partie privée : niveau des bots de 1 (très facile) à 10 (très fort)
+	DefaultBotDifficulty = 5,
 	QuickCountdown = 6, -- secondes : compte à rebours de la partie rapide (aucun lobby, aucun « prêt »)
 	MaximumPlayers = 8,
 	ReadyCountdown = 10, -- secondes

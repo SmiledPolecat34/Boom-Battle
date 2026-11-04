@@ -301,6 +301,16 @@ function MainMenu.new(parent: Instance, ctx: any)
 		ctx.openOverlay("Solo")
 	end)
 
+	-- PARTIE PRIVÉE : crée un groupe (on en devient l'hôte) ou rejoint celui qui existe déjà sur le serveur.
+	local privateButton = Components.button(frame, "PrivateButton", "PARTIE PRIVÉE", Theme.violet, UDim2.fromOffset(250, 58))
+	privateButton.AnchorPoint = Vector2.new(1, 1)
+	privateButton.Position = UDim2.new(1, -24, 1, -256)
+	privateButton.TextSize = 24
+	local partyExists = false
+	privateButton.Activated:Connect(function()
+		ctx.partyAction(if partyExists then "join" else "create")
+	end)
+
 	play.Activated:Connect(function()
 		ctx.setQueued(true)
 	end)
@@ -379,6 +389,10 @@ function MainMenu.new(parent: Instance, ctx: any)
 		-- affiche le « + » d'invitation.
 		update = function(snapshot: any, me: any)
 			lastSnapshot, lastMe = snapshot, me
+			partyExists = snapshot.party ~= nil
+			privateButton.Text = if snapshot.party
+				then ("REJOINDRE (%d/%d)"):format(snapshot.party.count, snapshot.party.max)
+				else "PARTIE PRIVÉE"
 			refreshParty()
 			syncVisibility()
 		end,

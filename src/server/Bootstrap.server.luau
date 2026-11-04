@@ -43,6 +43,7 @@ for _, name in {
 	"RequestEmote",
 	"RequestQuickChat",
 	"StartSolo",
+	"PartyAction",
 	"Notice",
 	"RoundState",
 	"RoundEnded",
