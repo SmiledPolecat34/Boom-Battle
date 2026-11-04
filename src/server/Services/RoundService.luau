@@ -51,6 +51,7 @@ local alive: { [Player]: boolean } = {}
 local eliminations: { RoundResolver.Elimination } = {}
 local spawnIndex: { [Player]: number } = {}
 local roundStartedAt = 0
+local startingCount = 0 -- nombre de participants au début de la manche (un départ ne doit pas la transformer en solo)
 local roundId = 0 -- identifiant de la manche en cours : garantit une seule récompense par joueur et par manche
 local lastEliminationAt = 0
 local lastReadyRequest: { [Player]: number } = {}
@@ -347,6 +348,7 @@ local function beginPlaying()
 		alive[player] = true
 		PlayState.setActive(player, true)
 	end
+	startingCount = #participantOrder
 	roundStartedAt = os.clock()
 	lastEliminationAt = 0
 	setState("PLAYING", ROUND.RoundDuration)
@@ -533,7 +535,7 @@ local function tick()
 		end
 	elseif state == "PLAYING" then
 		local survivors = countAlive()
-		local threshold = if #participantOrder <= 1 then 0 else 1 -- le solo Studio dure jusqu'à la mort ou la fin du temps
+		local threshold = if startingCount <= 1 then 0 else 1 -- le solo Studio dure jusqu'à la mort ou la fin du temps ; un départ en cours de manche laisse un gagnant
 		local settled = os.clock() - lastEliminationAt >= SETTLE_DELAY
 		if survivors <= threshold and settled then
 			finishRound()

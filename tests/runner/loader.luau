@@ -285,26 +285,120 @@ function Loader.new(root: string)
 		return rng
 	end
 
+	-- Horloge et ordonnanceur SIMULÉS. Le temps ne s'écoule que par world.advance(secondes) : les tests de machine
+	-- d'états (manches, compte à rebours) sont donc instantanés et déterministes.
+	-- task.wait n'est suspensif que dans un thread créé par task.spawn/delay/defer ; ailleurs (thread de test) il rend
+	-- la main tout de suite, comme les attentes de réessai de PlayerDataService.
+	local clock = { now = 1000 } -- > 0 : les limiteurs de cadence comparent à 0 au premier appel
+	world.clock = clock
+	local sleepers: { { wake: number, thread: thread, order: number } } = {}
+	local mine: { [thread]: boolean } = {}
+	local stepHooks: { (dt: number) -> () } = {}
+	local order = 0
+	local hookClock = { last = clock.now } -- dernier instant auquel les crochets de pas ont été appelés
+
+	local function resume(thread: thread, ...)
+		local ok, err = coroutine.resume(thread, ...)
+		if not ok then
+			table.insert(world.warnings, "erreur dans un thread simulé : " .. tostring(err))
+		end
+	end
+
+	local function sleep(thread: thread, seconds: number)
+		order += 1
+		table.insert(sleepers, { wake = clock.now + math.max(seconds, 0), thread = thread, order = order })
+	end
+
+	local function start(fn: (...any) -> (), ...)
+		local thread = coroutine.create(fn)
+		mine[thread] = true
+		resume(thread, ...)
+		return thread
+	end
+
 	local taskLibrary = {
-		spawn = function(fn, ...)
-			local thread = coroutine.create(fn)
-			coroutine.resume(thread, ...)
+		spawn = start,
+		defer = start,
+		delay = function(seconds, fn, ...)
+			local args = table.pack(...)
+			local thread = coroutine.create(function()
+				fn(table.unpack(args, 1, args.n))
+			end)
+			mine[thread] = true
+			sleep(thread, seconds)
 			return thread
-		end,
-		defer = function(fn, ...)
-			local thread = coroutine.create(fn)
-			coroutine.resume(thread, ...)
-			return thread
-		end,
-		delay = function(_seconds, fn, ...)
-			-- Pas d'horloge simulée : les délais ne s'exécutent pas (les modules testés ici n'en dépendent pas).
-			return coroutine.create(fn)
 		end,
 		wait = function(seconds)
-			return seconds or 0
+			local duration = seconds or 1 / 30
+			local thread = coroutine.running()
+			if mine[thread] then
+				sleep(thread, duration)
+				coroutine.yield()
+			end
+			return duration
 		end,
-		cancel = function() end,
+		cancel = function(thread)
+			for i = #sleepers, 1, -1 do
+				if sleepers[i].thread == thread then
+					table.remove(sleepers, i)
+				end
+			end
+		end,
 	}
+
+	-- Fait avancer le temps simulé de `seconds`, par pas d'au plus 1/20 s, en réveillant les threads dans l'ordre.
+	function world.advance(seconds: number)
+		local target = clock.now + seconds
+		while clock.now < target - 1e-9 do
+			local nextStep = math.min(target, clock.now + 0.05)
+			-- Réveille d'abord ce qui est dû avant la fin du pas, dans l'ordre chronologique.
+			while true do
+				local best = nil
+				for index, sleeper in sleepers do
+					if sleeper.wake <= nextStep + 1e-9 and (best == nil or sleeper.wake < sleepers[best].wake or (sleeper.wake == sleepers[best].wake and sleeper.order < sleepers[best].order)) then
+						best = index
+					end
+				end
+				if not best then
+					break
+				end
+				local sleeper = table.remove(sleepers, best)
+				clock.now = math.max(clock.now, sleeper.wake)
+				resume(sleeper.thread)
+			end
+			clock.now = nextStep
+			local dt = nextStep - hookClock.last
+			hookClock.last = nextStep
+			for _, hook in stepHooks do
+				hook(math.max(dt, 0))
+			end
+		end
+	end
+
+	-- Fonction appelée à chaque pas de simulation (ex. déplacer un faux personnage vers sa cible).
+	function world.onStep(hook: (dt: number) -> ())
+		table.insert(stepHooks, hook)
+	end
+
+	local fakeOs = {
+		clock = function()
+			return clock.now
+		end,
+		time = function()
+			return 1700000000 + math.floor(clock.now)
+		end,
+		date = os.date,
+		difftime = os.difftime,
+	}
+
+	-- typeof : un faux Instance (marqué _isInstance) se comporte comme un Instance ; le reste suit le typeof de Luau.
+	local luauTypeof = typeof
+	local function typeofShim(value: any)
+		if type(value) == "table" and rawget(value, "_isInstance") == true then
+			return "Instance"
+		end
+		return luauTypeof(value)
+	end
 
 	-- Enum : toute valeur Enum.Type.Nom devient la chaîne "Enum.Type.Nom" (suffit pour des configs et des comparaisons).
 	local Enum = setmetatable({}, {
@@ -317,17 +411,32 @@ function Loader.new(root: string)
 		end,
 	})
 
+	local workspaceNode = newNode("Workspace", "Workspace", nil)
+	function workspaceNode:GetServerTimeNow()
+		return clock.now
+	end
+
 	local env = {
 		Enum = Enum,
 		game = gameNode,
-		workspace = newNode("Workspace", "Workspace", nil),
+		workspace = workspaceNode,
 		Instance = { new = instanceNew },
 		Random = Random,
 		task = taskLibrary,
+		os = fakeOs,
+		typeof = typeofShim,
 		Vector3 = roblox.Vector3,
 		Vector2 = roblox.Vector2,
 		Color3 = roblox.Color3,
 		CFrame = roblox.CFrame,
+		-- print est capturé dans world.output (sinon la sortie des tests est noyée par les journaux des services).
+		print = function(...)
+			local parts = table.pack(...)
+			for i = 1, parts.n do
+				parts[i] = tostring(parts[i])
+			end
+			table.insert(world.output, table.concat(parts, " "))
+		end,
 		warn = function(...)
 			-- Les avertissements des modules sont conservés pour que les tests les vérifient.
 			local parts = table.pack(...)
@@ -338,6 +447,7 @@ function Loader.new(root: string)
 		end,
 	}
 	world.warnings = {}
+	world.output = {}
 	world.env = env
 
 	local function makeRequire(): (any) -> any
@@ -383,6 +493,38 @@ function Loader.new(root: string)
 	end
 	function world.load(dotted: string)
 		return world.require(world.moduleByPath(dotted))
+	end
+
+	-- Remet le monde à zéro : modules rechargés à la demande, joueurs et connexions oubliés, horloge à 1000, threads
+	-- simulés supprimés. À appeler dans beforeEach pour les modules à état global (RoundService...) : les variables
+	-- locales d'une suite qui contiennent d'anciens modules deviennent alors périmées (les recharger après reset).
+	function world.reset()
+		table.clear(world.cache)
+		table.clear(world.loading)
+		table.clear(players)
+		playersService.PlayerAdded, firePlayerAdded = newSignal()
+		playersService.PlayerRemoving, firePlayerRemoving = newSignal()
+		table.clear(sleepers)
+		table.clear(stepHooks)
+		table.clear(mine)
+		clock.now = 1000
+		hookClock.last = 1000
+		table.clear(world.warnings)
+		table.clear(world.output)
+		table.clear(stores)
+		world.dataStoreFailure = nil
+		table.clear(rawget(workspaceNode, "_attributes"))
+	end
+
+	-- Remplace un module par un double de test AVANT qu'un autre module ne le charge (ex. services dépendant du moteur).
+	function world.mock(name: string, replacement: any)
+		for node, source in sources do
+			if source.kind == "ModuleScript" and node.Name == name then
+				world.cache[node] = { value = replacement }
+				return replacement
+			end
+		end
+		error("module introuvable : " .. name, 2)
 	end
 
 	-- Raccourci : world.module("GridService") retrouve le module par son nom (doit être unique dans l'arbre).

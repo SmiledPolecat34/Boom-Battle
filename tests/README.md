@@ -71,9 +71,9 @@ end)
 
 Globales disponibles : `describe`, `it`, `xit` (ignoré), `beforeEach`, `afterEach`, `expect(x).toBe / toEqual /
 toBeTruthy / toBeFalsy / toBeNil / toBeCloseTo / toBeGreaterThan(OrEqual) / toBeLessThan(OrEqual) / toHaveLength /
-toContain / toThrow` (et `.never` pour la négation), `world` (instance isolée du jeu simulé : `world.module`,
-`world.addPlayer`, `world.removePlayer`, `world.dataStoreFailure`, `world.warnings`), `Fixtures`
-(`emptyGrid`, `fakePlayer`, `fakeRemotes`), `Lune` (fs/serde pour les tests « méta »).
+toContain / toThrow` (et `.never` pour la négation), `world` (instance isolée du jeu simulé : `world.module`, `world.mock`,
+`world.reset`, `world.advance`, `world.addPlayer`, `world.removePlayer`, `world.dataStoreFailure`, `world.warnings`, `world.output`),
+`Fixtures` (`emptyGrid`, `fakePlayer`, `fakeCharacter`, `fakeRemotes`, `mockMapService`, `roundHarness`), `Lune` (fs/serde pour les tests « méta »).
 
 Principes :
 
@@ -88,9 +88,9 @@ Principes :
 
 ## Ce qui n'est pas (encore) couvert hors Studio
 
-Voir `tests/untested.json` : machine d'états `RoundService`, `MovementService`, `BombService`, `DamageService`,
-`PowerupService`, `MapService`, `BotService`, services d'émotes / de chat rapide, contrôleurs et écrans d'interface. La
-priorité n°1 est de rendre `RoundService` testable (horloge et services injectés).
+Voir `tests/untested.json` : `BombService`, `DamageService`, `PowerupService`, `MapService`, `BotService`, services
+d'émotes / de chat rapide, contrôleurs et écrans d'interface (ils créent de vraies Parts ou des interfaces). `RoundService`
+et `MovementService` sont couverts avec un temps simulé (`world.advance`) et des doubles (`world.mock`, `Fixtures.roundHarness`).
 
 ## Scripts Studio (`tests/Phase*Tests.luau`)
 

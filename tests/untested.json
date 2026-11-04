@@ -3,8 +3,6 @@
   "nonStrictAllowed": [],
   "untested": {
     "Types": "Déclarations de types uniquement : aucune logique exécutable à tester.",
-    "RoundService": "Machine d'états de manche : dépend de Players, des personnages, de MapService, des remotes et de l'horloge. PRIORITÉ 1 : à rendre testable avec une horloge et des services injectés.",
-    "MovementService": "Pilotage de Humanoid et propriétaire réseau (Instances Roblox réelles). À tester en Studio ; extraire la logique de pas en module pur.",
     "BombService": "Crée des Parts et planifie des explosions (Instances, task.delay). La résolution pure est couverte par ExplosionResolver.spec.",
     "DamageService": "Élimination via Humanoid et Parts. Dépend du moteur physique.",
     "PowerupService": "Parts de bonus et ramassage par proximité (Instances réelles).",
