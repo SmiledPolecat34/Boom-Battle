@@ -3,10 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Registre BOOM BATTLE</title>
+<title>BOOM BATTLE — Registre du projet</title>
+<meta name="description" content="Le registre BOOM BATTLE : suivre les tests, explorer les données du jeu et gérer les contenus du projet.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Outfit:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 /* Idée : un registre de poste de pilotage. Bandeau marine à onglets, contenu en cartes denses, accent violet du jeu,
    jaune réservé aux prix et aux repères. Trois vues : tests, données du jeu, assets. */
@@ -180,15 +181,172 @@ footer { color: var(--muted); font-size: .85rem; }
 @media (max-width: 520px) { .barrow { grid-template-columns: 1fr 44px; } .barrow .track { grid-column: 1 / -1; order: 3; } nav { margin-left: 0; } }
 @media (prefers-reduced-motion: no-preference) { .fill { transition: width .4s ease; } }
 </style>
+<style>
+/* Une structure stable, des surfaces sobres et un accent commun à toutes les vues. */
+:root {
+  --bg: #f6f7fb; --surface: #fff; --ink: #202638; --muted: #626c80;
+  --accent: #6043cb; --accent-solid: #6043cb; --coin: #936000;
+  --good: #187546; --bad: #ba303d; --line: #e2e6ef; --soft: #eeebfa;
+  --font-display: "Outfit", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #11151e; --surface: #1a202c; --ink: #eef0f7; --muted: #a5aec1;
+    --accent: #baa6ff; --coin: #efc065; --good: #71d5a0; --bad: #ff919e;
+    --line: #30394b; --soft: #29243e;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #11151e; --surface: #1a202c; --ink: #eef0f7; --muted: #a5aec1;
+  --accent: #baa6ff; --coin: #efc065; --good: #71d5a0; --bad: #ff919e;
+  --line: #30394b; --soft: #29243e;
+}
+body { font-size: 15px; line-height: 1.6; }
+button, input, textarea, select { font: inherit; }
+button, input, textarea, select, a, summary { -webkit-tap-highlight-color: transparent; }
+:where(button, input, textarea, select, a, summary, [tabindex]):focus-visible { outline: 3px solid var(--accent); outline-offset: 4px; }
+[hidden] { display: none !important; }
+.skip-link { position: fixed; top: 12px; left: 12px; z-index: 100; transform: translateY(-180%); padding: 12px 20px; background: var(--surface); border: 2px solid var(--accent); border-radius: 8px; }
+.skip-link:focus { transform: translateY(0); }
+.app-sidebar { position: fixed; inset: 0 auto 0 0; width: 236px; z-index: 20; background: var(--surface); color: var(--ink); border-right: 1px solid var(--line); }
+.bar { height: 100%; padding: 32px 18px 20px; display: flex; flex-direction: column; align-items: stretch; flex-wrap: nowrap; gap: 28px; }
+.brand { padding: 0 8px; flex-direction: row; align-items: center; gap: 10px; }
+.brand-mark { display: grid; place-items: center; width: 38px; height: 38px; flex: none; border-radius: 12px; background: var(--accent-solid); color: white; }
+.brand h1 { font-size: 1rem; font-weight: 700; letter-spacing: .035em; }
+.brand small { display: block; color: var(--muted); font-size: .75rem; }
+.nav-caption { padding: 0 14px; color: var(--muted); font-size: .66rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; }
+nav { display: flex; flex-direction: column; flex-wrap: nowrap; gap: 6px; margin: 8px 0 0; }
+nav button { display: flex; align-items: center; gap: 12px; text-align: left; border: 1px solid transparent; border-radius: 8px; color: var(--muted); font-size: .88rem; padding: 11px 14px; min-height: 46px; }
+nav button svg { width: 19px; height: 19px; flex: none; }
+nav button[aria-selected="true"] { background: var(--soft); color: var(--accent); font-weight: 600; }
+nav button[aria-selected="true"]::after { content: ""; margin-left: auto; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+nav button:hover:not([aria-selected="true"]) { background: var(--bg); color: var(--ink); }
+.sidebar-bottom { margin-top: auto; border-top: 1px solid var(--line); padding: 18px 10px 0; }
+.local-label { display: flex; align-items: center; gap: 8px; font-size: .8rem; font-weight: 500; }
+.local-label::before { content: ""; width: 7px; height: 7px; background: var(--muted); border-radius: 50%; }
+.sidebar-bottom p { margin: 4px 0 0; font-size: .73rem; color: var(--muted); }
+.workspace { margin-left: 236px; }
+.topbar { height: 70px; padding: 0 40px; display: flex; align-items: center; justify-content: space-between; gap: 16px; border-bottom: 1px solid var(--line); background: var(--surface); font-size: .8rem; color: var(--muted); }
+.breadcrumb { display: flex; align-items: center; gap: 12px; }
+.breadcrumb b { color: var(--ink); font-weight: 500; }
+.project-badge { border: 1px solid var(--line); padding: 4px 10px; border-radius: 6px; font-size: .72rem; white-space: nowrap; }
+main { max-width: 1536px; padding: 36px 40px 24px; gap: 28px; }
+.page-intro { display: flex; flex-direction: column; gap: 6px; }
+.eyebrow { color: var(--accent); font-size: .68rem; text-transform: uppercase; letter-spacing: .16em; font-weight: 600; }
+.page-intro h2 { font-size: clamp(1.7rem, 3vw, 2.2rem); letter-spacing: -.035em; line-height: 1.2; }
+.page-intro p { margin: 2px 0 0; color: var(--muted); max-width: 70ch; }
+section:not([hidden]) { display: flex; flex-direction: column; gap: 22px; min-width: 0; }
+h2 { font-size: 1.08rem; letter-spacing: -.015em; }
+h3 { font-size: .98rem; }
+.stack { gap: 20px; min-width: 0; }
+.card { border-radius: 12px; padding: 22px; box-shadow: 0 2px 3px #14213d02; min-width: 0; }
+.tiles { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px; }
+.tile { border: 1px solid var(--line); border-radius: 10px; padding: 20px; position: relative; overflow: hidden; }
+.tile::before { content: ""; position: absolute; top: 22px; right: 16px; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
+.tile.good::before { background: var(--good); }
+.tile.bad::before { background: var(--bad); }
+.tile.warn::before { background: var(--coin); }
+.tile b { font-size: clamp(1.6rem, 2.5vw, 2rem); font-weight: 600; letter-spacing: -.04em; line-height: 1.2; margin-bottom: 8px; }
+.tile span { font-size: .78rem; }
+.banner { border-radius: 9px; padding: 12px 16px; font-size: .88rem; }
+.banner.good { background: color-mix(in srgb, var(--good) 6%, var(--surface)); border-color: color-mix(in srgb, var(--good) 22%, var(--line)); color: var(--good); }
+.banner.bad { background: color-mix(in srgb, var(--bad) 6%, var(--surface)); border-color: color-mix(in srgb, var(--bad) 22%, var(--line)); color: var(--bad); }
+.banner.neutral { background: var(--surface); border: 1px solid var(--line); color: var(--muted); }
+.banner.neutral .status { background: var(--muted); }
+.barrow { grid-template-columns: minmax(160px, 260px) 1fr 40px; gap: 16px; padding: 3px 0; font-size: .84rem; }
+.barrow .track { height: 7px; background: var(--bg); border-radius: 3px; }
+.barrow .fill { border-radius: 3px; background: color-mix(in srgb, var(--accent) 75%, var(--surface)); }
+.bars { max-height: 330px; overflow-y: auto; padding-right: 6px; }
+.tools { gap: 12px; }
+.tools h2 { margin-right: auto; }
+input[type="search"], .runbar input[type="text"], .field input, .field select, .field textarea, .composer textarea { border-radius: 8px; min-height: 44px; }
+input[type="search"] { min-width: 0; width: min(100%, 320px); }
+.pills { gap: 4px; padding: 5px; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; align-self: flex-start; max-width: 100%; }
+.pill { border-radius: 6px; border-color: transparent; font-size: .83rem; padding: 9px 13px; min-height: 42px; background: transparent; }
+.pill:hover { background: var(--bg); }
+.pill[aria-pressed="true"] { background: var(--soft); color: var(--accent); border-color: transparent; }
+.btn { border-radius: 8px; background: var(--accent-solid); border-color: var(--accent-solid); min-height: 44px; font-size: .84rem; padding: 10px 18px; }
+.btn:hover:not(:disabled) { filter: brightness(.92); }
+.btn.ghost { color: var(--accent); border-color: var(--line); background: var(--surface); }
+.copy { border-radius: 6px; min-height: 36px; padding: 6px 12px; background: var(--surface); font-size: .78rem; }
+details.suite { border-radius: 8px; }
+details.suite summary { min-height: 52px; padding: 12px 16px; }
+details.suite summary::before { content: "›"; color: var(--muted); font-size: 1.2rem; width: 10px; }
+details.suite[open] summary::before { content: "⌄"; }
+details.suite summary .name { font-size: .84rem; }
+details.suite[open] summary { border-bottom: 1px solid var(--line); margin-bottom: 12px; }
+.status { width: 7px; height: 7px; }
+th, td { padding: 12px 14px; }
+th { background: var(--bg); font-size: .73rem; font-weight: 600; }
+td { font-size: .83rem; overflow-wrap: anywhere; }
+tbody tr:last-child td { border-bottom: 0; }
+tbody tr:hover { background: color-mix(in srgb, var(--accent) 3%, var(--surface)); }
+.tablewrap { max-width: 100%; border-radius: 8px; }
+.tablewrap:focus-visible { outline-offset: -3px; }
+.grid { grid-template-columns: repeat(auto-fill, minmax(min(100%, 265px), 1fr)); gap: 16px; }
+.grid .item > div { min-width: 0; }
+.tag { font-size: .7rem; overflow-wrap: anywhere; }
+.item h3 { margin-bottom: 4px; }
+.dot { width: 40px; height: 40px; border-radius: 12px; }
+.maps { grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 16px; }
+.gallery { grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr)); gap: 16px; }
+.gallery .card { overflow-wrap: anywhere; }
+.thumb { background-size: 16px 16px; margin-bottom: 14px; }
+.kv { grid-template-columns: minmax(0, 1fr) minmax(0, auto); }
+.kv dt, .kv dd { overflow-wrap: anywhere; }
+.fdoc { grid-template-columns: minmax(0, 100px) minmax(0, 1fr); }
+.form { grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); }
+.composer > :first-child { min-width: 0; }
+.msg.user { background: var(--accent-solid); }
+pre.json { max-width: 100%; }
+.runpanel { font-size: .85rem; }
+.runbar input[type="text"] { min-width: 0; flex-basis: 220px; }
+footer { border-top: 1px solid var(--line); padding-top: 20px; font-size: .74rem; overflow-wrap: anywhere; }
+footer .copy { margin-top: 12px; }
+@media (min-width: 1500px) { main { padding-top: 44px; } }
+@media (max-width: 1200px) { .tiles { grid-template-columns: repeat(3, minmax(0, 1fr)); } main { padding: 28px; } .topbar { padding: 0 28px; } }
+@media (max-width: 800px) {
+  .app-sidebar { position: static; width: 100%; border-right: 0; border-bottom: 1px solid var(--line); }
+  .bar { padding: 18px 20px 0; gap: 16px; }
+  .brand { padding: 0; }
+  .brand-mark { width: 34px; height: 34px; }
+  .nav-caption, .sidebar-bottom { display: none; }
+  nav { flex-direction: row; overflow-x: auto; margin: 0 -20px; padding: 0 16px 12px; }
+  nav button { flex: none; padding: 10px 12px; white-space: nowrap; }
+  nav button[aria-selected="true"]::after { display: none; }
+  .workspace { margin: 0; }
+  .topbar { height: 52px; padding: 0 20px; }
+  main { padding: 28px 20px; gap: 24px; }
+}
+@media (max-width: 520px) {
+  main { padding: 24px 16px; }
+  .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .tile:last-child { grid-column: 1 / -1; }
+  .tile { padding: 16px; }
+  .card { padding: 16px; }
+  .barrow { grid-template-columns: minmax(0, 1fr) 40px; gap: 4px 12px; }
+  .barrow .track { grid-column: 1 / -1; order: 3; margin-bottom: 6px; }
+  .tools input[type="search"] { width: 100%; }
+  .project-badge { display: none; }
+  .form, .split, .chatsplit { grid-template-columns: minmax(0, 1fr); }
+  .composer { flex-wrap: wrap; }
+  .composer textarea { flex-basis: 100%; }
+  .runbar .btn { width: 100%; }
+}
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; scroll-behavior: auto !important; } }
+@media (forced-colors: active) { nav button[aria-selected="true"], .pill[aria-pressed="true"] { border: 2px solid Highlight; } .status, .tile::before { border: 2px solid CanvasText; } }
+</style>
 </head>
 <body>
-<header>
+<a class="skip-link" href="#main">Aller au contenu</a>
+<header class="app-sidebar">
   <div class="bar">
     <div class="brand">
-      <h1>BOOM BATTLE</h1>
-      <small>Registre des tests, des données de jeu et des assets</small>
+      <span class="brand-mark" aria-hidden="true"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="14" r="7"/><path d="m15 9 2-2-2-2 2-2m2 5h3m-2-5 2-2"/></svg></span>
+      <div><h1>BOOM BATTLE</h1><small>Registre du projet</small></div>
     </div>
-    <nav role="tablist" aria-label="Vues">
+    <div><div class="nav-caption">Espace de travail</div>
+    <nav role="tablist" aria-label="Vues" aria-orientation="vertical">
       <button role="tab" id="tab-tests" data-view="tests" aria-selected="true">Tests</button>
       <button role="tab" id="tab-donnees" data-view="donnees" aria-selected="false">Données du jeu</button>
       <button role="tab" id="tab-assets" data-view="assets" aria-selected="false">Assets</button>
@@ -196,11 +354,15 @@ footer { color: var(--muted); font-size: .85rem; }
       <button role="tab" id="tab-assistant" data-view="assistant" aria-selected="false">Assistant</button>
       <button role="tab" id="tab-sons" data-view="sons" aria-selected="false">Sons</button>
       <button role="tab" id="tab-stockage" data-view="stockage" aria-selected="false">Stockage</button>
-    </nav>
+    </nav></div>
+    <div class="sidebar-bottom"><div class="local-label">Environnement local</div><p>Les données de votre projet,<br>réunies au même endroit.</p></div>
   </div>
 </header>
-<main>
-  <section id="view-tests" aria-labelledby="tab-tests"></section>
+<div class="workspace">
+<div class="topbar"><div class="breadcrumb"><span>Registre</span><span aria-hidden="true">/</span><b id="breadcrumb-current">Tests</b></div><span class="project-badge">BOOM BATTLE · Projet Roblox</span></div>
+<main id="main" tabindex="-1">
+  <div class="page-intro"><span class="eyebrow">Qualité du projet</span><h2 id="page-title">Tests &amp; validation</h2><p id="page-description">Suivez la qualité du jeu, lancez vos tests et retrouvez chaque résultat.</p></div>
+  <section id="view-tests" role="tabpanel" tabindex="0" aria-labelledby="tab-tests"></section>
   <section id="view-donnees" aria-labelledby="tab-donnees" hidden></section>
   <section id="view-assets" aria-labelledby="tab-assets" hidden></section>
   <section id="view-contribuer" aria-labelledby="tab-contribuer" hidden></section>
@@ -209,6 +371,7 @@ footer { color: var(--muted); font-size: .85rem; }
   <section id="view-stockage" aria-labelledby="tab-stockage" hidden></section>
   <footer id="foot"></footer>
 </main>
+</div>
 
 <script id="data" type="application/json">__DATA__</script>
 <script>
@@ -269,22 +432,22 @@ footer { color: var(--muted); font-size: .85rem; }
     });
     var untested = Object.keys(D.untested.untested || {});
     var seconds = r.results.reduce(function (a, t) { return a + (t.seconds || 0); }, 0);
-    var failed = r.failed;
+    var failed = r.failed, unavailable = !!r.error || !r.results.length;
     var groups = {};
     order.forEach(function (s) { var g = s.split("/")[0]; (groups[g] = groups[g] || []).push(s); });
     var max = Math.max.apply(null, order.map(function (s) { return bySuite[s].length; }));
 
     var html = "";
     if (r.error) html += '<div class="banner bad" role="alert">' + esc(r.error) + '</div>';
-    html += runPanelHtml();
-    html += '<div class="banner ' + (failed ? "bad" : "good") + '" role="status"><span class="status ' + (failed ? "bad" : "") + '"></span>' +
-      (failed ? failed + " test(s) en échec : voir le détail ci-dessous" : "Tous les tests automatisés passent") + "</div>";
+    html += '<div class="banner ' + (failed ? "bad" : unavailable ? "neutral" : "good") + '" role="status"><span class="status ' + (failed ? "bad" : "") + '" aria-hidden="true"></span>' +
+      (failed ? failed + " test(s) en échec : voir le détail ci-dessous" : r.error || !r.results.length ? "Aucun bilan de tests disponible. Lancez une exécution pour vérifier le projet." : "Tous les tests automatisés passent") + "</div>";
     html += '<div class="tiles">' +
       '<div class="tile good"><b class="num">' + fmt(r.passed) + "</b><span>tests réussis</span></div>" +
       '<div class="tile ' + (failed ? "bad" : "good") + '"><b class="num">' + fmt(failed) + "</b><span>échecs</span></div>" +
       '<div class="tile info"><b class="num">' + r.suites + "</b><span>suites</span></div>" +
       '<div class="tile ' + (untested.length > 1 ? "warn" : "info") + '"><b class="num">' + untested.length + "</b><span>module(s) sans suite</span></div>" +
       '<div class="tile info"><b class="num">' + seconds.toFixed(2) + " s</b><span>durée cumulée des tests</span></div></div>";
+    html += runPanelHtml();
 
     html += '<div class="card stack" style="gap:12px"><h2>Tests par suite</h2><div class="bars">';
     order.forEach(function (s) {
@@ -313,7 +476,7 @@ footer { color: var(--muted); font-size: .85rem; }
         if (!tests.length) return;
         shown += tests.length;
         var bad = tests.filter(function (t) { return !t.ok; }).length;
-        out += '<details class="suite"' + (f || bad ? " open" : "") + '><summary><span class="status ' + (bad ? "bad" : "") + '"></span><span class="name mono">' + esc(s) + '</span><span class="count num">' + tests.length + " test" + (tests.length > 1 ? "s" : "") + "</span></summary><ul>";
+        out += '<details class="suite"' + (f || bad ? " open" : "") + '><summary><span class="status ' + (bad ? "bad" : "") + '" aria-hidden="true"></span><span class="name mono">' + esc(s) + '</span><span class="count num">' + tests.length + " test" + (tests.length > 1 ? "s" : "") + (bad ? " · " + bad + " en échec" : " · Réussis") + "</span></summary><ul>";
         tests.forEach(function (t) { out += '<li class="' + (t.ok ? "" : "fail") + '">' + esc(t.name) + (t.ok ? "" : " : " + esc(t.message || "")) + "</li>"; });
         out += "</ul></details>";
       });
@@ -461,20 +624,67 @@ footer { color: var(--muted); font-size: .85rem; }
 /*__EXTRA__*/
   /* ---------- Navigation par hash ---------- */
   var views = ["tests", "donnees", "assets", "contribuer", "assistant", "sons", "stockage"];
+  var viewInfo = {
+    tests: ["Tests", "Tests & validation", "Suivez la qualité du jeu, lancez vos tests et retrouvez chaque résultat.", "Qualité du projet"],
+    donnees: ["Données du jeu", "Explorez les données du jeu", "Retrouvez les configurations, les contenus et les réglages qui donnent vie au jeu.", "Configuration"],
+    assets: ["Assets", "Bibliothèque d’assets", "Consultez les visuels du projet et retrouvez leurs identifiants Roblox.", "Ressources du jeu"],
+    contribuer: ["Contribuer", "Faites évoluer le jeu", "Préparez un nouveau contenu, vérifiez les champs et suivez vos contributions.", "Création de contenu"],
+    assistant: ["Assistant", "Votre assistant de projet", "Explorez les données et préparez vos prochaines idées dans une conversation.", "Espace de réflexion"],
+    sons: ["Sons", "Bibliothèque sonore", "Organisez vos sons, leurs usages et leurs réglages pour préparer leur intégration.", "Ressources du jeu"],
+    stockage: ["Stockage", "Vos données, en un endroit", "Consultez le stockage du registre, exportez une sauvegarde ou restaurez vos données.", "Gestion du registre"]
+  };
+  var navPaths = [
+    '<path d="m8 12 3 3 5-6"/><rect x="3" y="3" width="18" height="18" rx="5"/>',
+    '<ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v7c0 4 16 4 16 0V5M4 12v7c0 4 16 4 16 0v-7"/>',
+    '<rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8" cy="8" r="1"/><path d="m3 17 6-6 4 4 3-3 5 5"/>',
+    '<path d="M12 5v14M5 12h14"/><rect x="3" y="3" width="18" height="18" rx="5"/>',
+    '<path d="M8 3h8a5 5 0 0 1 5 5v7a4 4 0 0 1-4 4H9l-6 3V8a5 5 0 0 1 5-5Z"/><path d="M8 10h8M8 14h5"/>',
+    '<path d="M9 18V5l11-2v13M9 8l11-2"/><ellipse cx="6" cy="18" rx="3" ry="3"/><ellipse cx="17" cy="16" rx="3" ry="3"/>',
+    '<path d="m3 7 9-4 9 4-9 4-9-4Zm0 5 9 4 9-4M3 17l9 4 9-4"/>'
+  ];
+  views.forEach(function (n, i) {
+    var tab = $("tab-" + n), panel = $("view-" + n);
+    tab.setAttribute("aria-controls", "view-" + n);
+    panel.setAttribute("role", "tabpanel"); panel.setAttribute("tabindex", "0");
+    tab.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + navPaths[i] + '</svg><span>' + viewInfo[n][0] + '</span>';
+    tab.addEventListener("keydown", function (e) {
+      var next = i;
+      if (e.key === "ArrowRight" || e.key === "ArrowDown") next = (i + 1) % views.length;
+      else if (e.key === "ArrowLeft" || e.key === "ArrowUp") next = (i + views.length - 1) % views.length;
+      else if (e.key === "Home") next = 0;
+      else if (e.key === "End") next = views.length - 1;
+      else return;
+      e.preventDefault(); location.hash = views[next]; route(); $("tab-" + views[next]).focus();
+    });
+  });
   function route() {
     var v = location.hash.replace("#", "");
     if (views.indexOf(v) < 0) v = "tests";
+    if (location.hash === "#main") return;
     views.forEach(function (n) {
       $("view-" + n).hidden = n !== v;
       $("tab-" + n).setAttribute("aria-selected", String(n === v));
+      $("tab-" + n).setAttribute("tabindex", n === v ? "0" : "-1");
     });
+    $("breadcrumb-current").textContent = viewInfo[v][0];
+    $("page-title").textContent = viewInfo[v][1];
+    $("page-description").textContent = viewInfo[v][2];
+    document.querySelectorAll(".eyebrow").forEach(function (el) { el.textContent = viewInfo[v][3]; });
+    document.title = "BOOM BATTLE — " + viewInfo[v][0];
+    document.querySelectorAll(".tablewrap").forEach(function (el) { el.setAttribute("tabindex", "0"); el.setAttribute("role", "region"); el.setAttribute("aria-label", "Tableau défilant"); });
+    document.querySelectorAll('[role="tablist"]').forEach(function (el) { el.setAttribute("aria-orientation", window.matchMedia && window.matchMedia("(max-width: 800px)").matches ? "horizontal" : "vertical"); });
     saveSetting({ tab: v });
     if (v === "stockage") loadStock();
   }
   Array.prototype.forEach.call(document.querySelectorAll("nav button"), function (b) {
-    b.addEventListener("click", function () { location.hash = b.getAttribute("data-view"); });
+    b.addEventListener("click", function () { location.hash = b.getAttribute("data-view"); route(); });
   });
   window.addEventListener("hashchange", route);
+  window.addEventListener("resize", function () {
+    document.querySelectorAll('[role="tablist"]').forEach(function (el) {
+      el.setAttribute("aria-orientation", window.matchMedia && window.matchMedia("(max-width: 800px)").matches ? "horizontal" : "vertical");
+    });
+  });
 
   renderTests(); renderGame(); renderAssets(); renderContribuer(); renderAssistant(); route();
   startContribDb(); startSample(); startStorage();

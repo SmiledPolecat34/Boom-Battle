@@ -4,7 +4,47 @@
 // l'assistant sans clé (mode local) et avec clé (appels Groq simulés, outils, brouillon).
 const test = require("node:test");
 const assert = require("node:assert/strict");
-const { FAKE_KEY, boot, wait, ok, fakeServer, fillQuestForm } = require("./page-helpers");
+const { FAKE_KEY, boot, wait, ok, fakeServer, fillQuestForm, sampleData } = require("./page-helpers");
+
+test("navigation accessible : flèches, bouclage, début et fin activent le panneau et déplacent le focus", async () => {
+  const { els, sandbox } = boot({ fetchImpl: fakeServer().fetchImpl });
+  await wait();
+  const navigate = (id, key) => {
+    let prevented = false;
+    els["tab-" + id].handlers.keydown({ key, preventDefault() { prevented = true; } });
+    assert.ok(prevented);
+  };
+  assert.equal(els["tab-tests"].attrs["aria-controls"], "view-tests");
+  assert.equal(els["tab-tests"].attrs.tabindex, "0");
+  navigate("tests", "ArrowRight");
+  assert.equal(sandbox.location.hash, "donnees");
+  assert.equal(els["view-donnees"].hidden, false);
+  assert.equal(els["view-tests"].hidden, true);
+  assert.equal(els["tab-tests"].attrs.tabindex, "-1");
+  assert.equal(els["tab-donnees"].attrs["aria-selected"], "true");
+  assert.ok(els["tab-donnees"].focused);
+  assert.equal(els["breadcrumb-current"].textContent, "Données du jeu");
+  assert.equal(sandbox.document.title, "BOOM BATTLE — Données du jeu");
+  navigate("donnees", "End");
+  assert.equal(sandbox.location.hash, "stockage");
+  navigate("stockage", "ArrowDown");
+  assert.equal(sandbox.location.hash, "tests");
+  navigate("tests", "ArrowUp");
+  assert.equal(sandbox.location.hash, "stockage");
+  navigate("stockage", "Home");
+  assert.equal(sandbox.location.hash, "tests");
+});
+
+test("bilan indisponible : aucune annonce de succès lorsque la collecte échoue ou ne contient aucun test", async () => {
+  for (const error of ["", "Collecte impossible"]) {
+    const data = sampleData(error);
+    data.tests.results = []; data.tests.passed = 0;
+    const { els } = boot({ fetchImpl: fakeServer().fetchImpl, data });
+    await wait();
+    assert.doesNotMatch(els["view-tests"].innerHTML, /Tous les tests automatisés passent/);
+    assert.match(els["view-tests"].innerHTML, /Aucun bilan de tests disponible/);
+  }
+});
 
 test("page : les cinq vues se construisent avec les données", async () => {
   const server = fakeServer();

@@ -61,6 +61,7 @@ function boot({ session, local, fetchImpl, error, data }) {
     id, innerHTML: "", hidden: false, value: "", checked: false, textContent: "", attrs: {}, handlers: {}, disabled: false, scrollTop: 0, scrollHeight: 0,
     setAttribute(k, v) { this.attrs[k] = v; }, getAttribute(k) { return this.attrs[k]; },
     addEventListener(t, f) { this.handlers[t] = f; }, appendChild() {}, closest() { return null; },
+    focus() { this.focused = true; },
     querySelectorAll() { return []; },
     querySelector(sel) {
       if (sel === "aside") return { addEventListener: (t, f) => { asideHandlers[t] = f; } };
