@@ -71,11 +71,18 @@ Principes :
   reproductibilité), jamais des cases précises tirées au hasard.
 - Les messages de test sont en français, comme le reste du projet.
 
-## Ce qui n'est pas (encore) couvert hors Studio
+## Ce qui n'est PAS couvert (et pourquoi)
 
-Voir `tests/untested.json` : `BombService`, `DamageService`, `PowerupService`, `MapService`, `BotService`, services
-d'émotes / de chat rapide, contrôleurs et écrans d'interface (ils créent de vraies Parts ou des interfaces). `RoundService`
-et `MovementService` sont couverts avec un temps simulé (`world.advance`) et des doubles (`world.mock`, `Fixtures.roundHarness`).
+Plus aucun module de `src/` n'est exempté (hors `Types`, des déclarations de types sans code), mais « couvert » veut dire
+« testé contre des **simulations** du moteur » (`tests/runner/loader.luau`, `tests/runner/instances.luau`) :
+
+- Pas de moteur physique ni de rendu : positions, collisions réelles, apparence à l'écran, animations réelles, sons.
+- `Random`, `CFrame.lookAt`, `Humanoid`, `Animator`, `TweenService`, `UserInputService`, `SocialService`, `TextChatService`
+  sont des doubles minimaux : un test vert prouve la logique, pas le comportement exact de Roblox.
+- Les scripts d'entrée `Bootstrap.server` et `Bootstrap.client` ne sont pas des modules : seul le contrat des remotes qu'ils
+  créent et attendent est vérifié (suite `meta`).
+- Hors portée de tout test local : plusieurs clients en réseau, latence, DataStore réel, vraie fenêtre d'invitation, mobile
+  réel, performances. À faire par le propriétaire (`docs/TEST_PLAN.md`).
 
 ## Scripts Studio (`tests/Phase*Tests.luau`)
 

@@ -93,8 +93,18 @@ describe("chemin (findPath)", function()
 	end)
 
 	it("refuse un pilier, une case hors grille et un départ hors grille", function()
-		local grid = openMediumGrid()
-		expect(grid:findPath({ x = 1, y = 1 }, { x = 3, y = 3 })).toBeNil()
+		local grid, layout = openMediumGrid()
+		-- Les piliers sont aléatoires (symétriques) : on cible un pilier réellement présent.
+		local pillar
+		for y = 1, layout.size do
+			for x = 1, layout.size do
+				if layout.cells[y][x] == "PILLAR" then
+					pillar = { x = x, y = y }
+				end
+			end
+		end
+		expect(pillar).never.toBeNil()
+		expect(grid:findPath({ x = 1, y = 1 }, pillar)).toBeNil()
 		expect(grid:findPath({ x = 1, y = 1 }, { x = 0, y = 1 })).toBeNil()
 		expect(grid:findPath({ x = 1, y = 1 }, { x = 17, y = 1 })).toBeNil()
 		expect(grid:findPath({ x = -1, y = 1 }, { x = 2, y = 1 })).toBeNil()

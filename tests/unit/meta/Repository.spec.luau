@@ -149,6 +149,79 @@ describe("couverture des tests", function()
 	end)
 end)
 
+describe("contrat réseau (remotes)", function()
+	-- Un nom attendu par un service mais jamais créé par Bootstrap.server fait attendre le client indéfiniment
+	-- (WaitForChild) : le jeu semblerait « figé » au démarrage. Ce test le détecte avant Studio.
+	local function createdByServer()
+		local text = fs.readFile("src/server/Bootstrap.server.luau")
+		local block = text:match("for _, name in %{(.-)%} do")
+		local names = {}
+		for name in block:gmatch('"([%w_]+)"') do
+			names[name] = true
+		end
+		return names
+	end
+
+	local function expectedBySources()
+		local expected = {}
+		for _, path in filesOf("src") do
+			if not path:find("Bootstrap", 1, true) then
+				local text = fs.readFile(path)
+				for name in text:gmatch('remotes:WaitForChild%("([%w_]+)"%)') do
+					expected[name] = path
+				end
+				for name in text:gmatch('remotes:FindFirstChild%("([%w_]+)"%)') do
+					expected[name] = path
+				end
+			end
+		end
+		return expected
+	end
+
+	it("Bootstrap.server crée une remote pour chaque nom attendu par un service ou un contrôleur", function()
+		local created = createdByServer()
+		local missing = {}
+		for name, path in expectedBySources() do
+			if not created[name] then
+				table.insert(missing, name .. " (" .. path .. ")")
+			end
+		end
+		table.sort(missing)
+		expect(missing).toEqual({})
+	end)
+
+	it("aucune remote créée sans être utilisée (code mort ou oubli)", function()
+		local expected = expectedBySources()
+		local unused = {}
+		for name in createdByServer() do
+			-- ClientReady et MapReady sont attendues par Bootstrap.client / RoundService (fichiers exclus ci-dessus)
+			local used = expected[name] ~= nil
+			if not used then
+				for _, path in filesOf("src") do
+					if fs.readFile(path):find('"' .. name .. '"', 1, true) and not path:find("Bootstrap.server", 1, true) then
+						used = true
+					end
+				end
+			end
+			if not used then
+				table.insert(unused, name)
+			end
+		end
+		table.sort(unused)
+		expect(unused).toEqual({})
+	end)
+
+	it("les noms de remotes sont uniques", function()
+		local text = fs.readFile("src/server/Bootstrap.server.luau")
+		local block = text:match("for _, name in %{(.-)%} do")
+		local seen = {}
+		for name in block:gmatch('"([%w_]+)"') do
+			expect(seen[name]).toBeNil()
+			seen[name] = true
+		end
+	end)
+end)
+
 describe("projet Rojo", function()
 	it("chaque $path de default.project.json existe", function()
 		local project = serde.decode("json", fs.readFile("default.project.json"))

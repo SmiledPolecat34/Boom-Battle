@@ -10,6 +10,7 @@ local fs = require("@lune/fs")
 local luau = require("@lune/luau")
 local roblox = require("@lune/roblox")
 local serde = require("@lune/serde")
+local Instances = require("./instances")
 
 local Loader = {}
 
@@ -88,6 +89,14 @@ end
 
 function Node:FindFirstChild(name: string)
 	return rawget(self, "_children")[name]
+end
+
+function Node:WaitForChild(name: string, timeout: number?)
+	local child = rawget(self, "_children")[name]
+	if child == nil and timeout ~= nil then
+		return nil -- comme Roblox : expiration du délai => nil
+	end
+	return child or error(("WaitForChild('%s') : absent sous '%s' (arbre Rojo simulé)"):format(name, rawget(self, "Name")), 2)
 end
 
 function Node:GetChildren()
@@ -194,9 +203,12 @@ function Loader.new(root: string)
 
 	local heartbeat, fireHeartbeat = newSignal()
 	world.fireHeartbeat = fireHeartbeat
+	local renderStepped, fireRenderStepped = newSignal()
+	world.fireRenderStepped = fireRenderStepped
 	local runService = {
 		Name = "RunService",
 		Heartbeat = heartbeat,
+		RenderStepped = renderStepped,
 		IsStudio = function()
 			return false
 		end,
@@ -252,14 +264,13 @@ function Loader.new(root: string)
 	end
 
 	-- Environnement des modules ---------------------------------------------------------------------------------------
-	local function instanceNew(className: string)
+	local function instanceNew(className: string, parent: any?)
 		if className == "BindableEvent" then
 			local event, fire = newSignal()
 			return { ClassName = className, Event = event, Fire = function(_self, ...) fire(...) end, Destroy = function() end }
-		elseif className == "Folder" then
-			return newNode("Folder", "Folder", nil)
 		end
-		error(("Instance.new('%s') non simulé : ce module relève des tests Studio"):format(className), 2)
+		-- Toute autre classe : instance générique simulée (voir instances.luau).
+		return Instances.new(className, parent, { newSignal = newSignal })
 	end
 
 	-- Random déterministe de remplacement (le vrai Random de Roblox n'existe pas sous Lune).
@@ -411,10 +422,135 @@ function Loader.new(root: string)
 		end,
 	})
 
-	local workspaceNode = newNode("Workspace", "Workspace", nil)
-	function workspaceNode:GetServerTimeNow()
+	local workspaceNode = Instances.new("Workspace", nil, { newSignal = newSignal })
+	rawset(workspaceNode, "GetServerTimeNow", function()
 		return clock.now
+	end)
+
+	-- Services supplémentaires, simulés au minimum pour les services de jeu qui construisent des objets.
+	services.Lighting = Instances.new("Lighting", nil, { newSignal = newSignal })
+	-- Services client minimaux : suffisent aux écrans et contrôleurs pour se construire et réagir à des événements simulés.
+	local function newUserInputService()
+		local service = { Name = "UserInputService", TouchEnabled = false, KeyboardEnabled = true, MouseEnabled = true, GamepadEnabled = false }
+		for _, name in { "InputBegan", "InputEnded", "InputChanged", "LastInputTypeChanged", "TouchStarted", "TouchEnded" } do
+			local signal, fire = newSignal()
+			service[name] = signal
+			service["_fire" .. name] = fire
+		end
+		local propertySignals = {}
+		function service:GetPropertyChangedSignal(name)
+			propertySignals[name] = propertySignals[name] or newSignal()
+			return propertySignals[name]
+		end
+		-- Touches tenues et saisie de texte, pilotées par les tests : service.heldKeys[keyCode] = true / service.focusedTextBox.
+		service.heldKeys = {}
+		service.focusedTextBox = nil
+		function service:IsKeyDown(keyCode)
+			return self.heldKeys[keyCode] == true
+		end
+		function service:GetFocusedTextBox()
+			return self.focusedTextBox
+		end
+		function service:GetMouseLocation()
+			return roblox.Vector2.new(640, 360)
+		end
+		function service:GetLastInputType()
+			return "Enum.UserInputType.Keyboard"
+		end
+		return service
 	end
+	services.UserInputService = newUserInputService()
+	local function newTextChatService()
+		local chat = Instances.new("TextChatService", nil, { newSignal = newSignal })
+		for _, className in { "ChatWindowConfiguration", "ChatInputBarConfiguration", "BubbleChatConfiguration" } do
+			Instances.new(className, chat, { newSignal = newSignal })
+		end
+		return chat
+	end
+	services.TextChatService = newTextChatService()
+	services.TweenService = {
+		Name = "TweenService",
+		-- Un Tween simulé applique ses buts dès Play (assez pour vérifier l'état final d'une animation d'interface).
+		Create = function(_self, instance, tweenInfo, goals)
+			local tween = { PlaybackState = "Begin", instance = instance, goals = goals }
+			local completed, fireCompleted = newSignal()
+			tween.Completed = completed
+			function tween:Play()
+				for key, value in goals do
+					instance[key] = value
+				end
+				self.PlaybackState = "Completed"
+				fireCompleted("Completed")
+			end
+			function tween:Cancel()
+				self.PlaybackState = "Cancelled"
+			end
+			function tween:Pause() end
+			function tween:Destroy() end
+			return tween
+		end,
+	}
+	services.ContentProvider = {
+		Name = "ContentProvider",
+		PreloadAsync = function() end,
+		GetAssetFetchStatus = function()
+			return "Enum.AssetFetchStatus.Success"
+		end,
+	}
+	local invitePrompts = 0
+	world.invitePrompts = function()
+		return invitePrompts
+	end
+	local function newSocialService()
+		invitePrompts = 0
+		return {
+			Name = "SocialService",
+			GameInvitePromptClosed = newSignal(),
+			CanSendGameInviteAsync = function()
+				return true
+			end,
+			PromptGameInvite = function()
+				invitePrompts += 1
+			end,
+		}
+	end
+	services.SocialService = newSocialService()
+	services.Debris = {
+		Name = "Debris",
+		AddItem = function(_self, item, seconds)
+			taskLibrary.delay(seconds or 10, function()
+				item:Destroy()
+			end)
+		end,
+	}
+	-- Personnage de remplacement créé « depuis une description » : Model + Humanoid + HumanoidRootPart.
+	local function createHumanoidModel(_self, _description, _rigType)
+		local model = Instances.new("Model", nil, { newSignal = newSignal })
+		model.Name = "Model"
+		Instances.new("Humanoid", model, { newSignal = newSignal })
+		Instances.new("Part", model, { newSignal = newSignal }).Name = "HumanoidRootPart"
+		return model
+	end
+	playersService.CreateHumanoidModelFromDescription = createHumanoidModel
+
+	-- Joueur local (client) : Player simulé avec PlayerGui et PlayerScripts. Recréé à chaque world.reset().
+	local function newLocalPlayer()
+		local player = Instances.new("Player", nil, { newSignal = newSignal })
+		player.Name = "LocalPlayer"
+		player.DisplayName = "LocalPlayer"
+		player.UserId = 1
+		Instances.new("PlayerGui", player, { newSignal = newSignal })
+		Instances.new("Folder", player, { newSignal = newSignal }).Name = "PlayerScripts"
+		return player
+	end
+	playersService.LocalPlayer = newLocalPlayer()
+	-- Caméra du Workspace.
+	local function newCamera()
+		local camera = Instances.new("Camera", nil, { newSignal = newSignal })
+		workspaceNode.CurrentCamera = camera
+		return camera
+	end
+	newCamera()
 
 	local env = {
 		Enum = Enum,
@@ -429,6 +565,26 @@ function Loader.new(root: string)
 		Vector2 = roblox.Vector2,
 		Color3 = roblox.Color3,
 		CFrame = roblox.CFrame,
+		TweenInfo = { new = function(...) return { ... } end },
+		-- Police simulée : Font.fromEnum / Font.new rendent une table décrivant la police demandée.
+		Font = {
+			fromEnum = function(item)
+				return { Family = tostring(item), Weight = "Regular", Style = "Normal" }
+			end,
+			new = function(family, weight, style)
+				return { Family = family, Weight = weight, Style = style }
+			end,
+		},
+		UDim = roblox.UDim,
+		UDim2 = roblox.UDim2,
+		Rect = roblox.Rect,
+		NumberRange = roblox.NumberRange,
+		NumberSequence = roblox.NumberSequence,
+		NumberSequenceKeypoint = roblox.NumberSequenceKeypoint,
+		ColorSequence = roblox.ColorSequence,
+		ColorSequenceKeypoint = roblox.ColorSequenceKeypoint,
+		BrickColor = roblox.BrickColor,
+		Ray = roblox.Ray,
 		-- print est capturé dans world.output (sinon la sortie des tests est noyée par les journaux des services).
 		print = function(...)
 			local parts = table.pack(...)
@@ -498,7 +654,18 @@ function Loader.new(root: string)
 	-- Remet le monde à zéro : modules rechargés à la demande, joueurs et connexions oubliés, horloge à 1000, threads
 	-- simulés supprimés. À appeler dans beforeEach pour les modules à état global (RoundService...) : les variables
 	-- locales d'une suite qui contiennent d'anciens modules deviennent alors périmées (les recharger après reset).
+	local attached: { { service: string, name: string } } = {}
 	function world.reset()
+		for _, entry in attached do
+			rawget(gameNode:GetService(entry.service), "_children")[entry.name] = nil
+		end
+		table.clear(attached)
+		playersService.CreateHumanoidModelFromDescription = createHumanoidModel -- un test a pu le remplacer
+		playersService.LocalPlayer = newLocalPlayer()
+		newCamera()
+		services.UserInputService = newUserInputService()
+		services.SocialService = newSocialService()
+		services.TextChatService = newTextChatService()
 		table.clear(world.cache)
 		table.clear(world.loading)
 		table.clear(players)
@@ -513,7 +680,16 @@ function Loader.new(root: string)
 		table.clear(world.output)
 		table.clear(stores)
 		world.dataStoreFailure = nil
-		table.clear(rawget(workspaceNode, "_attributes"))
+		workspaceNode:ClearAllChildren()
+		for attribute in workspaceNode:GetAttributes() do
+			workspaceNode:SetAttribute(attribute, nil)
+		end
+	end
+
+	-- Ajoute une instance (ex. dossier d'assets) sous un service de l'arbre Rojo : world.attach("ReplicatedStorage", inst).
+	function world.attach(serviceName: string, instance: any)
+		rawget(gameNode:GetService(serviceName), "_children")[instance.Name] = instance
+		table.insert(attached, { service = serviceName, name = instance.Name })
 	end
 
 	-- Remplace un module par un double de test AVANT qu'un autre module ne le charge (ex. services dépendant du moteur).

@@ -82,6 +82,22 @@ return function(world)
 		return character
 	end
 
+	-- Personnage fait d'instances génériques : Model > Humanoid, HumanoidRootPart, Head (voir instances.luau).
+	-- Contrairement à fakeCharacter, il ne bouge pas tout seul : on pose sa position avec character.HumanoidRootPart.Position.
+	function Fixtures.instanceCharacter(position)
+		local Instance = world.env.Instance
+		local model = Instance.new("Model")
+		model.Name = "Character"
+		Instance.new("Humanoid", model)
+		local root = Instance.new("Part", model)
+		root.Name = "HumanoidRootPart"
+		root.Position = position or Vector3.zero
+		local head = Instance.new("Part", model)
+		head.Name = "Head"
+		head.Position = (position or Vector3.zero) + Vector3.new(0, 2, 0)
+		return model
+	end
+
 	-- Joueur factice. Parent = service Players (PlayerDataService.load vérifie que le joueur est toujours présent).
 	-- LoadCharacter crée un faux personnage et déclenche CharacterAdded, comme Roblox ; `loadCount` les compte.
 	function Fixtures.fakePlayer(userId: number, name: string?)
@@ -119,14 +135,24 @@ return function(world)
 		local folder = { _remotes = {} }
 		for _, name in names do
 			local signal, fire = Loader.newSignal()
+			local clientSignal, fireClientEvent = Loader.newSignal()
 			local remote = {
 				Name = name,
 				OnServerEvent = signal,
+				OnClientEvent = clientSignal,
 				sent = {},
+				sentToServer = {}, -- appels FireServer (côté client)
 				IsA = function(_self, className)
 					return className == "RemoteEvent"
 				end,
 			}
+			function remote:FireServer(...)
+				table.insert(self.sentToServer, table.pack(...))
+			end
+			-- Simule un message du serveur reçu par le client.
+			function remote:fireClient(...)
+				fireClientEvent(...)
+			end
 			function remote:fireServer(player, ...)
 				fire(player, ...)
 			end

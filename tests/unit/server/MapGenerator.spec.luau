@@ -98,6 +98,59 @@ for sizeId, sizeDef in MapConfig.Sizes do
 	end)
 end
 
+describe("piliers aléatoires équitables", function()
+	local function pillarsOf(layout)
+		local list = {}
+		for y = 1, layout.size do
+			for x = 1, layout.size do
+				if layout.cells[y][x] == "PILLAR" then
+					table.insert(list, { x = x, y = y })
+				end
+			end
+		end
+		return list
+	end
+
+	for sizeId, sizeDef in MapConfig.Sizes do
+		it(sizeId .. " : symétrie miroir sur les deux axes, jamais en bordure ni dans une zone de spawn", function()
+			for seed = 1, 20 do
+				local layout = MapGenerator.generate(sizeDef, seed, 8)
+				for _, p in pillarsOf(layout) do
+					expect(layout.cells[p.y][layout.size + 1 - p.x]).toBe("PILLAR")
+					expect(layout.cells[layout.size + 1 - p.y][p.x]).toBe("PILLAR")
+					expect(p.x >= 2 and p.x <= layout.size - 1 and p.y >= 2 and p.y <= layout.size - 1).toBe(true)
+					for _, spawn in layout.spawns do
+						expect(math.abs(spawn.x - p.x) + math.abs(spawn.y - p.y)).toBeGreaterThan(MapConfig.SpawnSafeDistance)
+					end
+				end
+			end
+		end)
+
+		it(sizeId .. " : le nombre de piliers reste celui de la grille classique", function()
+			for seed = 1, 20 do
+				expect(#pillarsOf(MapGenerator.generate(sizeDef, seed, 8))).toBe((#sizeDef.pillarAxis) ^ 2)
+			end
+		end)
+
+		it(sizeId .. " : les placements varient d'une seed à l'autre", function()
+			local signatures = {}
+			local distinct = 0
+			for seed = 1, 12 do
+				local parts = {}
+				for _, p in pillarsOf(MapGenerator.generate(sizeDef, seed, 8)) do
+					table.insert(parts, p.x .. "," .. p.y)
+				end
+				local signature = table.concat(parts, ";")
+				if not signatures[signature] then
+					signatures[signature] = true
+					distinct += 1
+				end
+			end
+			expect(distinct).toBeGreaterThan(1)
+		end)
+	end
+end)
+
 describe("paramètres limites", function()
 	local medium = MapConfig.Sizes.Medium
 
