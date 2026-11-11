@@ -134,6 +134,36 @@ describe("pose", function()
 		expect(part.Color).toEqual(world.module("CosmeticConfig").get("bomb_red").color)
 		expect(part.Size).toEqual(Vector3.new(3, 3, 3))
 	end)
+
+	it("la bombe porte l'identifiant de son apparence et la hauteur du sol (le client y accroche le modèle 3D)", function()
+		local p = player(1, spawn1)
+		PlayerDataService.load(p)
+		PlayerDataService.mutate(p, function(profile)
+			profile.OwnedCosmetics.bomb_cosmic = true
+			profile.EquippedCosmetics.bomb = "bomb_cosmic"
+		end)
+		BombService.placeBomb(p)
+		local part = bombParts()[1]
+		expect(part:GetAttribute("BBBombSkin")).toBe("bomb_cosmic")
+		local ground = part:GetAttribute("BBGroundY")
+		expect(type(ground)).toBe("number")
+		expect(math.abs(ground - (part.Position.Y - 1.6)) < 1e-6).toBe(true)
+	end)
+
+	it("sans profil chargé, la bombe porte l'apparence par défaut ; la sphère de repli et sa taille ne changent pas", function()
+		local p = player(1, spawn1)
+		BombService.placeBomb(p)
+		local part = bombParts()[1]
+		expect(part:GetAttribute("BBBombSkin")).toBe("bomb_classic")
+		expect(part.Size).toEqual(Vector3.new(3, 3, 3))
+		expect(part.CanCollide).toBe(false)
+	end)
+
+	it("la bombe porte l'instant de pose (BBPlacedAt) : les clients en tirent la progression de la mèche", function()
+		local p = player(1, spawn1)
+		BombService.placeBomb(p)
+		expect(type(bombParts()[1]:GetAttribute("BBPlacedAt"))).toBe("number")
+	end)
 end)
 
 describe("explosion", function()

@@ -98,7 +98,20 @@ local function explode(first: ExplosionResolver.BombRecord)
 	if explosionRemote then
 		-- Couleur de l'effet choisi par le poseur de la bombe déclenchante : purement visuelle.
 		local effect = equippedCosmetic(first.ownerId :: number, "effect")
-		explosionRemote:FireAllClients({ cells = result.cells, duration = duration, color = effect.color })
+		-- Données purement cosmétiques en plus des cases : origines des bombes, caisses détruites, identifiant de l'effet (le client en
+		-- tire le style et découpe l'explosion en modules). Aucune de ces données ne décide de ce qui est dangereux.
+		local origins: { Types.Cell } = {}
+		for _, bomb in result.bombs do
+			table.insert(origins, { x = bomb.cell.x, y = bomb.cell.y })
+		end
+		explosionRemote:FireAllClients({
+			cells = result.cells,
+			origins = origins,
+			crates = result.crates,
+			style = effect.id,
+			duration = duration,
+			color = effect.color,
+		})
 	end
 
 	-- Dégâts pendant toute la durée des flammes ; un joueur n'est touché qu'une fois par explosion.
@@ -137,7 +150,21 @@ local function makeBombPart(info: MapService.MapInfo, cell: Types.Cell, ownerUse
 	part.Material = skin.material or Enum.Material.SmoothPlastic
 	part.Anchored = true
 	part.CanCollide = false -- le blocage est logique (GridService) ; évite de coincer le poseur
-	part.CFrame = CFrame.new(info.grid:cellToWorld(cell, BOMB_HEIGHT))
+	local position = info.grid:cellToWorld(cell, BOMB_HEIGHT)
+	part.CFrame = CFrame.new(position)
+	-- Le serveur ne fabrique QUE cette sphère (repli visible si rien d'autre ne s'affiche). Chaque client la remplace
+	-- localement par le modèle 3D de la bombe équipée (BombSkinController) d'après ces deux attributs : le serveur
+	-- ne réplique donc jamais les nombreuses pièces d'un modèle, et les mobiles peuvent utiliser la version allégée.
+	part:SetAttribute("BBBombSkin", skin.id)
+	-- Effet d'explosion équipé du poseur (purement visuel) : le client s'en sert pour lancer la descente d'un effet « Météore » pendant la fin de la mèche.
+	part:SetAttribute("BBEffect", equippedCosmetic(ownerUserId, "effect").id)
+	part:SetAttribute("BBGroundY", position.Y - BOMB_HEIGHT)
+	-- Instant de pose (heure SERVEUR) : les clients en tirent la progression de la mèche (animations, clignotement final),
+	-- identique pour tous les joueurs. Repli sur l'horloge locale si le temps serveur est indisponible.
+	local okTime, placedAt = pcall(function()
+		return workspace:GetServerTimeNow()
+	end)
+	part:SetAttribute("BBPlacedAt", if okTime and typeof(placedAt) == "number" then placedAt else os.clock())
 	part.Parent = info.folder
 	return part
 end

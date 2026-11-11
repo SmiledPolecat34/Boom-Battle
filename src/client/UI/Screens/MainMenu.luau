@@ -373,7 +373,7 @@ function MainMenu.new(parent: Instance, ctx: any)
 
 			local equipped = CosmeticConfig.get(profile.equipped.bomb)
 			if equipped then
-				scene:setLocalBombColor(equipped.color)
+				scene:setLocalBombCosmetic(equipped) -- couleur de repli + modèle 3D tenu en main
 			end
 		end,
 		-- Les autres joueurs du serveur occupent les deux podiums latéraux (amis d'abord) ; un emplacement libre

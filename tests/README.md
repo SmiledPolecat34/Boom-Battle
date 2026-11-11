@@ -102,6 +102,7 @@ pour les Phases 4 et 8).
 | `Phase6Tests.luau` | Profil, boutique, récompenses, quêtes, stockage | Serveur |
 | `Phase8Tests.luau` | Émotes, chat rapide, emplacements du groupe, limite d'invitations | Client |
 | `Phase9Tests.luau` | Cerveau des bots | Serveur |
+| `Phase11BombSkinsTests.luau` | Bombes 3D : 24 modèles (style, pose), contrôleur en jeu, repli sur échec de chargement, boutique / inventaire réels, achat avec équipement automatique (vrais remotes) | **Client** (session Play ; section achat : `DevStartCoins`, voir l'en-tête) |
 
 Les Phases 1-4, 6, 8 et 9 ont leur équivalent (étendu) dans `tests/unit/` et s'exécutent désormais sans Studio ; leurs
 scripts Studio restent utiles comme contrôle croisé dans le vrai moteur (notamment le vrai `Random` de Roblox). Seule la

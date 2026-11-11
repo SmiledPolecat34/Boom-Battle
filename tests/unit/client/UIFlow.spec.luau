@@ -80,6 +80,18 @@ describe("CosmeticBrowser — boutique", function()
 		expect(find(screen.frame, "Coins").Text).toBe("Pièces : 300")
 	end)
 
+	it("le catalogue de 24 bombes est entièrement dans la boutique (cartes + prix), l'inventaire n'affiche que les possédées", function()
+		local screen = shop()
+		screen.setProfile(profile())
+		local cards = 0
+		for _, id in CosmeticConfig.idsOfKind("bomb") do
+			expect(find(screen.frame, "Card_" .. id)).never.toBeNil()
+			cards += 1
+		end
+		expect(cards).toBe(24)
+		expect(find(find(screen.frame, "Card_bomb_cosmic"), "Status").Text).toBe(("%d pièces"):format(CosmeticConfig.get("bomb_cosmic").price))
+	end)
+
 	it("le solde est formaté par milliers", function()
 		local screen = shop()
 		screen.setProfile(profile({ coins = 1234567 }))
@@ -129,6 +141,11 @@ describe("CosmeticBrowser — boutique", function()
 		expect(find(screen.frame, "Feedback").Text).toBe("Achat réussi !")
 		screen.onShopResult({ ok = true, action = "equip" })
 		expect(find(screen.frame, "Feedback").Text).toBe("Objet équipé.")
+		-- achat d'une bombe : le serveur indique qu'elle est équipée automatiquement
+		screen.onShopResult({ ok = true, action = "purchase", equipped = true })
+		expect(find(screen.frame, "Feedback").Text).toBe("Achat réussi ! Objet équipé.")
+		screen.onShopResult({ ok = true, action = "purchase", equipped = false })
+		expect(find(screen.frame, "Feedback").Text).toBe("Achat réussi !")
 		screen.onShopResult({ ok = false, error = "funds" })
 		expect(#find(screen.frame, "Feedback").Text).toBeGreaterThan(0)
 		screen.onShopResult({ ok = false, error = "inconnu" })

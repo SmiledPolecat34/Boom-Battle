@@ -22,6 +22,11 @@ local function isLite(): boolean
 	return MobileAssets.forceLite or (UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled)
 end
 
+-- Exposé pour les autres contrôleurs (ex. ExteriorController).
+function MobileAssets.isLite(): boolean
+	return isLite()
+end
+
 local function loadTemplates(): boolean
 	table.clear(templates)
 	local root = ReplicatedStorage:FindFirstChild(ASSET_FOLDER)

@@ -5,6 +5,7 @@
 local UserInputService = game:GetService("UserInputService")
 
 local Components = require(script.Parent.Parent.Components)
+local BombVisuals = require(script.Parent.Parent.Parent.Controllers.BombVisuals)
 local InputController = require(script.Parent.Parent.Parent.Controllers.InputController)
 local SettingsStore = require(script.Parent.Parent.Parent.Controllers.SettingsStore)
 local Theme = require(script.Parent.Parent.Theme)
@@ -94,12 +95,26 @@ function GameHUD.new(parent: Instance, ctx: any)
 	iconPart(Enum.PartType.Cylinder, Vector3.new(0.7, 0.5, 0.5), CFrame.new(0, 1.7, 0) * CFrame.Angles(0, 0, math.pi / 2), Color3.fromRGB(70, 70, 80), Enum.Material.Metal)
 	iconPart(Enum.PartType.Ball, Vector3.new(0.7, 0.7, 0.7), CFrame.new(0, 2.25, 0), Color3.fromRGB(255, 170, 40), Enum.Material.Neon)
 
+	local previewCleanup: (() -> ())? = nil
+	local previewSkinId: string? = nil
 	local function setBombSkin(profile: any)
 		local equipped = if typeof(profile) == "table" and typeof(profile.equipped) == "table" then profile.equipped.bomb else nil
 		local skin = CosmeticConfig.get(equipped) or CosmeticConfig.get(CosmeticConfig.Defaults.bomb)
 		if skin then
 			body.Color = skin.color
 			body.Material = skin.material or Enum.Material.SmoothPlastic
+			-- Vrai modèle 3D de la bombe équipée ; l'icône de repli (sphère colorée) reste si le modèle est introuvable.
+			if previewSkinId ~= skin.id then
+				if previewCleanup then
+					previewCleanup()
+					previewCleanup = nil
+				end
+				previewSkinId = skin.id
+				previewCleanup = BombVisuals.mountPreview(bomb, skin, false, 3, function()
+					viewport.Visible = true -- meshes non chargés : l'icône de repli (sphère colorée) revient
+				end, "static") -- icône figée : flamme allumée, aucun coût par image
+				viewport.Visible = previewCleanup == nil
+			end
 		end
 	end
 	setBombSkin(nil)

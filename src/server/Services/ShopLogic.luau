@@ -13,6 +13,8 @@ export type Error = "unknown" | "owned" | "funds" | "invalid_price" | "not_owned
 
 -- Achète un cosmétique : vérifie l'existence, la non-possession et le solde, puis débite ET donne l'objet en un
 -- seul bloc (pas d'état intermédiaire). Aucun achat négatif, aucune duplication possible.
+-- Une BOMBE achetée est ÉQUIPÉE automatiquement (le joueur l'utilise tout de suite, sans repasser par l'inventaire) ;
+-- les effets restent à équiper à la main. Le joueur peut rééquiper une autre bombe possédée à tout moment (inventaire).
 function ShopLogic.purchase(profile: ProfileSchema.Profile, id: any): (boolean, Error?)
 	local item = CosmeticConfig.get(id)
 	if not item then
@@ -30,6 +32,9 @@ function ShopLogic.purchase(profile: ProfileSchema.Profile, id: any): (boolean, 
 	end
 	profile.Coins -= item.price
 	profile.OwnedCosmetics[item.id] = true
+	if item.kind == "bomb" then
+		profile.EquippedCosmetics.bomb = item.id
+	end
 	return true, nil
 end
 

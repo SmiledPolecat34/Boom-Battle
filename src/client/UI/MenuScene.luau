@@ -15,10 +15,16 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
 
+local BombAura = require(script.Parent.Parent.Controllers.BombAura)
+local BombFlame = require(script.Parent.Parent.Controllers.BombFlame)
+local BombVisuals = require(script.Parent.Parent.Controllers.BombVisuals)
 local Components = require(script.Parent.Components)
 
 local MenuScene = {}
 MenuScene.__index = MenuScene
+
+-- Remplace la sphère tenue en main par le modèle 3D de la bombe équipée (défini plus bas, utilisé à la création des acteurs).
+local applyHeldModel: (any, any) -> () = function(_self, _actor) end
 
 local ORIGIN = Vector3.new(0, 600, 0)
 local DECOR_TEMPLATE = "MenuDecor" -- dossier de ReplicatedStorage : décor importé (12 modèles ancrés)
@@ -142,6 +148,7 @@ function MenuScene.new()
 	self.visible = false
 	self.connection = nil :: RBXScriptConnection?
 	self.bombColor = Color3.fromRGB(35, 35, 45)
+	self.bombCosmetic = nil :: any -- cosmétique de bombe équipé (modèle 3D tenu en main) ; nil => sphère colorée
 
 	local folder = Instance.new("Folder")
 	folder.Name = "MenuScene"
@@ -604,6 +611,7 @@ function MenuScene._buildActor(self, actor: Actor, name: string)
 			weld.Part1 = bomb
 			weld.Parent = bomb
 			actor.bomb = bomb
+			applyHeldModel(self, actor)
 		end
 
 		local animator = humanoid:FindFirstChildOfClass("Animator") or Instance.new("Animator")
@@ -860,6 +868,78 @@ function MenuScene.playEmote(self, emote: { id: string, animationId: string, loo
 					end
 				end)
 			end
+		end
+	end
+end
+
+-- Modèle 3D de la bombe équipée, tenu en main par le joueur local : soudé à la sphère de repli (masquée), mis à l'échelle sur
+-- son diamètre. Tout échec laisse la sphère colorée. Les autres joueurs gardent la sphère unie (leur bombe n'est pas connue ici).
+applyHeldModel = function(self, actor)
+	local ball = actor.bomb
+	if actor.bombModel then
+		actor.bombModel:Destroy()
+		actor.bombModel = nil
+	end
+	if not ball or not actor.isLocal then
+		return
+	end
+	ball.Transparency = 0
+	local cosmetic = self.bombCosmetic
+	if not cosmetic then
+		return
+	end
+	local ok, built = pcall(BombVisuals.build, cosmetic)
+	if not ok or not built then
+		return
+	end
+	local scale = ball.Size.X / 3 -- le corps de chaque modèle fait 3 de diamètre
+	built.model:ScaleTo(scale)
+	BombVisuals.remeasure(built)
+	BombVisuals.place(built, ball.Position - Vector3.new(0, 1.5 * scale, 0), 0)
+	built.model.Parent = actor.model
+	-- Le modèle suit le centre de la sphère tenue (pièces ancrées, replacées à chaque image) mais reste DROIT et tourné vers la
+	-- caméra : la main qui bouge ne fait plus passer la mèche derrière la bombe, la flamme reste visible.
+	local follow: RBXScriptConnection? = nil
+	follow = RunService.RenderStepped:Connect(function()
+		if built.model.Parent == nil or ball.Parent == nil then
+			if follow then
+				follow:Disconnect()
+			end
+			return
+		end
+		BombVisuals.place(built, ball.Position - Vector3.new(0, 1.5 * scale, 0), BombVisuals.yawTowardCamera(workspace.CurrentCamera))
+	end)
+	actor.bombModel = built.model
+	-- Mèche allumée (flamme néon, à l'échelle de la bombe tenue en main) : le gestionnaire la replace à chaque image sur le bout
+	-- de la mèche, donc elle suit le modèle.
+	BombAura.attach(built.model, built.modelName, { quality = "full", scale = scale }) -- effet d'ambiance (avant la flamme)
+	BombFlame.attach(built.model, built.modelName, { quality = "full", scale = scale })
+	-- La sphère colorée reste visible tant que les meshes ne sont pas confirmés chargés ; échec : modèle retiré, sphère conservée.
+	local model = built.model
+	task.spawn(function()
+		if actor.bombModel ~= model then
+			return -- remplacé entre-temps
+		end
+		if BombVisuals.waitLoaded(model) then
+			if actor.bombModel == model then
+				ball.Transparency = 1
+			end
+		elseif actor.bombModel == model then
+			model:Destroy()
+			actor.bombModel = nil
+		end
+	end)
+end
+
+-- Bombe équipée par le joueur local : couleur de repli + modèle 3D tenu en main (cosmétique : purement visuel).
+function MenuScene.setLocalBombCosmetic(self, cosmetic: any)
+	self.bombCosmetic = cosmetic
+	if typeof(cosmetic) == "table" and typeof(cosmetic.color) == "Color3" then
+		self:setLocalBombColor(cosmetic.color)
+	end
+	for _, actor in self.actors do
+		if actor.isLocal and actor.bomb then
+			applyHeldModel(self, actor)
 		end
 	end
 end

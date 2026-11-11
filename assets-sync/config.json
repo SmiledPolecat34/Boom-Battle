@@ -1,0 +1,8 @@
+{
+ "remote": {
+  "type": "rclone",
+  "remote": "boomdrive:",
+  "driveFolderId": "1NaBgXIpxpUrXh3d217RNWEYC5XR5cuyV"
+ },
+ "autoPushOnCommit": true
+}

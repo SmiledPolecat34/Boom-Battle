@@ -2,6 +2,12 @@
   "_commentaire": "Modules de src/ SANS suite Lune, avec la raison. Cette liste ne doit que RÉTRÉCIR : un nouveau module sans test fait échouer la CI. Quand un module reçoit sa suite (tests/unit/...), retire-le d'ici (la CI l'exige).",
   "nonStrictAllowed": [],
   "untested": {
-    "Types": "Déclarations de types uniquement : aucune logique exécutable à tester."
+    "Types": "Déclarations de types uniquement : aucune logique exécutable à tester.",
+    "BombSkinController": "Dépend du moteur (attributs répliqués, Heartbeat, ContentProvider:PreloadAsync, Model:PivotTo, LocalTransparencyModifier) : vérifié dans Studio en session Play réelle (24 bombes, repli sur échec de chargement, vraie manche) : tests/Phase11BombSkinsTests.luau.",
+    "CosmicFX": "Effets Roblox (PointLight, ParticleEmitter, Highlight, CFrame animé) non simulables ici : logique testée dans Studio (29 contrôles sur modèle factice, puis Play sur le vrai modèle) : assets/3D/BOOM_BATTLE_ART/05_EXPORTS_ROBLOX/VFX/B09_CosmicFX_test.luau et tests/Phase11BombSkinsTests.luau.",
+    "BombFx": "Instances du moteur (ParticleEmitter, Color des pièces, PivotTo) : non simulables ici ; les données sont testées (BombEffectsConfig.spec), le rendu et l'animation sont vérifiés dans Studio en session Play : tests/Phase11BombSkinsTests.luau.",
+    "BombFlame": "Géométrie néon animée (Part, Size, Position, Transparency chaque image) et gestionnaire RenderStepped : non simulables ici ; les données (couleurs, pièce d'ancrage) sont testées par BombEffectsConfig.spec, le rendu et l'animation sont vérifiés dans Studio en session Play : tests/Phase11BombSkinsTests.luau.",
+    "BombAura": "Géométrie néon animée (Part, Size, CFrame, Transparency, Random) et gestionnaire RenderStepped : non simulables ici ; les données (modes, formes, couleurs, nombre) sont testées par BombEffectsConfig.spec, le rendu, l'animation, la pause et le nettoyage sont vérifiés dans Studio : tests/Phase11BombSkinsTests.luau.",
+    "ExplosionFx": "Moteur visuel d'explosion (pools de Part, ParticleEmitter, CFrame animé, Heartbeat) : non simulable ici ; la logique pure est testée (ExplosionLayout.spec, ExplosionStyles.spec) et le comportement réel est vérifié dans Studio : tests/Phase12ExplosionsTests.luau."
   }
 }

@@ -1,6 +1,7 @@
 Cahier_charges
 ARCHITECTURE*
 SETUP*
+assets/3D/BOOM_BATTLE_ART/
 TEST_PLAN*
 DEPLOYMENT*
 ROADMAP*
@@ -17,3 +18,9 @@ ROADMAP*
 *.rbxl.lock
 sourcemap.json
 Packages/
+
+# Assets 3D lourds : synchronisés via Google Drive (tools/assets/sync), jamais dans Git
+assets/3D/BOOM_BATTLE_ART*.zip
+*.zip
+.assets-sync/
+!tools/assets/sync/*.md

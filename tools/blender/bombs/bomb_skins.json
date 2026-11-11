@@ -1,0 +1,17 @@
+{
+  "_note": "Source de verite des skins de bombes (Famille A : maillage B01 partage). Couleurs de B02-B05 = CosmeticConfig.luau du jeu ; collerette = teinte plus sombre. Couleurs de diagnostic : les materiaux definitifs viennent en Phase 7.",
+  "shared": { "fuse": "#C8742E", "fuse_tip": "#2A1C12", "roblox_material": "SmoothPlastic" },
+  "skins": [
+    { "id": "B02", "name": "Rouge",  "folder": "B02_Rouge",  "game_id": "bomb_red",    "mesh": "B01_Classique",
+      "body": "#C82828", "collar": "#961C1C", "spark": "#FFB02E", "default_explosion": "E02" },
+    { "id": "B03", "name": "Bleue",  "folder": "B03_Bleue",  "game_id": "bomb_blue",   "mesh": "B01_Classique",
+      "body": "#286EDC", "collar": "#1C50AA", "spark": "#FFB02E", "default_explosion": "E03" },
+    { "id": "B04", "name": "Verte",  "folder": "B04_Verte",  "game_id": "bomb_green",  "mesh": "B01_Classique",
+      "body": "#32AA46", "collar": "#227D32", "spark": "#FFB02E", "default_explosion": "E04" },
+    { "id": "B05", "name": "Jaune",  "folder": "B05_Jaune",  "game_id": "bomb_yellow", "mesh": "B01_Classique",
+      "body": "#F0C828", "collar": "#BE9114", "spark": "#FFB02E", "default_explosion": "E05" },
+    { "id": "B10", "name": "ArcEnCiel", "folder": "B10_ArcEnCiel", "game_id": null, "mesh": "B10_ArcEnCiel (corps a 6 bandes, meme volume que B01)",
+      "bands_bottom_to_top": ["#8E24AA", "#1E88E5", "#43A047", "#FDD835", "#FB8C00", "#E53935"], "band_tilt_deg": 0,
+      "body": null, "collar": "#D81B8A", "spark": "#FF4FD8", "default_explosion": "E09" }
+  ]
+}

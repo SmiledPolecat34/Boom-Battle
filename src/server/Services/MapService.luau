@@ -371,7 +371,8 @@ function MapService.generateAndBuild(
 	local decorFolder = Instance.new("Folder")
 	decorFolder.Name = "Decor"
 	decorFolder.Parent = folder
-	local decorCount = math.clamp(size * 3, 30, 72)
+	-- Thème Classique : le décor extérieur est désormais le décor modélisé (ExteriorController, côté client).
+	local decorCount = if layout.theme == MapConfig.DefaultTheme then 0 else math.clamp(size * 3, 30, 72)
 	local placed = 0
 	local attempts = 0
 	while placed < decorCount and attempts < decorCount * 10 do

@@ -4,6 +4,7 @@
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
+local CosmeticConfig = require(ReplicatedStorage.Shared.CosmeticConfig)
 local GameConfig = require(ReplicatedStorage.Shared.GameConfig)
 local PlayerDataService = require(script.Parent.PlayerDataService)
 local ShopLogic = require(script.Parent.ShopLogic)
@@ -25,14 +26,18 @@ local function handle(player: Player, id: any, action: "purchase" | "equip", res
 	lastRequest[player] = now
 
 	local ok, err = false, "no_profile" :: any
+	local equipped = false
 	PlayerDataService.mutate(player, function(profile)
 		if action == "purchase" then
 			ok, err = ShopLogic.purchase(profile, id)
 		else
 			ok, err = ShopLogic.equip(profile, id)
 		end
+		-- Après un achat réussi, l'objet est-il maintenant équipé ? (bombe : oui, automatiquement) : sert au message du client.
+		local item = CosmeticConfig.get(id)
+		equipped = ok and item ~= nil and profile.EquippedCosmetics[item.kind] == item.id
 	end)
-	resultRemote:FireClient(player, { action = action, id = id, ok = ok, error = if ok then nil else err })
+	resultRemote:FireClient(player, { action = action, id = id, ok = ok, equipped = equipped, error = if ok then nil else err })
 end
 
 function ShopService.start(remotes: Folder)

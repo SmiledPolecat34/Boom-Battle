@@ -1,10 +1,13 @@
 --!strict
 -- Navigateur de cosmétiques, utilisé pour la BOUTIQUE (tout le catalogue, achat) et l'INVENTAIRE (objets possédés,
 -- équipement). Le client n'envoie qu'un identifiant : prix, possession et solde sont revérifiés par le serveur.
--- Les aperçus sont des pastilles colorées : les images de la maquette ne sont pas utilisables (texte et prix incrustés).
+-- Les bombes s'affichent en 3D (vrai modèle : aperçu rotatif dans le détail, miniature dans la grille, créée seulement pour les
+-- cartes visibles) ; une pastille colorée sert de repli si le modèle est introuvable (et pour les effets : les images de la
+-- maquette ne sont pas utilisables, texte et prix incrustés). Acheter une bombe l'équipe automatiquement (règle serveur).
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
+local BombVisuals = require(script.Parent.Parent.Parent.Controllers.BombVisuals)
 local Components = require(script.Parent.Parent.Components)
 local CosmeticConfig = require(ReplicatedStorage.Shared.CosmeticConfig)
 local Theme = require(script.Parent.Parent.Theme)
@@ -19,6 +22,13 @@ local ERROR_TEXT = {
 	invalid_price = "Prix invalide.",
 	no_profile = "Profil non chargé, réessaie dans un instant.",
 }
+
+-- Grille : 4 colonnes de cartes 112 x 128 (pas 8) dans une fenêtre de 340 de haut : sert à ne créer les aperçus 3D que des
+-- cartes visibles (calcul par la mise en page, pas par AbsolutePosition qui n'est pas à jour juste après la création).
+local GRID_COLUMNS = 4
+local ROW_HEIGHT = 136
+local GRID_VIEW_HEIGHT = 340
+local PREVIEW_MARGIN_ROWS = 1
 
 local function formatNumber(n: number): string
 	local text = tostring(math.floor(n))
@@ -48,6 +58,9 @@ function CosmeticBrowser.new(parent: Instance, ctx: any, mode: string)
 	coinsLabel.TextXAlignment = Enum.TextXAlignment.Right
 
 	local state = { tab = "bomb" :: string, selected = nil :: string?, profile = nil :: any }
+	local detailCleanup: (() -> ())? = nil
+	-- Cartes de la grille courante (aperçus 3D créés / détruits selon leur visibilité).
+	local cardPreviews: { { order: number, cosmetic: any, dot: Frame, holder: Frame, cleanup: (() -> ())?, tried: boolean } } = {}
 
 	local tabButtons: { [string]: TextButton } = {}
 	for index, entry in { { "bomb", "BOMBES" }, { "effect", "EFFETS" } } do
@@ -82,14 +95,15 @@ function CosmeticBrowser.new(parent: Instance, ctx: any, mode: string)
 	local preview = Instance.new("Frame")
 	preview.Name = "Preview"
 	preview.AnchorPoint = Vector2.new(0.5, 0)
-	preview.Position = UDim2.new(0.5, 0, 0, 56)
-	preview.Size = UDim2.fromOffset(110, 110)
+	preview.Position = UDim2.new(0.5, 0, 0, 48)
+	preview.Size = UDim2.fromOffset(150, 150)
+	preview.ClipsDescendants = true
 	preview.Parent = detail
-	Components.corner(preview, 55)
+	Components.corner(preview, 24)
 	Components.stroke(preview, Theme.white, 2)
-	local detailText = Components.label(detail, "Description", "", 16, Theme.muted, Theme.fontBody)
-	detailText.Position = UDim2.fromOffset(10, 176)
-	detailText.Size = UDim2.new(1, -20, 0, 70)
+	local detailText = Components.label(detail, "Description", "", 15, Theme.muted, Theme.fontBody)
+	detailText.Position = UDim2.fromOffset(10, 204)
+	detailText.Size = UDim2.new(1, -20, 0, 62)
 	detailText.TextYAlignment = Enum.TextYAlignment.Top
 	local action = Components.button(detail, "Action", "", Theme.green, UDim2.new(1, -20, 0, 52))
 	action.Position = UDim2.new(0, 10, 1, -64)
@@ -121,6 +135,30 @@ function CosmeticBrowser.new(parent: Instance, ctx: any, mode: string)
 
 	local render: () -> ()
 
+	-- Aperçus 3D des cartes visibles (+ une rangée de marge) ; ceux qui sortent de la fenêtre sont détruits.
+	local function refreshCardPreviews()
+		local top = grid.CanvasPosition.Y
+		for _, info in cardPreviews do
+			local row = math.floor((info.order - 1) / GRID_COLUMNS)
+			local rowTop = row * ROW_HEIGHT
+			local visible = rowTop + ROW_HEIGHT >= top - PREVIEW_MARGIN_ROWS * ROW_HEIGHT
+				and rowTop <= top + GRID_VIEW_HEIGHT + PREVIEW_MARGIN_ROWS * ROW_HEIGHT
+			if visible and not info.cleanup and not info.tried then
+				info.tried = true
+				info.cleanup = BombVisuals.mountPreview(info.holder, info.cosmetic, false, 2, function()
+					info.dot.Visible = true -- meshes non chargés : la pastille colorée reprend la place
+				end, "static") -- miniature FIGÉE : flamme allumée, AUCUNE animation (seule la bombe sélectionnée, à droite, s'anime)
+				info.dot.Visible = info.cleanup == nil
+			elseif not visible and info.cleanup then
+				info.cleanup()
+				info.cleanup = nil
+				info.tried = false
+				info.dot.Visible = true
+			end
+		end
+	end
+	grid:GetPropertyChangedSignal("CanvasPosition"):Connect(refreshCardPreviews)
+
 	local function select(id: string)
 		state.selected = id
 		render()
@@ -139,6 +177,7 @@ function CosmeticBrowser.new(parent: Instance, ctx: any, mode: string)
 			end
 		end
 
+		table.clear(cardPreviews)
 		local ids = visibleIds()
 		if state.selected == nil or table.find(ids, state.selected) == nil then
 			state.selected = ids[1]
@@ -168,6 +207,17 @@ function CosmeticBrowser.new(parent: Instance, ctx: any, mode: string)
 			dot.BackgroundColor3 = cosmetic.color
 			dot.Parent = card
 			Components.corner(dot, 28)
+			if cosmetic.kind == "bomb" then
+				local holder = Instance.new("Frame")
+				holder.Name = "Preview3DHolder"
+				holder.AnchorPoint = Vector2.new(0.5, 0)
+				holder.Position = UDim2.new(0.5, 0, 0, 2)
+				holder.Size = UDim2.fromOffset(100, 86)
+				holder.BackgroundTransparency = 1
+				holder.Active = false
+				holder.Parent = card
+				table.insert(cardPreviews, { order = order, cosmetic = cosmetic, dot = dot, holder = holder, cleanup = nil, tried = false })
+			end
 			local name = Components.label(card, "Name", cosmetic.name, 16, Theme.white, Theme.fontBold)
 			name.Position = UDim2.fromOffset(0, 76)
 			name.Size = UDim2.new(1, 0, 0, 22)
@@ -186,7 +236,13 @@ function CosmeticBrowser.new(parent: Instance, ctx: any, mode: string)
 			end)
 		end
 
+		refreshCardPreviews()
+
 		-- Détail et bouton d'action.
+		if detailCleanup then
+			detailCleanup()
+			detailCleanup = nil
+		end
 		local selected = if state.selected then CosmeticConfig.get(state.selected) else nil
 		detail.Visible = selected ~= nil
 		if selected then
@@ -194,6 +250,15 @@ function CosmeticBrowser.new(parent: Instance, ctx: any, mode: string)
 			local equipped = profile ~= nil and profile.equipped[selected.kind] == selected.id
 			detailName.Text = selected.name
 			preview.BackgroundColor3 = selected.color
+			preview.BackgroundTransparency = 0
+			if selected.kind == "bomb" then
+				detailCleanup = BombVisuals.mountPreview(preview, selected, true, 3, function()
+					preview.BackgroundTransparency = 0 -- meshes non chargés : on retrouve la couleur pleine
+				end, "full")
+				if detailCleanup then
+					preview.BackgroundTransparency = 0.55 -- le modèle 3D se détache sur une teinte de la bombe
+				end
+			end
 			detailText.Text = selected.description
 			if equipped then
 				action.Text = "ÉQUIPÉ"
@@ -246,12 +311,20 @@ function CosmeticBrowser.new(parent: Instance, ctx: any, mode: string)
 			state.profile = profile
 			render()
 		end,
+		select = function(id: string) -- sélection par code (tests) : mêmes effets qu'un clic sur la carte
+			select(id)
+		end,
 		onShopResult = function(result: any)
 			if typeof(result) ~= "table" then
 				return
 			end
 			if result.ok then
-				feedback.Text = if result.action == "purchase" then "Achat réussi !" else "Objet équipé."
+				if result.action == "purchase" then
+					-- Le serveur indique si l'objet acheté est maintenant équipé (bombe : oui, automatiquement).
+					feedback.Text = if result.equipped == true then "Achat réussi ! Objet équipé." else "Achat réussi !"
+				else
+					feedback.Text = "Objet équipé."
+				end
 				feedback.TextColor3 = Theme.green
 			else
 				feedback.Text = ERROR_TEXT[result.error] or "Action impossible."

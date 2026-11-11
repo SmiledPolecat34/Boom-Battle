@@ -1,0 +1,15 @@
+{
+  "name": "boom-battle",
+  "private": true,
+  "description": "Outils du projet Boom Battle (synchronisation des assets 3D via Google Drive)",
+  "scripts": {
+    "assets:setup": "node tools/assets/sync/cli.js setup",
+    "assets:push": "node tools/assets/sync/cli.js push",
+    "assets:pull": "node tools/assets/sync/cli.js pull",
+    "assets:status": "node tools/assets/sync/cli.js status",
+    "assets:verify": "node tools/assets/sync/cli.js verify",
+    "assets:restore": "node tools/assets/sync/cli.js restore",
+    "assets:rebase": "node tools/assets/sync/cli.js rebase",
+    "assets:test": "node tools/assets/sync/test/run.js"
+  }
+}

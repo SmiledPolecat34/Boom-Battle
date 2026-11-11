@@ -6,6 +6,7 @@ local QuestConfig = world.module("QuestConfig")
 local GameConfig = world.module("GameConfig")
 local ProfileSchema = world.module("ProfileSchema")
 local ShopLogic = world.module("ShopLogic")
+local BombSkinConfig = world.module("BombSkinConfig")
 
 describe("catalogue cosmétique", function()
 	for _, kind in { "bomb", "effect" } do
@@ -34,6 +35,41 @@ describe("catalogue cosmétique", function()
 		expect(CosmeticConfig.get(nil)).toBeNil()
 		expect(CosmeticConfig.get({})).toBeNil()
 		expect(CosmeticConfig.get(true)).toBeNil()
+	end)
+
+	it("24 bombes au catalogue, chacune avec un modèle 3D décrit par BombSkinConfig (un modèle par bombe)", function()
+		local ids = CosmeticConfig.idsOfKind("bomb")
+		expect(#ids).toBe(24)
+		local usedModels = {}
+		for _, id in ids do
+			local item = CosmeticConfig.get(id)
+			expect(type(item.model)).toBe("string")
+			expect(BombSkinConfig.get(item.model)).never.toBeNil()
+			expect(usedModels[item.model]).toBeNil()
+			usedModels[item.model] = true
+		end
+	end)
+
+	it("les effets n'ont pas de modèle 3D", function()
+		for _, id in CosmeticConfig.idsOfKind("effect") do
+			expect(CosmeticConfig.get(id).model).toBeNil()
+		end
+	end)
+
+	it("identifiants et prix historiques inchangés (les sauvegardes des joueurs restent valides)", function()
+		local historical = { bomb_classic = 0, bomb_red = 250, bomb_blue = 250, bomb_green = 250, bomb_yellow = 250, bomb_ice = 500 }
+		for id, price in historical do
+			expect(CosmeticConfig.get(id).price).toBe(price)
+			expect(CosmeticConfig.get(id).kind).toBe("bomb")
+		end
+	end)
+
+	it("la bombe par défaut est la seule gratuite", function()
+		for _, id in CosmeticConfig.idsOfKind("bomb") do
+			if id ~= CosmeticConfig.Defaults.bomb then
+				expect(CosmeticConfig.get(id).price).toBeGreaterThan(0)
+			end
+		end
 	end)
 end)
 
@@ -182,6 +218,59 @@ describe("ShopLogic.purchase", function()
 		expect(ShopLogic.purchase(p, nil)).toBe(false)
 		expect(p.Coins).toBe(1000)
 	end)
+
+	it("acheter une BOMBE l'équipe automatiquement", function()
+		local p = richProfile(300)
+		expect(p.EquippedCosmetics.bomb).toBe("bomb_classic")
+		expect(ShopLogic.purchase(p, "bomb_red")).toBe(true)
+		expect(p.EquippedCosmetics.bomb).toBe("bomb_red")
+	end)
+
+	it("acheter un EFFET ne l'équipe pas (et ne touche pas à la bombe équipée)", function()
+		local p = richProfile(300)
+		expect(ShopLogic.purchase(p, "effect_red")).toBe(true)
+		expect(p.OwnedCosmetics.effect_red).toBe(true)
+		expect(p.EquippedCosmetics.effect).toBe("effect_classic")
+		expect(p.EquippedCosmetics.bomb).toBe("bomb_classic")
+	end)
+
+	it("une 2e bombe achetée remplace la bombe équipée mais la 1re reste possédée", function()
+		local p = richProfile(1000)
+		ShopLogic.purchase(p, "bomb_red")
+		ShopLogic.purchase(p, "bomb_ice")
+		expect(p.EquippedCosmetics.bomb).toBe("bomb_ice")
+		expect(p.OwnedCosmetics.bomb_red).toBe(true)
+		expect(p.OwnedCosmetics.bomb_ice).toBe(true)
+	end)
+
+	it("un achat refusé (solde, doublon, inconnu) ne change JAMAIS l'équipement", function()
+		local p = richProfile(300)
+		ShopLogic.purchase(p, "bomb_red")
+		ShopLogic.equip(p, "bomb_classic")
+		expect(ShopLogic.purchase(p, "bomb_red")).toBe(false) -- doublon : ne ré-équipe pas
+		expect(p.EquippedCosmetics.bomb).toBe("bomb_classic")
+		expect(ShopLogic.purchase(p, "bomb_cosmic")).toBe(false) -- solde insuffisant
+		expect(ShopLogic.purchase(p, "bomb_inconnue")).toBe(false)
+		expect(p.EquippedCosmetics.bomb).toBe("bomb_classic")
+	end)
+
+	it("les 24 bombes s'achètent puis s'équipent ; le solde ne devient jamais négatif", function()
+		local p = richProfile(1000000)
+		local total = 0
+		for _, id in CosmeticConfig.idsOfKind("bomb") do
+			local item = CosmeticConfig.get(id)
+			if id ~= CosmeticConfig.Defaults.bomb then
+				local before = p.Coins
+				expect(ShopLogic.purchase(p, id)).toBe(true)
+				expect(p.Coins).toBe(before - item.price)
+				total += item.price
+			end
+			expect(ShopLogic.equip(p, id)).toBe(true)
+			expect(p.EquippedCosmetics.bomb).toBe(id)
+		end
+		expect(p.Coins).toBe(1000000 - total)
+		expect(p.Coins).toBeGreaterThanOrEqual(0)
+	end)
 end)
 
 describe("ShopLogic.equip", function()
@@ -216,5 +305,40 @@ describe("ShopLogic.equip", function()
 		for _, bad in { "x", 5, true, {}, "" } do
 			expect(ShopLogic.equip(p, bad)).toBe(false)
 		end
+	end)
+end)
+
+describe("catalogue de 24 bombes : profils", function()
+	it("un profil du catalogue COMPLET (bombe Cosmique possédée et équipée) est conservé tel quel", function()
+		local profile = ProfileSchema.sanitize({
+			DataVersion = GameConfig.Data.DataVersion,
+			Coins = 12,
+			OwnedCosmetics = { bomb_cosmic = true, bomb_lava = true },
+			EquippedCosmetics = { bomb = "bomb_cosmic", effect = "effect_classic" },
+		})
+		expect(profile.OwnedCosmetics.bomb_cosmic).toBe(true)
+		expect(profile.OwnedCosmetics.bomb_lava).toBe(true)
+		expect(profile.EquippedCosmetics.bomb).toBe("bomb_cosmic")
+	end)
+
+	it("une bombe équipée mais NON possédée (donnée falsifiée) retombe sur la bombe par défaut", function()
+		local profile = ProfileSchema.sanitize({
+			DataVersion = GameConfig.Data.DataVersion,
+			OwnedCosmetics = {},
+			EquippedCosmetics = { bomb = "bomb_cosmic", effect = "effect_classic" },
+		})
+		expect(profile.EquippedCosmetics.bomb).toBe("bomb_classic")
+	end)
+
+	it("un ancien profil (6 bombes) reste valide", function()
+		local profile = ProfileSchema.sanitize({
+			DataVersion = GameConfig.Data.DataVersion,
+			Coins = 40,
+			OwnedCosmetics = { bomb_classic = true, bomb_red = true, bomb_ice = true, effect_classic = true },
+			EquippedCosmetics = { bomb = "bomb_ice", effect = "effect_classic" },
+		})
+		expect(profile.OwnedCosmetics.bomb_ice).toBe(true)
+		expect(profile.EquippedCosmetics.bomb).toBe("bomb_ice")
+		expect(profile.Coins).toBe(40)
 	end)
 end)
